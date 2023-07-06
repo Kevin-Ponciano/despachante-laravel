@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->char('role',2);
             $table->foreignId('cliente_id')->nullable()->constrained('clientes');
+            $table->foreignId('despachante_id')->nullable()->constrained('despachantes');
             $table->string('profile_photo_path', 2048)->nullable();
             $table->rememberToken();
             $table->timestamps();
