@@ -7,6 +7,8 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/css/tabler.min.css',
+                'resources/js/tabler.min.js',
             ],
             refresh: true,
             // refresh: [
