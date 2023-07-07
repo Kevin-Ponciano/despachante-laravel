@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -58,4 +57,24 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function isDespachante(): bool
+    {
+        $role = $this->role[0];
+        if ($role === 'D') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isCliente(): bool
+    {
+        $role = $this->role[0];
+        if ($role === 'C') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -13,28 +13,31 @@
                     </div>
                     <h2 class="h3 text-center mb-3">
                         Faça login na sua conta
+                        @error('name')
+                        <p class="text-center text-red">Usuário ou Senha Incorretos</p>
+                        @enderror
                     </h2>
-                    <form action="{{route('login')}}" method="POST" autocomplete="off" novalidate=""
-                          data-bitwarden-watching="1">
+
+                    <form action="{{route('login')}}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label class="form-label">Endereço de email</label>
-                            <input type="email" name="email" :value="old('email')" class="form-control"
-                                   placeholder="your@email.com" required autofocus autocomplete="username">
+                            <label class="form-label">Nome de Usuário</label>
+                            <input name="name" value="{{old('name')}}" class="form-control" required autofocus
+                                   autocomplete="name"/>
                         </div>
                         <div class="mb-2">
                             <label class="form-label">
                                 Password
-                                @if (Route::has('password.request'))
+                            </label>
+                            <div class="input-group input-group-flat">
+                                <input type="password" name="password" class="form-control"
+                                       required autocomplete="current-password">
+                            </div>
+                            @if (Route::has('password.request'))
                                 <span class="form-label-description">
                                   <a href="{{ route('password.request') }}">esqueci a senha</a>
                                 </span>
-                                    @endif
-                            </label>
-                            <div class="input-group input-group-flat">
-                                <input type="password" name="password" class="form-control" placeholder="Your password"
-                                       required autocomplete="current-password">
-                            </div>
+                            @endif
                         </div>
                         <div class="mb-2">
                             <label class="form-check">
