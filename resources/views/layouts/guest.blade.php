@@ -21,8 +21,10 @@
 </head>
 <body>
 <script src="{{asset('assets/js/theme.js')}}"></script>
-<div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
-    {{ $slot }}
+<div class="page">
+    <main>
+        {{ $slot }}
+    </main>
 </div>
 @vite('resources/js/tabler.min.js')
 </body>

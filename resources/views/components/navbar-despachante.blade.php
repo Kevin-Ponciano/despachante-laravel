@@ -11,6 +11,21 @@
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
                     <div class="d-none d-md-flex">
+                        <div class="nav-item w-auto">
+                        <form>
+                            <div class="input-icon">
+                                <span class="input-icon-addon">
+                                  <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                                       stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                       stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+                                          d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path d="M21 21l-6 -6"></path></svg>
+                                </span>
+                                <input type="text" value="" class="form-control w-8" placeholder="Buscar..."
+                                       aria-label="Search in website">
+                            </div>
+                        </form>
+                    </div>
                         <a class="nav-link px-0 hide-theme-dark cursor-pointer" data-bs-toggle="tooltip"
                            data-bs-placement="bottom" aria-label="Enable dark mode"
                            data-bs-original-title="Enable dark mode">
@@ -227,28 +242,7 @@
                                     </svg>
                                 </span>
                             <span class="nav-link-title">
-                                Novo Processo
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="icon icon-tabler icon-tabler-clipboard-plus" width="24" height="24"
-                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path
-                                           d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
-                                       <path
-                                           d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
-                                       <path d="M10 14h4"></path>
-                                       <path d="M12 12v4"></path>
-                                    </svg>
-                                </span>
-                            <span class="nav-link-title">
-                                Novo ATPV
+                                Novo
                             </span>
                         </a>
                     </li>
