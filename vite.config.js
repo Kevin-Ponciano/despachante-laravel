@@ -5,10 +5,9 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.css',
+                'resources/css/tabler-css.js',
                 'resources/js/app.js',
-                'resources/css/tabler.min.css',
-                'resources/js/tabler.min.js',
+                'resources/css/app.css',
             ],
             refresh: true,
             // refresh: [

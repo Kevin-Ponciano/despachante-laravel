@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\despachante\Atpvs;
+use App\Http\Livewire\despachante\Clientes;
+use App\Http\Livewire\despachante\Dashboard;
+use App\Http\Livewire\despachante\Processos;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    Route::middleware(['despachante'])->prefix('despachante')->group(function () {
-        Route::get('/dashboard', Dashboard::class)->name('dashboard-despachante');
+    Route::middleware(['despachante'])->prefix('despachante')->name('despachante.')->group(function () {
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        Route::get('/processos', Processos::class)->name('processos');
+        Route::get('/atpvs', Atpvs::class)->name('atpvs');
+        Route::get('/clientes', Clientes::class)->name('clientes');
     });
 });

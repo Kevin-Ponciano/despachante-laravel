@@ -9,14 +9,22 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
+    <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
     <!-- Tabler CSS -->
-    @vite('resources/css/tabler.min.css')
-    <!-- Tabler Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <!-- Styles -->
+    @vite(['resources/css/tabler-css.js','resources/js/app.js','resources/css/app.css'])
+
+    <!-- Datatable CSS -->
+    <link
+        href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.5/b-2.4.1/b-html5-2.4.1/b-print-2.4.1/datatables.min.css"
+        rel="stylesheet"/>
+    <!-- Datatable JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script
+        src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.5/b-2.4.1/b-html5-2.4.1/b-print-2.4.1/datatables.min.js"></script>
+
     @livewireStyles
     <!-- Fonts -->
     <style>
@@ -41,13 +49,11 @@
 </div>
 
 @stack('modals')
-
-<!-- Vite Scripts -->
-@vite(['resources/js/tabler.min.js'])
 <!-- Imask -->
 <script src="https://unpkg.com/imask"></script>
-<script src="{{asset('assets/js/imask.config.js')}}"></script>
-@vite([ 'resources/js/app.js'])
+<script src="{{asset('assets/js/mask.config.js')}}"></script>
+<!-- DataTable -->
+<script src="{{asset('assets/js/datatable.config.js')}}"></script>
 @livewireScripts
 </body>
 </html>

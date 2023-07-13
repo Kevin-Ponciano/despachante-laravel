@@ -1,4 +1,6 @@
 <x-app-layout>
     <x-navbar-despachante/>
-    {{$slot}}
+    <div class="page-wrapper">
+        {{$slot}}
+    </div>
 </x-app-layout>

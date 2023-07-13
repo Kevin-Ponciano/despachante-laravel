@@ -3,23 +3,22 @@
 namespace App\Http\Livewire;
 
 use App\Models\Servico;
-use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 class ProcessoNovo extends Component
 {
     public $processo;
     public $nome;
-    public $servicos_id;
+    public $servicoId;
     public $servicos = [];
 
     protected $listeners = ['storeProcesso' => 'store'];
 
     public function addServico()
     {
-        if ($this->servicos_id == null || $this->servicos_id == -1)
+        if ($this->servicoId == null || $this->servicoId == -1)
             return;
-        $servico = Servico::find($this->servicos_id)->toArray();
+        $servico = Servico::find($this->servicoId)->toArray();
         if (!in_array($servico, $this->servicos))
             $this->servicos[] = $servico;
         $this->dispatchBrowserEvent('servico-added');
@@ -38,7 +37,7 @@ class ProcessoNovo extends Component
 
     public function render()
     {
-        return view('livewire.despachante.processo-novo')
-            ->layout('layouts.despachante');
+        return view('livewire.processo-novo');
+            //->layout('layouts.despachante');
     }
 }

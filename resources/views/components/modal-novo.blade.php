@@ -31,12 +31,7 @@
                             <livewire:processo-novo/>
                         </div>
                         <div class="tab-pane" id="tabs-atpv" role="tabpanel">
-                            <h4>Profile tab</h4>
-                            <div>Fringilla egestas nunc quis tellus diam rhoncus ultricies tristique enim at diam,
-                                sem
-                                nunc
-                                amet, pellentesque id egestas velit sed
-                            </div>
+                            <livewire:atpv-novo/>
                         </div>
                     </div>
                 </div>
@@ -79,5 +74,6 @@
         let livewire_event = () => {
             Livewire.emit(livewire_event_msg)
         }
+
     </script>
 </div>

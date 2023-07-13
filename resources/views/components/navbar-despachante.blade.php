@@ -3,7 +3,7 @@
         <div class="navbar">
             <div class="container-xl">
                 <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                    <a href="">
+                    <a href="{{route('despachante.dashboard')}}">
                         <img src="{{asset('assets/img/logo3.png')}}" alt="Saled"
                              class="navbar-brand-image">
                         ALED
@@ -208,9 +208,9 @@
                     </div>
                 </div>
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('despachante.dashboard')}}">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                        viewBox="0 0 24 24"
                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -225,7 +225,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">
+                        <a href="#" class="nav-link" data-bs-toggle="modal"
+                           data-bs-target="#modal-novo">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="icon icon-tabler icon-tabler-calendar-plus" width="24" height="24"
@@ -266,7 +267,7 @@
                         <div class="dropdown-menu">
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{route('despachante.clientes')}}">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              class="icon icon-tabler icon-tabler-manual-gearbox" width="24" height="24"
                                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -394,4 +395,16 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+           let url = window.location
+           let item = $('li.nav-item a[href="'+ url +'"]')
+
+            if(item.attr('class') === 'dropdown-item') {
+                item.parent().parent().parent().parent().addClass('active')
+            } else {
+                item.parent().addClass('active')
+            }
+        });
+    </script>
 </header>

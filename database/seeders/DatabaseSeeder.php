@@ -7,7 +7,10 @@ use App\Models\Despachante;
 use App\Models\Endereco;
 use App\Models\Pedido;
 use App\Models\Plano;
+use App\Models\Processo;
+use App\Models\Servico;
 use App\Models\User;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,6 +21,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $faker = Faker::create('pt_BR');
 //        $endereco = Endereco::create([
 //            'logradouro' => 'Rua 1',
 //            'numero' => '123',
@@ -49,17 +53,78 @@ class DatabaseSeeder extends Seeder
 //            'role' => 'DM'
 //        ]);
 
-        Pedido::create([
-            'comprador_nome' => 'Comprador 1',
-            'comprador_telefone' => '27999999999',
-            'placa' => 'ABC1234',
-            'veiculo' => 'Veículo 1',
-            'preco_placa' => 100,
-            'preco_honorario' => 100,
-            'status' => 'ac',
-            'criado_por' => '1',
-            'cliente_id' => 1,
-        ]);
+//        Pedido::create([
+//            'comprador_nome' => 'Comprador 1',
+//            'comprador_telefone' => '27999999999',
+//            'placa' => 'ABC1234',
+//            'veiculo' => 'Veículo 1',
+//            'preco_placa' => 100,
+//            'preco_honorario' => 100,
+//            'status' => 'ac',
+//            'criado_por' => '1',
+//            'cliente_id' => 1,
+//        ]);
+
+//        Servico::create([
+//            'nome' => 'Serviço 1',
+//            'preco' => 100,
+//            'descricao' => 'Descrição 1',
+//            'despachante_id' => 1,
+//        ]);
+//
+//        Servico::create([
+//            'nome' => 'Serviço 2',
+//            'preco' => 150,
+//            'descricao' => 'Descrição 2',
+//            'despachante_id' => 1,
+//        ]);
+//
+//        Servico::create([
+//            'nome' => 'Serviço 3',
+//            'preco' => 200,
+//            'descricao' => 'Descrição 3',
+//            'despachante_id' => 1,
+//        ]);
+
+//        Servico::create([
+//            'nome' => 'Serviço 4',
+//            'preco' => 250,
+//            'descricao' => 'Descrição 4',
+//            'despachante_id' => 1,
+//        ]);
+
+
+//        $pedidos = [];
+//        $qtd_pedidos = 30;
+//        for($i = 0; $i < $qtd_pedidos; $i++) {
+//            $pedidos[] = [
+//                'comprador_nome' => $faker->name,
+//                'comprador_telefone' => $faker->cellphoneNumber,
+//                'placa' => $faker->numerify('#######'),
+//                'veiculo' => $faker->word,
+//                'preco_placa' => $faker->randomFloat(2, 100, 1000),
+//                'preco_honorario' => $faker->randomFloat(2, 100, 1000),
+//                'status' => $faker->randomElement(['ab', 'ea', 'cd']),
+//                'criado_por' => 1,
+//                'cliente_id' => 1,
+//            ];
+//        }
+//        foreach ($pedidos as $pedido) {
+//            Pedido::create($pedido);
+//        }
+        $processos = [];
+        $pedidos = Pedido::all();
+        foreach ($pedidos as $pedido) {
+            $processos[] = [
+                'tipo' => $faker->randomElement(['ss', 'rv']),
+                'comprador_tipo' => $faker->randomElement(['lj', 'tc']),
+                'qtd_placas' => $faker->randomDigit,
+                'pedido_id' => $pedido->id,
+            ];
+        }
+        foreach ($processos as $processo) {
+            Processo::create($processo);
+        }
 
     }
 }

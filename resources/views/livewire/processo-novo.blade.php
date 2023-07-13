@@ -2,14 +2,6 @@
     use App\Models\Servico;
 @endphp
 <div>
-    <style>
-        .btn-remove-service {
-            position: absolute;
-            top: 0;
-            right: -5px;
-            transform: translateY(-50%);
-        }
-    </style>
     <ul wire:ignore class="nav nav-tabs card-header-tabs flex-row-reverse" data-bs-toglgle="tabs">
         <li class="nav-item" role="presentation">
             <a href="#tabs-info-pedido" class="nav-link"
@@ -48,7 +40,7 @@
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label">Telefone</label>
-                        <input id="telefone-p" type="text" class="form-control" name="telefone"
+                        <input type="text" class="form-control imask-telefone" name="telefone"
                                wire:model.defer="telefone">
                     </div>
                 </div>
@@ -164,7 +156,8 @@
                                     <span class="input-icon-addon">
                                         <i class="ti ti-currency-real"></i>
                                     </span>
-                                <input type="text" class="form-control imask-preco px-5"
+                                <input x-data x-mask:dynamic="$money($input, '.','')"
+                                       type="text" class="form-control px-5"
                                        wire:model.defer="servicos.{{ $index }}.preco">
                                 <button class="btn btn-ghost-danger btn-remove-service px-0 py-0"
                                         title="Remover Serviço"
@@ -176,7 +169,7 @@
                     </div>
                 @endforeach
                 <div>
-                    <select class="form-select mb-2" wire:model.defer="servicos_id">
+                    <select class="form-select mb-2" wire:model.defer="servicoId">
                         <option value="-1" selected>Selecionar Serviço</option>
                         {{--                        todo: Aplicar com relacionamentos--}}
                         @foreach(Servico::all() as $servico)

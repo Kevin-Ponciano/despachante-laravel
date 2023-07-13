@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    @vite('resources/css/tabler.min.css')
+    @vite('resources/css/tabler-css.js')
     <style>
         @import url('https://rsms.me/inter/inter.css');
 
@@ -26,6 +26,5 @@
         {{ $slot }}
     </main>
 </div>
-@vite('resources/js/tabler.min.js')
 </body>
 </html>
