@@ -37,6 +37,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                {{-- todo Transformar em Slot --}}
                 <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                     Cancelar
                 </a>

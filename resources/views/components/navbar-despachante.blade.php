@@ -401,6 +401,7 @@
            let item = $('li.nav-item a[href="'+ url +'"]')
 
             if(item.attr('class') === 'dropdown-item') {
+                item.addClass('active')
                 item.parent().parent().parent().parent().addClass('active')
             } else {
                 item.parent().addClass('active')
