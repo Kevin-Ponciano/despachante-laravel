@@ -61,7 +61,7 @@ class User extends Authenticatable
     public function isDespachante(): bool
     {
         $role = $this->role[0];
-        if ($role === 'D') {
+        if ($role === 'd') {
             return true;
         } else {
             return false;
@@ -71,7 +71,7 @@ class User extends Authenticatable
     public function isCliente(): bool
     {
         $role = $this->role[0];
-        if ($role === 'C') {
+        if ($role === 'd') {
             return true;
         } else {
             return false;

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Cliente;
 use App\Models\Despachante;
 use App\Models\Endereco;
 use App\Models\Pedido;
@@ -50,9 +51,8 @@ class DatabaseSeeder extends Seeder
 //            'name' => 'admin',
 //            'email' => 'admin@admin',
 //            'password' => Hash::make('123'),
-//            'role' => 'DM'
+//            'role' => 'dm'
 //        ]);
-
 //        Pedido::create([
 //            'comprador_nome' => 'Comprador 1',
 //            'comprador_telefone' => '27999999999',
@@ -112,19 +112,37 @@ class DatabaseSeeder extends Seeder
 //        foreach ($pedidos as $pedido) {
 //            Pedido::create($pedido);
 //        }
-        $processos = [];
-        $pedidos = Pedido::all();
-        foreach ($pedidos as $pedido) {
-            $processos[] = [
-                'tipo' => $faker->randomElement(['ss', 'rv']),
-                'comprador_tipo' => $faker->randomElement(['lj', 'tc']),
-                'qtd_placas' => $faker->randomDigit,
-                'pedido_id' => $pedido->id,
-            ];
-        }
-        foreach ($processos as $processo) {
-            Processo::create($processo);
-        }
+//        $processos = [];
+//        $pedidos = Pedido::all();
+//        foreach ($pedidos as $pedido) {
+//            $processos[] = [
+//                'tipo' => $faker->randomElement(['ss', 'rv']),
+//                'comprador_tipo' => $faker->randomElement(['lj', 'tc']),
+//                'qtd_placas' => $faker->randomDigit,
+//                'pedido_id' => $pedido->id,
+//            ];
+//        }
+//        foreach ($processos as $processo) {
+//            Processo::create($processo);
+//        }
+
+//        $clientes = [];
+//        $qtd_clientes = 5;
+//        for ($i = 0; $i < $qtd_clientes; $i++) {
+//            $clientes[] = [
+//                'nome' => $faker->company(),
+//                'status' => $faker->randomElement(['ac', 'in']),
+//                'preco_1_placa' => $faker->randomFloat(2, 100, 1000),
+//                'preco_2_placa' => $faker->randomFloat(2, 100, 1000),
+//                'preco_atpv' => $faker->randomFloat(2, 100, 1000),
+//                'preco_loja' => $faker->randomFloat(2, 100, 1000),
+//                'preco_terceiro' => $faker->randomFloat(2, 100, 1000),
+//                'despachante_id' => 1,
+//            ];
+//        }
+//        foreach ($clientes as $cliente) {
+//            Cliente::create($cliente);
+//        }
 
     }
 }

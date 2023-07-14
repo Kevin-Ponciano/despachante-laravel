@@ -11,7 +11,7 @@
             </div>
         </div>
         <fieldset class="form-fieldset">
-            <h4>Tabela de preços <span class="page-subtitle">opcional</span></h4>
+            <h4>Tabela de Preços <span class="page-subtitle">opcional</span></h4>
             <div class="row">
                 <div class="col-3">
                     <div class="mb-3">

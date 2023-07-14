@@ -26,7 +26,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="{{$id}}" class="card-table table">
+            <table id="{{$id}}" class="card-table table table-hover">
                 <thead>
                 {{$thead}}
                 </thead>

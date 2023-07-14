@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Livewire\despachante\Atpvs;
+use App\Http\Livewire\despachante\ClienteEditar;
 use App\Http\Livewire\despachante\Clientes;
 use App\Http\Livewire\despachante\Dashboard;
 use App\Http\Livewire\despachante\Processos;
+use App\Http\Livewire\despachante\UsuarioEditar;
+use App\Http\Livewire\despachante\Usuarios;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,5 +30,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/processos', Processos::class)->name('processos');
         Route::get('/atpvs', Atpvs::class)->name('atpvs');
         Route::get('/clientes', Clientes::class)->name('clientes');
+        Route::get('/clientes/{id}', ClienteEditar::class)->name('clientes.editar');
+        Route::get('/usuarios', Usuarios::class)->name('usuarios');
+        Route::get('/usuarios/{id}', UsuarioEditar::class)->name('usuarios.editar');
     });
 });

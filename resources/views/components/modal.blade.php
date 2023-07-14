@@ -1,5 +1,5 @@
 <div class="modal modal-blur fade" id="{{$id}}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog {{$class =  $class ?? 'modal-lg'}}" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{$title}}</h5>

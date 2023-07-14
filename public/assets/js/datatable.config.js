@@ -19,5 +19,7 @@ $(document).ready(function () {
         ...configDefault,
     });
 
-
+    $('#usuarios-table').DataTable({
+        ...configDefault,
+    });
 });
