@@ -3,6 +3,10 @@ const configDefault = {
         url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/pt-BR.json',
     }
 }
+
+const tablePlay = () => {
+
+}
 $(document).ready(function () {
     let processo_table = $('#processos-table').DataTable({
         ...configDefault,
@@ -22,4 +26,11 @@ $(document).ready(function () {
     $('#usuarios-table').DataTable({
         ...configDefault,
     });
+
+    $('#servicos-table').DataTable({
+        ...configDefault,
+    });
 });
+
+
+

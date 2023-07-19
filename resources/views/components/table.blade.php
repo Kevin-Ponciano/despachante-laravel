@@ -18,7 +18,7 @@
 {{--                              New view--}}
 {{--                            </a>--}}
 {{--                        </span>--}}
-                        {{$actions}}
+                        {{$actions = $actions ?? ''}}
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-<div class="card {{$bg}}">
+<a href="{{$route}}" class="card {{$bg}}">
     <div class="card-body">
         <div class="d-flex align-items-center">
             <div class="subheader">{{$titulo}}</div>
@@ -23,4 +23,4 @@
             </div>
         </div>
     </div>
-</div>
+</a>

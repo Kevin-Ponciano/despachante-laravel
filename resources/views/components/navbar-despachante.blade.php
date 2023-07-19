@@ -188,7 +188,7 @@
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                            aria-label="Open user menu">
                                 <span class="avatar avatar-sm"
-                                      style="background-image: url(./static/avatars/000m.jpg)"></span>
+                                      style="background-image: url({{asset('assets/img/logo3.png')}})"></span>
                             <div class="d-none d-xl-block ps-2">
                                 <div>Paweł Kuna</div>
                                 <div class="mt-1 small text-muted">UI Designer</div>
@@ -268,37 +268,21 @@
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
                                     <a class="dropdown-item" href="{{route('despachante.clientes')}}">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="icon icon-tabler icon-tabler-manual-gearbox" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M5 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                            <path d="M12 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                            <path d="M19 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                            <path d="M5 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                            <path d="M12 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                            <path d="M5 8l0 8"></path>
-                                            <path d="M12 8l0 8"></path>
-                                            <path d="M19 8v2a2 2 0 0 1 -2 2h-12"></path>
-                                        </svg>
+                                        <i class="ti ti-manual-gearbox"></i>
                                         <span class="ms-2">
                                             Clientes
                                         </span>
                                     </a>
                                     <a class="dropdown-item" href="{{route('despachante.usuarios')}}">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="icon icon-tabler icon-tabler-users" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                                            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                            <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
-                                        </svg>
+                                        <i class="ti ti-users-group"></i>
                                         <span class="ms-2">
                                             Usuários
+                                        </span>
+                                    </a>
+                                    <a class="dropdown-item" href="{{route('despachante.servicos')}}">
+                                        <i class="ti ti-tools"></i>
+                                        <span class="ms-2">
+                                            Serviços
                                         </span>
                                     </a>
                                 </div>
@@ -331,7 +315,7 @@
                         <div class="dropdown-menu">
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{route('despachante.relatorios.pedidos')}}">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              class="icon icon-tabler icon-tabler-table-options" width="24" height="24"
                                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"

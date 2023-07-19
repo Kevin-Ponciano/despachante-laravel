@@ -169,11 +169,11 @@
                     </div>
                 @endforeach
                 <div>
-                    <select class="form-select mb-2" wire:model.defer="servicoId">
+                    <select class="form-select mb-2 w-33" wire:model.defer="servicoId">
                         <option value="-1" selected>Selecionar Serviço</option>
                         {{--                        todo: Aplicar com relacionamentos--}}
                         @foreach(Servico::all() as $servico)
-                            <option value="{{$servico->id}}">{{$servico->nome}} ({{$servico->descricao}})</option>
+                            <option title="{{$servico->descricao}}"  value="{{$servico->id}}">{{$servico->nome}} </option>
                         @endforeach
                     </select>
                     <button class="btn btn-ghost-primary" wire:click.prevent="addServico">Adicionar</button>

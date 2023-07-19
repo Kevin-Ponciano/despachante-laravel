@@ -5,6 +5,8 @@ use App\Http\Livewire\despachante\ClienteEditar;
 use App\Http\Livewire\despachante\Clientes;
 use App\Http\Livewire\despachante\Dashboard;
 use App\Http\Livewire\despachante\Processos;
+use App\Http\Livewire\despachante\RelatorioPedidos;
+use App\Http\Livewire\despachante\Servicos;
 use App\Http\Livewire\despachante\UsuarioEditar;
 use App\Http\Livewire\despachante\Usuarios;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +35,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/clientes/{id}', ClienteEditar::class)->name('clientes.editar');
         Route::get('/usuarios', Usuarios::class)->name('usuarios');
         Route::get('/usuarios/{id}', UsuarioEditar::class)->name('usuarios.editar');
+        Route::get('/servicos', Servicos::class)->name('servicos');
+        Route::get('/relatorios/pedidos', RelatorioPedidos::class)->name('relatorios.pedidos');
+
     });
 });

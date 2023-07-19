@@ -54,6 +54,9 @@
 <script src="{{asset('assets/js/mask.config.js')}}"></script>
 <!-- DataTable -->
 <script src="{{asset('assets/js/datatable.config.js')}}"></script>
+<!-- TomSelect -->
+<script src="{{asset('assets/js/libs/tom-select/dist/js/tom-select.complete.min.js')}}"></script>
+<script src="{{asset('assets/js/tomSelect.config.js')}}"></script>
 @livewireScripts
 </body>
 </html>

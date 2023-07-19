@@ -35,18 +35,18 @@
                 PROCESSOS
             </div>
             <div class="row row-deck row-cards">
-                    <div class="col-sm-6 col-lg-4">
-                    <x-card bg="bg-success-lt" titulo="Processos" subtitulo="Abertos" numero="32"
+                <div class="col-sm-6 col-lg-4">
+                    <x-card bg="bg-success-lt" titulo="Processos" subtitulo="Abertos" numero="32" :route="route('despachante.processos')"
                             icon="ti ti-file-plus ti"
                     />
                 </div>
                 <div class="col-sm-6 col-lg-4">
-                <x-card bg="bg-primary-lt" titulo="Processos" subtitulo="Em andamento" numero="32"
+                    <x-card bg="bg-primary-lt" titulo="Processos" subtitulo="Em andamento" numero="32" :route="route('despachante.processos')"
                             icon="ti ti-file-analytics ti"
                     />
                 </div>
                 <div class="col-sm-6 col-lg-4">
-                <x-card bg="bg-danger-lt" titulo="Processos" subtitulo="Pendentes" numero="32"
+                    <x-card bg="bg-danger-lt" titulo="Processos" subtitulo="Pendentes" numero="32" :route="route('despachante.processos')"
                             icon="ti ti-file-report ti"
                     />
                 </div>
@@ -55,23 +55,23 @@
                 ATPVs
             </div>
             <div class="row row-deck row-cards">
-                    <div class="col-sm-6 col-lg-4">
-                    <x-card bg="bg-success-lt" titulo="ATPVs" subtitulo="Abertos" numero="32"
+                <div class="col-sm-6 col-lg-4">
+                    <x-card bg="bg-success-lt" titulo="ATPVs" subtitulo="Abertos" numero="32" :route="route('despachante.atpvs')"
                             icon="ti ti-file-plus ti"
                     />
                 </div>
                 <div class="col-sm-6 col-lg-4">
-                <x-card bg="bg-primary-lt" titulo="ATPVs" subtitulo="Em andamento" numero="32"
+                    <x-card bg="bg-primary-lt" titulo="ATPVs" subtitulo="Em andamento" numero="32" :route="route('despachante.atpvs')"
                             icon="ti ti-file-analytics ti"
                     />
                 </div>
                 <div class="col-sm-6 col-lg-2">
-                <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Pendentes" numero="32"
+                    <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Pendentes" numero="32" :route="route('despachante.atpvs')"
                             icon="ti ti-file-report ti"
                     />
                 </div>
                 <div class="col-sm-6 col-lg-2">
-                <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Solicitado Cancelamento" numero="32"
+                    <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Solicitado Cancelamento" numero="32" :route="route('despachante.atpvs')"
                             icon="ti ti-file-x ti"
                     />
                 </div>
