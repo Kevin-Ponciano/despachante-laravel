@@ -20,97 +20,79 @@
 
     <div class="tab-content">
         <div wire:ignore.self class="tab-pane active show" id="tabs-processo2" role="tabpanel">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label">Cliente Logista</label>
-                        <selec class="form-control">
-                            <option disabled selected>Selecionar Cliente</option>
-                        </selec>
+            <x-processo>
+                <x-slot:cliente>
+                    <label class="form-label">Cliente Logista</label>
+                    <selec class="form-control">
+                        <option disabled selected>Selecionar Cliente</option>
+                    </selec>
+                </x-slot:cliente>
+                <x-slot:nomeComprador>
+                    <label class="form-label">Nome do Comprador</label>
+                    <input type="text" class="form-control" name="nome" wire:model.defer="nome">
+                </x-slot:nomeComprador>
+                <x-slot:telefone>
+                    <label class="form-label">Telefone</label>
+                    <input type="text" class="form-control imask-telefone" name="telefone"
+                           wire:model.defer="telefone">
+                </x-slot:telefone>
+                <x-slot:placa>
+                    <label class="form-label">Placa</label>
+                    <input type="text" class="form-control text-uppercase" maxlength="7" name="placa"
+                           wire:model.defer="placa">
+                </x-slot:placa>
+                <x-slot:veiculo>
+                    <label class="form-label">Veículo</label>
+                    <input type="text" class="form-control" name="veiculo" wire:model.defer="veiculo">
+                </x-slot:veiculo>
+                <x-slot:qtd_placa>
+                    <div class="form-label">Quantidade Placas:</div>
+                    <div>
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="qtd_placa" checked>
+                            <span class="form-check-label">0 Placas</span>
+                        </label>
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="qtd_placa">
+                            <span class="form-check-label">1 Placas</span>
+                        </label>
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="qtd_placa">
+                            <span class="form-check-label">2 Placas</span>
+                        </label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <label class="form-label">Nome do Comprador</label>
-                        <input type="text" class="form-control" name="nome" wire:model.defer="nome">
+                </x-slot:qtd_placa>
+                <x-slot:comprador_tipo>
+                    <div class="form-label">Comprador:</div>
+                    <div>
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="comprador_tipo" checked>
+                            <span class="form-check-label">Terceiro</span>
+                        </label>
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="comprador_tipo">
+                            <span class="form-check-label">Loja</span>
+                        </label>
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <label class="form-label">Telefone</label>
-                        <input type="text" class="form-control imask-telefone" name="telefone"
-                               wire:model.defer="telefone">
+                </x-slot:comprador_tipo>
+                <x-slot:processo_tipo>
+                    <div class="form-label">Processo:</div>
+                    <div>
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="tipo" checked>
+                            <span class="form-check-label">Solicitação Serviço</span>
+                        </label>
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="tipo">
+                            <span class="form-check-label">RENAV</span>
+                        </label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label">Placa</label>
-                        <input type="text" class="form-control text-uppercase" maxlength="7" name="placa"
-                               wire:model.defer="placa">
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="mb-3">
-                        <label class="form-label">Veículo</label>
-                        <input type="text" class="form-control" name="veiculo" wire:model.defer="veiculo">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <div class="form-label">Quantidade Placas:</div>
-                        <div>
-                            <label class="form-check">
-                                <input class="form-check-input" type="radio" name="qtd_placa" checked>
-                                <span class="form-check-label">0 Placas</span>
-                            </label>
-                            <label class="form-check">
-                                <input class="form-check-input" type="radio" name="qtd_placa">
-                                <span class="form-check-label">1 Placas</span>
-                            </label>
-                            <label class="form-check">
-                                <input class="form-check-input" type="radio" name="qtd_placa">
-                                <span class="form-check-label">2 Placas</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <div class="form-label">Comprador:</div>
-                        <div>
-                            <label class="form-check">
-                                <input class="form-check-input" type="radio" name="comprador_tipo" checked>
-                                <span class="form-check-label">Terceiro</span>
-                            </label>
-                            <label class="form-check">
-                                <input class="form-check-input" type="radio" name="comprador_tipo">
-                                <span class="form-check-label">Loja</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <div class="form-label">Processo:</div>
-                        <div>
-                            <label class="form-check">
-                                <input class="form-check-input" type="radio" name="tipo" checked>
-                                <span class="form-check-label">Solicitação Serviço</span>
-                            </label>
-                            <label class="form-check">
-                                <input class="form-check-input" type="radio" name="tipo">
-                                <span class="form-check-label">RENAV</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </x-slot:processo_tipo>
+                <x-slot:observacao>
+                    <div class="form-label">Observação</div>
+                    <textarea class="form-control" name="observacao" wire:model.defer="observacao"></textarea>
+                </x-slot:observacao>
+            </x-processo>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="mb-3">
@@ -131,7 +113,7 @@
                                 <i class="ti ti-currency-real"></i>
                             </span>
                             <input type="text" class="form-control imask-preco px-5 w-66"
-                                   wire:model.defer="preco_placa">
+                                   wire:model.defer="precoPlaca">
                         </div>
                     </div>
                 </div>
@@ -143,7 +125,7 @@
                                 <i class="ti ti-currency-real"></i>
                             </span>
                             <input type="text" class="form-control imask-preco px-5 w-66"
-                                   wire:model.defer="preco_honorario">
+                                   wire:model.defer="precoHonorario">
                         </div>
                     </div>
                 </div>
@@ -173,10 +155,11 @@
                         <option value="-1" selected>Selecionar Serviço</option>
                         {{--                        todo: Aplicar com relacionamentos--}}
                         @foreach(Servico::all() as $servico)
-                            <option title="{{$servico->descricao}}"  value="{{$servico->id}}">{{$servico->nome}} </option>
+                            <option title="{{$servico->descricao}}"
+                                    value="{{$servico->id}}">{{$servico->nome}} </option>
                         @endforeach
                     </select>
-                    <button class="btn btn-ghost-primary" wire:click.prevent="addServico">Adicionar</button>
+                    <button class="btn btn-ghost-primary" wire:click="addServico">Adicionar</button>
                 </div>
             </div>
         </div>

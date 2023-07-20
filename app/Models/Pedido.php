@@ -17,6 +17,7 @@ class Pedido extends Model
         'preco_placa',
         'preco_honorario',
         'status',
+        'observacoes',
         'criado_por',
         'cliente_id',
     ];

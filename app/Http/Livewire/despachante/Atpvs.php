@@ -26,6 +26,11 @@ class Atpvs extends Component
         $this->emit('selected');
     }
 
+    public function toRedirect($id)
+    {
+        return redirect()->route('despachante.atpvs.show', $id);
+    }
+
     public function render()
     {
         $this->queryString = ['teste'];

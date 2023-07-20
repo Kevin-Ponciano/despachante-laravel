@@ -1,18 +1,30 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\despachante;
 
+use App\Models\Pedido;
+use App\Models\Processo;
 use App\Models\Servico;
 use Livewire\Component;
 
-class ProcessoNovo extends Component
+class ProcessoShow extends Component
 {
     public $processo;
-    public $nome;
+    public $isEditing = false;
+    public $qtdPlaca;
+    public $compradorTipo;
+    public $processoTipo;
     public $servicoId;
     public $servicos = [];
+    public $status = 'ab';
 
-    protected $listeners = ['storeProcesso' => 'store'];
+    public function mount($id)
+    {
+        $processo = Processo::find($id);
+        $this->processo = $processo;
+        $this->nome = 'Kevin';
+        $this->observacao = Pedido::find($processo->pedido_id)->observacoes;
+    }
 
     public function addServico()
     {
@@ -29,14 +41,11 @@ class ProcessoNovo extends Component
             return $servico['id'] != $id;
         });
     }
-    public function store()
-    {
-        debug($this->nome);
-    }
 
     public function render()
     {
-        return view('livewire.processo-novo');
-            //->layout('layouts.despachante');
+        debug($this->isEditing);
+        return view('livewire.processo-show')
+            ->layout('layouts.despachante');
     }
 }
