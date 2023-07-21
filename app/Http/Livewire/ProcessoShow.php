@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\despachante;
+namespace App\Http\Livewire;
 
 use App\Models\Pedido;
-use App\Models\PedidoServico;
 use App\Models\Processo;
 use App\Models\Servico;
 use Livewire\Component;
@@ -47,7 +46,12 @@ class ProcessoShow extends Component
     public function render()
     {
         debug($this->isEditing);
-        return view('livewire.processo-show')
-            ->layout('layouts.despachante');
+
+        if (auth()->user()->isDespachante())
+            return view('livewire.processo-show')->layout('layouts.despachante');
+        elseif (auth()->user()->isCliente())
+            return view('livewire.processo-show')->layout('layouts.cliente');
+        else
+            abort(500);
     }
 }

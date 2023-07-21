@@ -1,22 +1,30 @@
 <div>
     <x-page-title title="ATPV" :subtitle="'Pedido: '.$atpv->pedido_id">
         <x-slot name="actions">
-            <div x-data="{status : $wire.status }" class="btn-list">
+            <div class="btn-list">
                 <button class="btn">
                     Imprimir
                 </button>
-                <button class="btn btn-warning" x-show="status!=='ex' && status!=='cd'">
-                    Dados Incorretos
-                </button>
-                <button class="btn btn-success" x-show="status==='ab'">
-                    Play
-                </button>
-                <button class="btn btn-success" x-show="status==='ea'">
-                    Concluir
-                </button>
-                <button class="btn btn-danger" x-show="status!=='ex'">
-                    Excluir
-                </button>
+                @if($status!=='ex' && $status!=='cd')
+                    <button class="btn btn-warning">
+                        Dados Incorretos
+                    </button>
+                @endif
+                @if($status==='ab')
+                    <button class="btn btn-success">
+                        Play
+                    </button>
+                @endif
+                @if($status==='ea')
+                    <button class="btn btn-success">
+                        Concluir
+                    </button>
+                @endif
+                @if($status!=='ex')
+                    <button class="btn btn-danger">
+                        Excluir
+                    </button>
+                @endif
             </div>
         </x-slot>
     </x-page-title>

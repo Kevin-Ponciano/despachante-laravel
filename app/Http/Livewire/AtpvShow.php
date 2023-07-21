@@ -11,7 +11,7 @@ class AtpvShow extends Component
     public $isRenave = true;
     public $col_length;
     public $servicos=[];
-    public $status = 'ab';
+    public $status = 'ea';
 
     public function mount($id)
     {

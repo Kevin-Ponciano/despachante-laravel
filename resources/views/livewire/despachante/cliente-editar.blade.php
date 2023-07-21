@@ -108,7 +108,7 @@
                     <fieldset class="form-fieldset">
                         <h4>Usuário Administrador do Cliente</h4>
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-4">
                                 <div class="mb-3">
                                     <div class="d-flex">
                                         <label class="form-label">Nome de Usuário</label>

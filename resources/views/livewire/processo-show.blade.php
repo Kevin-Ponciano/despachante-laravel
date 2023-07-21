@@ -152,7 +152,7 @@
                         <div wire:ignore.self class="tab-pane" id="tabs-pedido-info" role="tabpanel">
                             <div class="tab-content">
                                 <div class="row">
-                                    <div class="col-lg-4">
+                                    <div class="col-4">
                                         <div class="mb-3">
                                             <label class="form-label">Valor Placas</label>
                                             <div class="input-icon">
@@ -164,7 +164,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-4">
                                         <div class="mb-3">
                                             <label class="form-label">Valor Honorário</label>
                                             <div class="input-icon">

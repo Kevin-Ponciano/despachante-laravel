@@ -71,10 +71,20 @@ class User extends Authenticatable
     public function isCliente(): bool
     {
         $role = $this->role[0];
-        if ($role === 'd') {
+        if ($role === 'c') {
             return true;
         } else {
             return false;
         }
+    }
+
+    public function nomeEmpresa()
+    {
+        if($this->isDespachante())
+            return Despachante::find($this->despachante_id)->razao_social;
+        elseif($this->isCliente())
+            return Cliente::find($this->cliente_id)->nome;
+        else
+            return 'Erro';
     }
 }
