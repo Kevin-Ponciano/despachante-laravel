@@ -9,11 +9,10 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/css/app.css',
             ],
-            refresh: true,
-            // refresh: [
-            //     ...refreshPaths,
-            //     'app/Http/Livewire/**',
-            // ],
+            refresh: [
+                ...refreshPaths,
+                'app/Http/Livewire/**',
+            ],
         }),
     ],
 });

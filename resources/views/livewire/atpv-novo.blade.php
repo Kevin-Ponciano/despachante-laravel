@@ -214,14 +214,18 @@
             <div class="col-lg-1">
                 <div class="mb-3">
                     <label class="form-label">UF</label>
-                    <input x-data x-mask:dynamic="alpineMaskUf" x-model="$wire.uf"
+                    <input x-data x-mask:dynamic="alpineMaskUf"
                            id="uf" type="text" class="form-control text-uppercase px-2" name="uf"
                            wire:model.defer="uf">
                 </div>
             </div>
         </div>
     </fieldset>
-    <script>
-
-    </script>
+    <div class="row">
+        <div class="col-lg-12">
+            <label class="form-label">Observação</label>
+            <textarea class="form-control" name="observacao"
+                      wire:model.defer="observacao"></textarea>
+        </div>
+    </div>
 </div>

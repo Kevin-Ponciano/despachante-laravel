@@ -48,14 +48,18 @@
         <x-slot:thead>
             <tr>
                 <th>id</th>
-                <th>Cliente</th>
-                <th>Placa</th>
+                <th>Comprador E-mail</th>
+                <th>Vendedor E-mail</th>
                 <th>Aberto às</th>
             </tr>
         </x-slot:thead>
         <x-slot:tbody>
             @foreach($atpvs as $atpv)
-                <tr>
+                <tr class="cursor-pointer" wire:click="toRedirect({{$atpv->id}})">
+                    <td>{{$atpv->id}}</td>
+                    <td>{{$atpv->comprador_email}}</td>
+                    <td>{{$atpv->vendedor_email}}</td>
+                    <td>{{$atpv->created_at}}</td>
                 </tr>
             @endforeach
         </x-slot:tbody>

@@ -9,6 +9,10 @@ class Processos extends Component
 {
     public $processos;
 
+    public function toRedirect($id)
+    {
+        return redirect()->route('despachante.processos.show', $id);
+    }
     public function render()
     {
         $this->processos = Processo::all();

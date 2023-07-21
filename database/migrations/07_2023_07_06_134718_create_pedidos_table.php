@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('dados_inconsistentes')->nullable();
             $table->boolean('retorno_pendencia')->default(false);
             $table->boolean('documento_enviado')->default(false);
+            $table->text('observacoes')->nullable();
 
             $table->dateTime('criado_em');
             $table->dateTime('atualizado_em')->nullable();

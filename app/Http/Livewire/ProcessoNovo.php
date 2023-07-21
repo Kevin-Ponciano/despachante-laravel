@@ -21,7 +21,6 @@ class ProcessoNovo extends Component
         $servico = Servico::find($this->servicoId)->toArray();
         if (!in_array($servico, $this->servicos))
             $this->servicos[] = $servico;
-        $this->dispatchBrowserEvent('servico-added');
     }
 
     public function removeServico($id)

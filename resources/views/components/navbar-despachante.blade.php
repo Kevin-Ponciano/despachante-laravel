@@ -12,20 +12,22 @@
                 <div class="navbar-nav flex-row order-md-last">
                     <div class="d-none d-md-flex">
                         <div class="nav-item w-auto">
-                        <form>
-                            <div class="input-icon">
+                            <form>
+                                <div class="input-icon">
                                 <span class="input-icon-addon">
                                   <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                       viewBox="0 0 24 24"
                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                                        stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
-                                          d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path d="M21 21l-6 -6"></path></svg>
+                                          d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path
+                                          d="M21 21l-6 -6"></path></svg>
                                 </span>
-                                <input type="text" value="" class="form-control w-8" placeholder="Buscar..."
-                                       aria-label="Search in website">
-                            </div>
-                        </form>
-                    </div>
+                                    <input type="text" value="" class="form-control w-8" placeholder="Buscar..."
+                                           aria-label="Search in website">
+                                </div>
+                            </form>
+                        </div>
                         <a class="nav-link px-0 hide-theme-dark cursor-pointer" data-bs-toggle="tooltip"
                            data-bs-placement="bottom" aria-label="Enable dark mode"
                            data-bs-original-title="Enable dark mode">
@@ -188,18 +190,18 @@
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                            aria-label="Open user menu">
                                 <span class="avatar avatar-sm"
-                                      style="background-image: url({{asset('assets/img/logo3.png')}})"></span>
+                                      style="background-image: url(https://rare-gallery.com/thumbs/1069186-face-drawing-illustration-anime-glasses-red-cartoon-Ilya-Kuvshinov-ART-color-girl-beauty-woman-sketch-organ.png)"></span>
                             <div class="d-none d-xl-block ps-2">
-                                <div>Paweł Kuna</div>
-                                <div class="mt-1 small text-muted">UI Designer</div>
+                                <div>Kevin Ponciano</div>
+                                <div class="mt-1 small text-muted">Web Developer</div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href="#" class="dropdown-item">Status</a>
-                            <a href="./profile.html" class="dropdown-item">Profile</a>
-                            <a href="#" class="dropdown-item">Feedback</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="./settings.html" class="dropdown-item">Settings</a>
+                            {{--                            <a href="#" class="dropdown-item">Status</a>--}}
+                            {{--                            <a href="./profile.html" class="dropdown-item">Profile</a>--}}
+                            {{--                            <a href="#" class="dropdown-item">Feedback</a>--}}
+                            {{--                            <div class="dropdown-divider"></div>--}}
+                            {{--                            <a href="./settings.html" class="dropdown-item">Settings</a>--}}
                             <form method="POST" action="{{ route('logout') }}" id="logout">
                                 @csrf
                             </form>
@@ -268,19 +270,54 @@
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
                                     <a class="dropdown-item" href="{{route('despachante.clientes')}}">
-                                        <i class="ti ti-manual-gearbox"></i>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-manual-gearbox" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M5 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M12 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M19 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M5 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M12 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M5 8l0 8"></path>
+                                            <path d="M12 8l0 8"></path>
+                                            <path d="M19 8v2a2 2 0 0 1 -2 2h-12"></path>
+                                        </svg>
                                         <span class="ms-2">
                                             Clientes
                                         </span>
                                     </a>
                                     <a class="dropdown-item" href="{{route('despachante.usuarios')}}">
-                                        <i class="ti ti-users-group"></i>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-users-group" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                            <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1"></path>
+                                            <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                            <path d="M17 10h2a2 2 0 0 1 2 2v1"></path>
+                                            <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                            <path d="M3 13v-1a2 2 0 0 1 2 -2h2"></path>
+                                        </svg>
                                         <span class="ms-2">
                                             Usuários
                                         </span>
                                     </a>
                                     <a class="dropdown-item" href="{{route('despachante.servicos')}}">
-                                        <i class="ti ti-tools"></i>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-tools" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"></path>
+                                            <path d="M14.5 5.5l4 4"></path>
+                                            <path d="M12 8l-5 -5l-4 4l5 5"></path>
+                                            <path d="M7 8l-1.5 1.5"></path>
+                                            <path d="M16 12l5 5l-4 4l-5 -5"></path>
+                                            <path d="M16 17l-1.5 1.5"></path>
+                                        </svg>
                                         <span class="ms-2">
                                             Serviços
                                         </span>
@@ -381,10 +418,10 @@
     </div>
     <script>
         $(document).ready(function () {
-           let url = window.location
-           let item = $('li.nav-item a[href="'+ url +'"]')
+            let url = window.location
+            let item = $('li.nav-item a[href="' + url + '"]')
 
-            if(item.attr('class') === 'dropdown-item') {
+            if (item.attr('class') === 'dropdown-item') {
                 item.addClass('active')
                 item.parent().parent().parent().parent().addClass('active')
             } else {
