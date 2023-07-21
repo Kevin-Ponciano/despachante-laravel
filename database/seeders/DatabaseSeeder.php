@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Atpv;
 use App\Models\Cliente;
 use App\Models\Despachante;
 use App\Models\Endereco;
@@ -94,24 +95,39 @@ class DatabaseSeeder extends Seeder
 //        ]);
 
 
-//        $pedidos = [];
-//        $qtd_pedidos = 30;
-//        for($i = 0; $i < $qtd_pedidos; $i++) {
-//            $pedidos[] = [
-//                'comprador_nome' => $faker->name,
-//                'comprador_telefone' => $faker->cellphoneNumber,
-//                'placa' => $faker->numerify('#######'),
-//                'veiculo' => $faker->word,
-//                'preco_placa' => $faker->randomFloat(2, 100, 1000),
-//                'preco_honorario' => $faker->randomFloat(2, 100, 1000),
-//                'status' => $faker->randomElement(['ab', 'ea', 'cd']),
-//                'criado_por' => 1,
-//                'cliente_id' => 1,
-//            ];
-//        }
-//        foreach ($pedidos as $pedido) {
-//            Pedido::create($pedido);
-//        }
+        $pedidos = [];
+        $qtd_pedidos = 30;
+        for($i = 0; $i < $qtd_pedidos; $i++) {
+            $pedidos[] = [
+                'comprador_nome' => $faker->name,
+                'comprador_telefone' => $faker->cellphoneNumber,
+                'placa' => $faker->numerify('#######'),
+                'veiculo' => $faker->word,
+                'preco_placa' => $faker->randomFloat(2, 100, 1000),
+                'preco_honorario' => $faker->randomFloat(2, 100, 1000),
+                'status' => $faker->randomElement(['ab', 'ea', 'cd']),
+                'criado_por' => 1,
+                'cliente_id' => 1,
+            ];
+        }
+        foreach ($pedidos as $pedido) {
+            $pedidoNovo = Pedido::create($pedido);
+            Atpv::create([
+                'renavam' => $faker->numerify('###########'),
+                'numero_crv' => $faker->numerify('############'),
+                'vendedor_email' => $faker->email,
+                'vendedor_telefone' => $faker->cellphoneNumber,
+                'vendedor_cpf_cnpj' => $faker->numerify('##############'),
+                'comprador_cpf_cnpj' => $faker->numerify('##############'),
+                'comprador_email' => $faker->email,
+                'comprador_endereco' => 1,
+                'preco_venda' => $faker->randomFloat(2, 100, 1000),
+                'pedido_id' => $pedidoNovo->id,
+            ]);
+        }
+
+
+
 //        $processos = [];
 //        $pedidos = Pedido::all();
 //        foreach ($pedidos as $pedido) {
