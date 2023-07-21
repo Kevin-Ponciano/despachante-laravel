@@ -14,6 +14,5 @@ class DespachanteMiddleware
             return $next($request);
         }
         abort(404);
-
     }
 }
