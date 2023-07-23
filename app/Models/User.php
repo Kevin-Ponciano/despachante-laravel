@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -57,6 +58,36 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function despachante()
+    {
+        return $this->belongsTo(Despachante::class);
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class);
+    }
+
+    public function pedidosCriados()
+    {
+        return $this->hasMany(Pedido::class, 'criado_por');
+    }
+
+    public function pedidosResponsaveis()
+    {
+        return $this->hasMany(Pedido::class, 'responsavel_por');
+    }
+
+    public function pedidosConcluidos()
+    {
+        return $this->hasMany(Pedido::class, 'concluido_por');
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(Log::class, 'usuario_id');
+    }
 
     public function isDespachante(): bool
     {

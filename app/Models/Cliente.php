@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Cliente extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'nome',
         'status',
@@ -16,4 +18,21 @@ class Cliente extends Model
         'preco_terceiro',
         'despachante_id',
     ];
+
+    public function despachante()
+    {
+        return $this->belongsTo(Despachante::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class);
+    }
+
+
 }

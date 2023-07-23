@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Atpv extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'renavam',
         'numero_crv',
@@ -17,8 +20,18 @@ class Atpv extends Model
         'vendedor_cpf_cnpj',
         'comprador_cpf_cnpj',
         'comprador_email',
-        'comprador_endereco',
+        'comprador_endereco_id',
         'preco_venda',
         'pedido_id',
     ];
+
+    public function pedido()
+    {
+        return $this->belongsTo(Pedido::class);
+    }
+
+    public function compradorEndereco(): BelongsTo
+    {
+        return $this->belongsTo(Endereco::class, 'comprador_endereco_id');
+    }
 }
