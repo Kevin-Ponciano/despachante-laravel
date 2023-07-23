@@ -25,7 +25,7 @@ return new class extends Migration
             $table->char('vendedor_cpf_cnpj', 18);
             $table->char('comprador_cpf_cnpj', 18);
             $table->string('comprador_email');
-            $table->foreignId('comprador_endereco')->constrained('enderecos')->onUpdate('cascade');
+            $table->foreignId('comprador_endereco_id')->constrained('enderecos')->onUpdate('cascade');
             $table->float('preco_venda')->default(0);
             $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

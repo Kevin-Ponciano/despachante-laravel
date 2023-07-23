@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Team;
 use App\Models\User;
+use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Laravel\Jetstream\Features;
 
 class UserFactory extends Factory
 {
@@ -24,18 +24,54 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = Faker::create('pt_BR');
         return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->unique()->safeEmail(),
+            'name' => $faker->name,
+            'email' => $faker->unique()->email,
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Hash::make('123'),
+            'role' => 'du',
+            'despachante_id' => 1,
+            'cliente_id' => null,
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            'current_team_id' => null,
         ];
     }
+
+    /**
+     * Indicate that the user is an admin.
+     */
+    public function adminDespachante(): static
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => 'da',
+            ];
+        });
+    }
+
+    public function cliente(): static
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => 'cu',
+                'cliente_id' => 1,
+            ];
+        });
+    }
+
+    public function adminCliente(): static
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => 'ca',
+                'cliente_id' => 1,
+            ];
+        });
+    }
+
 
     /**
      * Indicate that the model's email address should be unverified.
@@ -49,21 +85,4 @@ class UserFactory extends Factory
         });
     }
 
-    /**
-     * Indicate that the user should have a personal team.
-     */
-    public function withPersonalTeam(): static
-    {
-        if (! Features::hasTeamFeatures()) {
-            return $this->state([]);
-        }
-
-        return $this->has(
-            Team::factory()
-                ->state(function (array $attributes, User $user) {
-                    return ['name' => $user->name.'\'s Team', 'user_id' => $user->id, 'personal_team' => true];
-                }),
-            'ownedTeams'
-        );
-    }
 }
