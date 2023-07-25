@@ -1,4 +1,4 @@
-<div class="modal modal-blur fade" id="modal-novo" tabindex="-1" aria-hidden="true">
+<div class="modal modal-blur fade " id="modal-novo" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -25,7 +25,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-0">
                     <div class="tab-content">
                         <div class="tab-pane active show" id="tabs-processo" role="tabpanel">
                             <livewire:processo-novo/>
@@ -36,45 +36,32 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                {{-- todo Transformar em Slot --}}
-                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                    Cancelar
-                </a>
-                <button id="submitButton" class="btn btn-primary ms-auto" data-bs-dismiss="modal"
-                        onclick="livewire_event()">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                         stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M12 5l0 14"></path>
-                        <path d="M5 12l14 0"></path>
-                    </svg>
-                    Criar novo processo
-                </button>
-            </div>
+            {{--            <div class="modal-footer">--}}
+            {{--                --}}{{-- todo Transformar em Slot --}}
+            {{--                <a href="#" onclick="Livewire.emit('clearInputs')" class="btn btn-link link-secondary"--}}
+            {{--                   data-bs-dismiss="modal">--}}
+            {{--                    Cancelar--}}
+            {{--                </a>--}}
+            {{--                <button id="submitButton" class="btn btn-primary ms-auto" data-bs-dismiss="modal"--}}
+            {{--                        onclick="livewire_event()">--}}
+            {{--                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->--}}
+            {{--                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"--}}
+            {{--                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"--}}
+            {{--                         stroke-linejoin="round">--}}
+            {{--                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>--}}
+            {{--                        <path d="M12 5l0 14"></path>--}}
+            {{--                        <path d="M5 12l14 0"></path>--}}
+            {{--                    </svg>--}}
+            {{--                    Criar novo processo--}}
+            {{--                </button>--}}
+            {{--            </div>--}}
         </div>
     </div>
     <script>
-        let livewire_event_msg = 'storeProcesso';
-
-        let switchButton = (tipo) => {
-            switch (tipo) {
-                case 'processo':
-                    $('#submitButton').html('Criar novo Processo')
-                    livewire_event_msg = 'storeProcesso'
-                    break;
-                case 'atpv':
-                    $('#submitButton').html('Criar novo ATPV')
-                    livewire_event_msg = 'storeAtpv'
-                    break;
-            }
-        }
-
-        let livewire_event = () => {
-            Livewire.emit(livewire_event_msg)
-        }
-
+        $('document').ready(function () {
+            Livewire.on('$refresh', () => {
+                $('#modal-novo').modal('hide')
+            })
+        })
     </script>
 </div>

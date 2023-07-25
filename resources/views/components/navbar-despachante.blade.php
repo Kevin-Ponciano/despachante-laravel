@@ -1,10 +1,13 @@
-<x-navbar :nome="\Auth::user()->nomeEmpresa()" :dashboard-route="route('despachante.dashboard')">
+<x-navbar :nome="\Auth::user()->nomeEmpresa()" :dashboard-route="route('despachante.dashboard')"
+          :nome-usuario="\Auth::user()->name" :funcao="\Auth::user()->getFuncao()">
     <x-slot:navItens>
         <li class="nav-item">
             <a href="#" class="nav-link" data-bs-toggle="modal"
                data-bs-target="#modal-novo">
                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-text-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-text-plus" width="24"
+                         height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                        <path d="M19 10h-14"></path>
                        <path d="M5 6h14"></path>

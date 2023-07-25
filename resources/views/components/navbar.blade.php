@@ -196,8 +196,8 @@
                                 <span class="avatar avatar-sm"
                                       style="background-image: url(https://rare-gallery.com/thumbs/1069186-face-drawing-illustration-anime-glasses-red-cartoon-Ilya-Kuvshinov-ART-color-girl-beauty-woman-sketch-organ.png)"></span>
                             <div class="d-none d-xl-block ps-2">
-                                <div>Kevin Ponciano</div>
-                                <div class="mt-1 small text-muted">Web Developer</div>
+                                <div>{{$nomeUsuario}}</div>
+                                <div class="mt-1 small text-muted">{{$funcao}}</div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

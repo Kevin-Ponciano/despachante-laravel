@@ -26,7 +26,7 @@ class UserFactory extends Factory
     {
         $faker = Faker::create('pt_BR');
         return [
-            'name' => $faker->name,
+            'name' => $faker->unique()->name,
             'email' => $faker->unique()->email,
             'email_verified_at' => now(),
             'password' => Hash::make('123'),

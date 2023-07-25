@@ -1,7 +1,9 @@
 <div class="row">
-    <div class="col-4">
+    <div class="col-auto">
         <div class="mb-3">
-            {{$cliente}}
+            <div>
+                {{$cliente}}
+            </div>
         </div>
     </div>
 </div>

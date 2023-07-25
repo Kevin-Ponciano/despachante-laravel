@@ -56,6 +56,44 @@
 <!-- TomSelect -->
 <script src="{{asset('assets/js/libs/tom-select/dist/js/tom-select.complete.min.js')}}"></script>
 <script src="{{asset('assets/js/tomSelect.config.js')}}"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        const theme = localStorage.getItem('theme');
+        let bgToast = '#eef1f4';
+        let titleToast = '';
+
+        if (theme === 'dark') {
+            bgToast = '#182433';
+            titleToast = 'text-white';
+        }
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            showCloseButton: true,
+            timerProgressBar: true,
+            background: bgToast,
+            width: 'auto',
+            customClass: {
+                htmlContainer: 'm-0',
+                timerProgressBar: 'bg-primary',
+            }
+        });
+
+        Livewire.on('success', (data) => {
+            const url = data.url;
+            const message = data.message;
+            Toast.fire({
+                icon: 'success',
+                html: `<div class='fw-semibold pb-1 ${titleToast}'>${message}</div>` +
+                    "<div class='text-center'><a href='" + url + "' class='btn btn-sm btn-teal'>Abrir</a></div>"
+            })
+        })
+    });
+</script>
 @livewireScripts
 </body>
 </html>

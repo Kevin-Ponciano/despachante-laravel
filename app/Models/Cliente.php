@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'nome',
         'status',
@@ -34,5 +35,22 @@ class Cliente extends Model
         return $this->hasMany(Pedido::class);
     }
 
+    public function processos()
+    {
+        return $this->hasManyThrough(Processo::class, Pedido::class);
+    }
 
+    public function pedidosWithProcessos()
+    {
+        return $this->pedidos()->with('processo')->get()->reject(function ($value) {
+            return $value->processo == null;
+        });
+    }
+
+    public function pedidosWithAtpvs()
+    {
+        return $this->pedidos()->with('atpv')->get()->reject(function ($value) {
+            return $value->atpv == null;
+        });
+    }
 }

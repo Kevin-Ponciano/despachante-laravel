@@ -5,7 +5,7 @@
             <div class="">
                 Clientes:
                 <div class="me-2 d-inline-block" wire:ignore>
-                    <select id="select-cliente" class="form-select-sm">
+                    <select id="select-cliente" class="form-select-sm" wire:model="clienteId">
                         <option value="-1">Todos</option>
                         @foreach(\App\Models\Cliente::all() as $cliente)
                             <option value="{{$cliente->id}}">{{$cliente->nome}}</option>

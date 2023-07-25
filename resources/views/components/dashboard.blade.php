@@ -14,11 +14,11 @@
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-{{--                        <span class="d-none d-sm-inline">--}}
-{{--                            <a href="#" class="btn">--}}
-{{--                            New view--}}
-{{--                            </a>--}}
-{{--                        </span>--}}
+                        {{--                        <span class="d-none d-sm-inline">--}}
+                        {{--                            <a href="#" class="btn">--}}
+                        {{--                            New view--}}
+                        {{--                            </a>--}}
+                        {{--                        </span>--}}
                         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
                            data-bs-target="#modal-novo">
                             <i class="ti ti-plus"></i>
@@ -42,7 +42,8 @@
                     />
                 </div>
                 <div class="col-sm-6 col-lg-4">
-                    <x-card bg="bg-primary-lt" titulo="Processos" subtitulo="Em andamento" :numero="$qtdProcessosEmAndamento"
+                    <x-card bg="bg-primary-lt" titulo="Processos" subtitulo="Em andamento"
+                            :numero="$qtdProcessosEmAndamento"
                             :route="$routeProcessosEmAndamento"
                             icon="ti ti-file-analytics ti"
                     />
@@ -77,7 +78,8 @@
                     />
                 </div>
                 <div class="col-sm-6 col-lg-2">
-                    <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Solicitado Cancelamento" :numero="$qtdAtpvsSolicitadoCancelamento"
+                    <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Solicitado Cancelamento"
+                            :numero="$qtdAtpvsSolicitadoCancelamento"
                             :route="$routeAtpvsSolicitadoCancelamento"
                             icon="ti ti-file-x ti"
                     />

@@ -19,10 +19,10 @@ class LoginResponse implements LoginResponseContract
         if (Auth::user()->isDespachante()) {
             return $request->wantsJson()
                 ? response()->json(['two_factor' => false])
-                : redirect()->route('despachante.dashboard');
+                : redirect()->intended(route('despachante.dashboard'));
         }
         return $request->wantsJson()
             ? response()->json(['two_factor' => false])
-            : redirect()->route('cliente.dashboard');
+            : redirect()->intended(route('cliente.dashboard'));
     }
 }
