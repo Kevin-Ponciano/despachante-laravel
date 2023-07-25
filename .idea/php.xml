@@ -61,7 +61,6 @@
       <path value="$PROJECT_DIR$/vendor/laravel/serializable-closure" />
       <path value="$PROJECT_DIR$/vendor/laravel/pint" />
       <path value="$PROJECT_DIR$/vendor/laravel/fortify" />
-      <path value="$PROJECT_DIR$/vendor/laravel/jetstream" />
       <path value="$PROJECT_DIR$/vendor/mockery/mockery" />
       <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
@@ -134,6 +133,7 @@
       <path value="$PROJECT_DIR$/vendor/_laravel_idea" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php83" />
       <path value="$PROJECT_DIR$/vendor/league/flysystem-local" />
+      <path value="$PROJECT_DIR$/vendor/laravel/jetstream" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
