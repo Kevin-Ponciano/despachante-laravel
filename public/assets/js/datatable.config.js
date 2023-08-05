@@ -8,12 +8,15 @@ const tablePlay = () => {
 
 }
 $(document).ready(function () {
-    let processo_table = $('#processos-table').DataTable({
-        ...configDefault,
-        dom: "<'row'<'col-sm-12 col-md-6 px-2'l><'col-sm-12 col-md-6 px-2'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    Livewire.on('tablePlay', () => {
+        let table = $('#table').DataTable({
+            ...configDefault,
+            dom: "<'row'<'col-sm-12 col-md-6 px-2'><'col-sm-12 col-md-6 px-2'>>" +
+                "<'row'<'col-sm-12'>>" +
+                "<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
+        });
     });
+
 
     $('#clientes-table').DataTable({
         ...configDefault,

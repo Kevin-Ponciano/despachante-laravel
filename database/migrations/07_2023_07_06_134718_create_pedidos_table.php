@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,12 +12,13 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('numero_pedido');
+
             $table->string('comprador_nome');
-            $table->char('comprador_telefone',15);
+            $table->char('comprador_telefone', 15);
             $table->char('placa', 7);
             $table->string('veiculo');
-            $table->float('preco_placa')->default(0);
-            $table->float('preco_honorario')->default(0);
+            $table->decimal('preco_honorario', 12)->default(0);
             $table->char('status', 2);
 
             $table->string('dados_inconsistentes')->nullable();

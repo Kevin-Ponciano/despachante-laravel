@@ -1,24 +1,17 @@
 $(document).ready(function () {
-    let el = $("#select-cliente")
-    if (el.length === 0) return
-    let select = new TomSelect(el, {})
-    if (select !== null) {
-        select.on('change', function () {
-            Livewire.emit('onChange', select.getValue())
-            select.blur()
-        });
-        $('.ts-control').addClass('py-0 px-1 text-muted')
+    let applySelect = (el) => {
+        if (el.length === 0) return
+        el.each(function () {
+            let select = new TomSelect(el, {
+                allowEmptyOption: true,
+            })
+            select.on('change', function () {
+                select.blur()
+            });
+        })
     }
-});
-
-$(document).ready(function () {
-    let el = $("#select-cliente-processo-novo")
-    if (el.length === 0) return
-    let select = new TomSelect(el, {})
-    if (select !== null) {
-        select.on('change', function () {
-            Livewire.emit('onChange', select.getValue())
-            select.blur()
-        });
-    }
+    applySelect($("#select-cliente"))
+    $('.ts-control').addClass('py-0 px-1 text-muted')
+    applySelect($("#select-cliente-processo-novo"))
+    applySelect($("#select-cliente-atpv-novo"))
 });

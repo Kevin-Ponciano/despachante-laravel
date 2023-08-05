@@ -9,12 +9,25 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Processo extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'tipo',
         'comprador_tipo',
         'qtd_placas',
+        'preco_placa',
         'pedido_id',
     ];
+
+    public function tipo()
+    {
+        $tipo = $this->tipo;
+        if ($tipo == 'ss')
+            return 'Solicitação de Serviço';
+        elseif ($tipo == 'rv')
+            return 'RENAVE';
+        else
+            return '-';
+    }
 
     public function pedido(): BelongsTo
     {

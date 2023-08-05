@@ -41,7 +41,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             abort(500);
     })->name('dashboard');
 
-
     Route::middleware(['despachante'])->prefix('despachante')->name('despachante.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::get('/processos', Processos::class)->name('processos');

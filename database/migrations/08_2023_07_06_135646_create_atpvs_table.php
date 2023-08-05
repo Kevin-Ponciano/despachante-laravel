@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,18 +14,18 @@ return new class extends Migration
             $table->id();
             $table->char('renavam', 11);
             $table->char('numero_crv', 12);
-            $table->char('codigo_crv',12)->nullable();
+            $table->char('codigo_crv', 12)->nullable();
 
-            $table->float('hodometro')->nullable()->default(0);
+            $table->string('hodometro')->nullable()->default(0);
             $table->dateTime('data_hodometro')->nullable();
 
             $table->string('vendedor_email');
-            $table->char('vendedor_telefone',15);
+            $table->char('vendedor_telefone', 15);
             $table->char('vendedor_cpf_cnpj', 18);
             $table->char('comprador_cpf_cnpj', 18);
             $table->string('comprador_email');
             $table->foreignId('comprador_endereco_id')->constrained('enderecos')->onUpdate('cascade');
-            $table->float('preco_venda')->default(0);
+            $table->decimal('preco_venda', 12)->default(0);
             $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

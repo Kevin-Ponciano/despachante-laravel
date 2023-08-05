@@ -148,7 +148,8 @@
                             <span class="input-icon-addon">
                                 <i class="ti ti-currency-real"></i>
                             </span>
-                                <input type="text" class="form-control imask-preco px-5 w-66"
+                                <input x-mask:dynamic="$money($input, ',','.')"
+                                       type="text" class="form-control px-5 w-66"
                                        wire:model.defer="precoPlaca">
                             </div>
                         </div>
@@ -160,7 +161,8 @@
                             <span class="input-icon-addon">
                                 <i class="ti ti-currency-real"></i>
                             </span>
-                                <input type="text" class="form-control imask-preco px-5 w-66"
+                                <input x-mask:dynamic="$money($input, ',','.')"
+                                       type="text" class="form-control px-5 w-66"
                                        wire:model.defer="precoHonorario">
                             </div>
                         </div>
@@ -174,7 +176,7 @@
                                     <span class="input-icon-addon">
                                         <i class="ti ti-currency-real"></i>
                                     </span>
-                                    <input x-data x-mask:dynamic="$money($input, '.','')"
+                                    <input x-mask:dynamic="$money($input, ',','.')"
                                            type="text" class="form-control px-5"
                                            wire:model.defer="servicos.{{ $index }}.preco">
                                     <a class="btn btn-danger btn-remove-service px-0 py-0 rounded-5"

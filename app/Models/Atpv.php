@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Atpv extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'renavam',
         'numero_crv',
@@ -33,5 +34,14 @@ class Atpv extends Model
     public function compradorEndereco(): BelongsTo
     {
         return $this->belongsTo(Endereco::class, 'comprador_endereco_id');
+    }
+
+    public function tipo()
+    {
+        if ($this->codigo_crv) {
+            return 'RENAVE';
+        } else {
+            return 'ATPV';
+        }
     }
 }

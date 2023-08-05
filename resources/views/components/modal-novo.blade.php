@@ -1,4 +1,4 @@
-<div class="modal modal-blur fade " id="modal-novo" tabindex="-1" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-novo" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,14 +9,14 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a href="#tabs-processo" onclick="switchButton('processo')"
+                            <a href="#tabs-processo"
                                class="nav-link active"
                                data-bs-toggle="tab"
                                aria-selected="true"
                                role="tab">Processo</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a href="#tabs-atpv" onclick="switchButton('atpv')"
+                            <a href="#tabs-atpv"
                                class="nav-link"
                                data-bs-toggle="tab"
                                aria-selected="false"
@@ -36,25 +36,6 @@
                     </div>
                 </div>
             </div>
-            {{--            <div class="modal-footer">--}}
-            {{--                --}}{{-- todo Transformar em Slot --}}
-            {{--                <a href="#" onclick="Livewire.emit('clearInputs')" class="btn btn-link link-secondary"--}}
-            {{--                   data-bs-dismiss="modal">--}}
-            {{--                    Cancelar--}}
-            {{--                </a>--}}
-            {{--                <button id="submitButton" class="btn btn-primary ms-auto" data-bs-dismiss="modal"--}}
-            {{--                        onclick="livewire_event()">--}}
-            {{--                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->--}}
-            {{--                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"--}}
-            {{--                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"--}}
-            {{--                         stroke-linejoin="round">--}}
-            {{--                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>--}}
-            {{--                        <path d="M12 5l0 14"></path>--}}
-            {{--                        <path d="M5 12l14 0"></path>--}}
-            {{--                    </svg>--}}
-            {{--                    Criar novo processo--}}
-            {{--                </button>--}}
-            {{--            </div>--}}
         </div>
     </div>
     <script>

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,6 +15,7 @@ return new class extends Migration
             $table->char('tipo', 2);
             $table->char('comprador_tipo', 2);
             $table->tinyInteger('qtd_placas')->default(0);
+            $table->decimal('preco_placa', 12)->default(0);
             $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

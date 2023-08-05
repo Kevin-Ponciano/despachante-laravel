@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Pedido;
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class PedidoFactory extends Factory
 {
@@ -17,9 +16,8 @@ class PedidoFactory extends Factory
         return [
             'comprador_nome' => $faker->name,
             'comprador_telefone' => $faker->cellphoneNumber,
-            'placa' => $faker->numerify('#######'),
+            'placa' => $faker->regexify('[A-Z]{3}[0-9]{4}'),
             'veiculo' => $faker->word,
-            'preco_placa' => $faker->randomFloat(2, 100, 1000),
             'preco_honorario' => $faker->randomFloat(2, 100, 1000),
             'status' => $faker->randomElement(['ab', 'ea', 'pe', 'co']),
             'dados_inconsistentes' => null,

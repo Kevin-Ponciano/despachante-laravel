@@ -65,18 +65,14 @@ class Despachante extends Model
         return $processos;
     }
 
-    public function pedidosWithProcessos()
+    public function pedidosProcessos()
     {
-        return $this->pedidos()->with('processo')->get()->reject(function ($value) {
-            return $value->processo == null;
-        });
+        return $this->pedidos()->has('processo');
     }
 
-    public function pedidosWithAtpvs()
+    public function pedidosAtpvs()
     {
-        return $this->pedidos()->with('atpv')->get()->reject(function ($value) {
-            return $value->atpv == null;
-        });
+        return $this->pedidos()->has('atpv');
     }
 
 

@@ -1,4 +1,4 @@
-<a href="{{$route}}" class="card {{$bg}}">
+<a href="{{$route}}" class="card @if($numero == 0) bg-github-lt @else {{$bg}} @endif">
     <div class="card-body">
         <div class="d-flex align-items-center">
             <div class="subheader">{{$titulo}}</div>

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pedido extends Model
 {
     use HasFactory;
+
     const CREATED_AT = 'criado_em';
     const UPDATED_AT = 'atualizado_em';
 
@@ -16,13 +18,41 @@ class Pedido extends Model
         'comprador_telefone',
         'placa',
         'veiculo',
-        'preco_placa',
         'preco_honorario',
         'status',
         'observacoes',
         'criado_por',
         'cliente_id',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($pedido) {
+            $numero_pedido = $pedido->cliente->despachante->pedidos()->max('numero_pedido') + 1;
+            $pedido->numero_pedido = $numero_pedido;
+        });
+    }
+
+    public function criado_em()
+    {
+        $criado_em = Carbon::createFromFormat('Y-m-d H:i:s', $this->criado_em);
+        return $criado_em->format('d/m/Y') . ' - ' . $criado_em->format('H:i');
+    }
+
+    public function atualizado_em()
+    {
+        $atualizado_em = Carbon::createFromFormat('Y-m-d H:i:s', $this->atualizado_em);
+        return $atualizado_em->format('d/m/Y') . ' - ' . $atualizado_em->format('H:i');
+
+    }
+
+    public function concluido_em()
+    {
+        $concluido_em = Carbon::createFromFormat('Y-m-d H:i:s', $this->concluido_em);
+        return $concluido_em->format('d/m/Y') . ' - ' . $concluido_em->format('H:i');
+    }
 
     public function usuarioCriador()
     {

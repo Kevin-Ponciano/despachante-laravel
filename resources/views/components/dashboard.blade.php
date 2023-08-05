@@ -35,23 +35,31 @@
                 PROCESSOS
             </div>
             <div class="row row-deck row-cards">
-                <div class="col-sm-6 col-lg-4">
-                    <x-card bg="bg-success-lt" titulo="Processos" subtitulo="Abertos" :numero="$qtdProcessosAbertos"
+                <div class="col-sm-6 col-lg-3">
+                    <x-card bg="bg-success-lt" titulo="Processos" subtitulo="Abertos"
+                            :numero="$qtdProcessosAbertos"
                             :route="$routeProcessosAbertos"
-                            icon="ti ti-file-plus ti"
+                            icon="ti ti-file-plus"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-4">
+                <div class="col-sm-6 col-lg-3">
+                    <x-card bg="bg-warning-lt" titulo="Processos" subtitulo="Retornados"
+                            :numero="$qtdProcessosRetornados"
+                            :route="$routeProcessosRetornados"
+                            icon="ti ti-file-symlink"
+                    />
+                </div>
+                <div class="col-sm-6 col-lg-3">
                     <x-card bg="bg-primary-lt" titulo="Processos" subtitulo="Em andamento"
                             :numero="$qtdProcessosEmAndamento"
                             :route="$routeProcessosEmAndamento"
-                            icon="ti ti-file-analytics ti"
+                            icon="ti ti-file-analytics"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-4">
+                <div class="col-sm-6 col-lg-3">
                     <x-card bg="bg-danger-lt" titulo="Processos" subtitulo="Pendentes" :numero="$qtdProcessosPendentes"
                             :route="$routeProcessosPendentes"
-                            icon="ti ti-file-report ti"
+                            icon="ti ti-file-report"
                     />
                 </div>
             </div>
@@ -59,29 +67,36 @@
                 ATPVs
             </div>
             <div class="row row-deck row-cards">
-                <div class="col-sm-6 col-lg-4">
+                <div class="col-sm-6 col-lg-3">
                     <x-card bg="bg-success-lt" titulo="ATPVs" subtitulo="Abertos" :numero="$qtdAtpvsAbertos"
                             :route="$routeAtpvsAbertos"
-                            icon="ti ti-file-plus ti"
+                            icon="ti ti-file-plus"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-4">
+                <div class="col-sm-6 col-lg-3">
+                    <x-card bg="bg-warning-lt" titulo="ATPVs" subtitulo="Retornados"
+                            :numero="$qtdAtpvsRetornados"
+                            :route="$routeAtpvsRetornados"
+                            icon="ti ti-file-symlink"
+                    />
+                </div>
+                <div class="col-sm-6 col-lg-2">
                     <x-card bg="bg-primary-lt" titulo="ATPVs" subtitulo="Em andamento" :numero="$qtdAtpvsEmAndamento"
                             :route="$routeAtpvsEmAndamento"
-                            icon="ti ti-file-analytics ti"
+                            icon="ti ti-file-analytics"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-2">
+                <div class="col-sm-6 col-lg-auto">
                     <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Pendentes" :numero="$qtdAtpvsPendentes"
                             :route="$routeAtpvsPendentes"
-                            icon="ti ti-file-report ti"
+                            icon="ti ti-file-report"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-2">
+                <div class="col-sm-6 col-lg">
                     <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Solicitado Cancelamento"
                             :numero="$qtdAtpvsSolicitadoCancelamento"
                             :route="$routeAtpvsSolicitadoCancelamento"
-                            icon="ti ti-file-x ti"
+                            icon="ti ti-file-x"
                     />
                 </div>
             </div>

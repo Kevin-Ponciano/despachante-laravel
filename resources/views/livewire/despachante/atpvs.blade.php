@@ -1,13 +1,13 @@
 <div>
     <x-page-title title="ATPVs"/>
-    <x-livewire-table>
+    <x-livewire-table :data="$pedidos">
         <x-slot:filters>
             <div class="">
                 Clientes:
                 <div class="me-2 d-inline-block" wire:ignore>
-                    <select id="select-cliente" class="form-select-sm" wire:model="clienteId">
-                        <option value="-1">Todos</option>
-                        @foreach(\App\Models\Cliente::all() as $cliente)
+                    <select id="select-cliente" class="form-select-sm" wire:model="cliente">
+                        <option value="">Todos</option>
+                        @foreach($clientes as $cliente)
                             <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
                         @endforeach
                     </select>
@@ -16,52 +16,77 @@
             <div class="">
                 Status:
                 <div class="me-2 d-inline-block text-muted">
-                    <select class="form-select form-select-sm">
-                        <option value="100">Todos</option>
-                        <option value="10">Abertos</option>
-                        <option value="25">Em Andamento</option>
-                        <option value="50">Concluídos</option>
+                    <select class="form-select form-select-sm" wire:model="status">
+                        <option value="">Todos</option>
+                        <option value="ab">Abertos</option>
+                        <option value="em">Em Andamento</option>
+                        <option value="pe">Pendentes</option>
+                        <option value="sc">Cancelamento</option>
+                        <option value="co">Concluídos</option>
                     </select>
                 </div>
             </div>
             <div class="">
                 Tipo:
                 <div class="me-2 d-inline-block text-muted">
-                    <select class="form-select form-select-sm">
-                        <option value="100">Todos</option>
-                        <option value="100">ATPV</option>
-                        <option value="10">RENAVE</option>
+                    <select class="form-select form-select-sm" wire:model="tipo">
+                        <option value="">Todos</option>
+                        <option value="at">ATPV</option>
+                        <option value="rv">RENAVE</option>
                     </select>
                 </div>
             </div>
             <div class="">
                 Retorno da Pendência:
                 <div class="me-2 d-inline-block text-muted">
-                    <select class="form-select form-select-sm">
-                        <option value="100">Todos</option>
-                        <option value="10">Sim</option>
-                        <option value="10">Não</option>
+                    <select class="form-select form-select-sm" wire:model="retorno">
+                        <option value="">Todos</option>
+                        <option value="1">Sim</option>
+                        <option value="0">Não</option>
                     </select>
                 </div>
             </div>
         </x-slot:filters>
         <x-slot:thead>
             <tr>
-                <th>id</th>
-                <th>Comprador E-mail</th>
-                <th>Vendedor E-mail</th>
-                <th>Aberto às</th>
+                <th wire:click="sortBy('id')">id
+                    <i class="ti ti-arrow-big-{{$sortField === 'id' ? $iconDirection : null}}-filled"></i></th>
+                <th wire:click="sortBy('nome')">cliente
+                    <i class="ti ti-arrow-big-{{$sortField === 'nome' ? $iconDirection : null}}-filled"></i></th>
+                <th wire:click="sortBy('comprador_nome')">nome do comprador
+                    <i class="ti ti-arrow-big-{{$sortField === 'comprador_nome' ? $iconDirection : null}}-filled"></i>
+                </th>
+                <th wire:click="sortBy('placa')">placa
+                    <i class="ti ti-arrow-big-{{$sortField === 'placa' ? $iconDirection : null}}-filled"></i></th>
+                <th wire:click="sortBy('codigo_crv')">Tipo
+                    <i class="ti ti-arrow-big-{{$sortField === 'codigo_crv' ? $iconDirection : null}}-filled"></i></th>
+                <th wire:click="sortBy('atualizado_em')">atualizado às
+                    <i class="ti ti-arrow-big-{{$sortField === 'atualizado_em' ? $iconDirection : null}}-filled"></i>
+                </th>
             </tr>
         </x-slot:thead>
         <x-slot:tbody>
-            @foreach($atpvs as $atpv)
-                <tr class="cursor-pointer" wire:click="toRedirect({{$atpv->id}})">
-                    <td>{{$atpv->id}}</td>
-                    <td>{{$atpv->comprador_email}}</td>
-                    <td>{{$atpv->vendedor_email}}</td>
-                    <td>{{$atpv->created_at}}</td>
+            @forelse($pedidos as $pedido)
+                <tr class="cursor-pointer"
+                    onclick="window.location='{{route('despachante.atpvs.show', $pedido->id)}}'">
+                    <td>{{$pedido->id}}</td>
+                    <td>{{$pedido->cliente->nome}}</td>
+                    <td>{{$pedido->comprador_nome}}</td>
+                    <td>{{$pedido->placa}}</td>
+                    <td>{{$pedido->atpv->tipo()}}</td>
+                    <td>{{$pedido->atualizado_em()}}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="6">
+                        <div class="d-flex justify-content-center">
+                            <span class="text-muted">
+                                Nenhum Processo Encontrado...
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            @endforelse
         </x-slot:tbody>
     </x-livewire-table>
 </div>

@@ -38,14 +38,6 @@ const imaskConfig = {
             maxLength: 18
         }
     ],
-    preco: {
-        mask: Number,  // enable number mask
-        scale: 2,  // digits after point, 0 for integers
-        padFractionalZeros: false,  // if true, then pads zeros at end to the length of scale
-        normalizeZeros: true,  // appends or removes zeros at ends
-        radix: '.',  // fractional delimiter
-        mapToRadix: [',']  // symbols to process as radix
-    }
 };
 
 function applyIMask(selector, config) {
@@ -58,7 +50,6 @@ function applyIMask(selector, config) {
 function applyIMasks() {
     applyIMask('.imask-telefone', imaskConfig.telefone);
     applyIMask('.imask-cpf-cnpj', imaskConfig.cpfCnpj);
-    applyIMask('.imask-preco', imaskConfig.preco);
 }
 
 applyIMasks();

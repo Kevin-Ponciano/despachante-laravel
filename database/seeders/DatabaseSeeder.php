@@ -7,9 +7,11 @@ use App\Models\Cliente;
 use App\Models\Despachante;
 use App\Models\Endereco;
 use App\Models\Pedido;
+use App\Models\PedidoServico;
 use App\Models\Processo;
 use App\Models\Servico;
 use App\Models\User;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,13 +19,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
+        $faker = Factory::create('pt_BR');
 
-        Despachante::factory(3)->create()->each(function ($despachante) {
+        Despachante::factory(3)->create()->each(function ($despachante) use ($faker) {
             $despachante->endereco_id = Endereco::factory()->create()->id;
             $despachante->save();
-            Servico::factory(3)->create([
-                'despachante_id' => $despachante->id,
-            ]);
 
             User::factory(2)->create([
                 'despachante_id' => $despachante->id,
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
 
             Cliente::factory(3)->create([
                 'despachante_id' => $despachante->id,
-            ])->each(function ($cliente) {
+            ])->each(function ($cliente) use ($faker) {
                 $user = User::factory()->create([
                     'role' => 'ca',
                     'despachante_id' => null,
@@ -46,13 +46,26 @@ class DatabaseSeeder extends Seeder
                         'comprador_endereco_id' => Endereco::factory()->create()->id,
                         'pedido_id' => $pedido->id,
                     ]);
+                    PedidoServico::create([
+                        'pedido_id' => $pedido->id,
+                        'servico_id' => Servico::factory()->create([
+                            'despachante_id' => $pedido->cliente->despachante->id,
+                        ])->id,
+                    ]);
                 });
                 Pedido::factory(5)->create([
                     'criado_por' => $user->id,
                     'cliente_id' => $cliente->id,
-                ])->each(function ($pedido) {
+                ])->each(function ($pedido) use ($faker) {
                     Processo::factory()->create([
                         'pedido_id' => $pedido->id,
+                    ]);
+                    PedidoServico::create([
+                        'pedido_id' => $pedido->id,
+                        'servico_id' => Servico::factory()->create([
+                            'despachante_id' => $pedido->cliente->despachante->id,
+                        ])->id,
+                        'preco' => $faker->randomFloat(2, 1, 10000),
                     ]);
                 });
             });

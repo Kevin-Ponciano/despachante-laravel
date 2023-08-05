@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Pedido;
 use App\Models\PedidoServico;
 use App\Models\Processo;
+use App\Traits\FunctionsTrait;
 use App\Traits\HandinFilesTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -13,6 +14,7 @@ class ProcessoNovo extends Component
 {
     use WithFileUploads;
     use HandinFilesTrait;
+    use FunctionsTrait;
 
     public $clientes;
     public $clienteId;
@@ -34,20 +36,13 @@ class ProcessoNovo extends Component
     public $servicoId;
     public $precoSettado = false;
 
-
-    protected $listeners = [
-        'storeProcesso' => 'store',
-        'clearInputs'
-    ];
-
     protected $rules = [
         'clienteId' => 'required|exists:clientes,id',
         'compradorNome' => 'required',
         'telefone' => 'required|min:14|max:15',
-        'placa' => 'required|min:7|max:7',
+        'placa' => 'required|between:7,7',
         'veiculo' => 'required',
         'arquivos.*' => 'mimes:pdf|max:10240', // 10MB Max
-
     ];
 
     protected $messages = [
@@ -55,8 +50,7 @@ class ProcessoNovo extends Component
         'clienteId.exists' => 'Selecione um Cliente.',
         'compradorNome.required' => 'Obrigatório.',
         'telefone.required' => 'Obrigatório.',
-        'telefone.min' => 'Telefone inválido.',
-        'telefone.max' => 'Telefone inválido.',
+        'telefone.between' => 'Telefone inválido.',
         'placa.required' => 'Obrigatório.',
         'placa.min' => 'Placa inválida.',
         'placa.max' => 'Placa inválida.',
@@ -132,7 +126,6 @@ class ProcessoNovo extends Component
 
     public function store()
     {
-        debug($this->precoSettado);
         $this->validate();
         if (!$this->precoSettado) {
             $this->setPrecos();
@@ -142,8 +135,7 @@ class ProcessoNovo extends Component
             'comprador_telefone' => $this->telefone,
             'placa' => $this->placa,
             'veiculo' => $this->veiculo,
-            'preco_placa' => $this->precoPlaca,
-            'preco_honorario' => $this->precoHonorario,
+            'preco_honorario' => $this->regexMoney($this->precoHonorario),
             'status' => 'ab',
             'observacoes' => $this->observacoes,
             'criado_por' => \Auth::user()->id,
@@ -153,6 +145,7 @@ class ProcessoNovo extends Component
             'tipo' => $this->processoTipo,
             'comprador_tipo' => $this->compradorTipo,
             'qtd_placas' => $this->qtdPlacas,
+            'preco_placa' => $this->regexMoney($this->precoPlaca),
             'pedido_id' => $pedido->id,
         ]);
         if (!empty($this->servicos)) {
@@ -160,11 +153,11 @@ class ProcessoNovo extends Component
                 PedidoServico::create([
                     'pedido_id' => $pedido->id,
                     'servico_id' => $servico['id'],
-                    'preco' => $servico['preco'],
+                    'preco' => $this->regexMoney($servico['preco']),
                 ]);
             }
         }
-
+        // todo verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
         $this->saveFiles($this->arquivos, $this->cliente, $pedido);
 
         $this->clearInputs();

@@ -2,7 +2,7 @@
     <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar">
             <div class="container-xl">
-                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <h1 class="navbar-brand d-none-navbar-horizontal pe-0 pe-md-3">
                     <a class="card-link" href="{{route('welcome')}}">
                         <img src="{{asset('assets/img/logo3.png')}}" alt="Saled"
                              class="navbar-brand-image">

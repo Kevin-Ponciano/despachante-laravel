@@ -7,21 +7,25 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     protected $listeners = ['$refresh'];
-    
+
     public function render()
     {
-        $qtdProcessosAbertos = \Auth::user()->despachante->pedidosWithProcessos()->where('status', 'ab')->count();
-        $qtdProcessosEmAndamento = \Auth::user()->despachante->pedidosWithProcessos()->where('status', 'ea')->count();
-        $qtdProcessosPendentes = \Auth::user()->despachante->pedidosWithProcessos()->where('status', 'pe')->count();
-        $qtdAtpvsAbertos = \Auth::user()->despachante->pedidosWithAtpvs()->where('status', 'ab')->count();
-        $qtdAtpvsEmAndamento = \Auth::user()->despachante->pedidosWithAtpvs()->where('status', 'ea')->count();
-        $qtdAtpvsPendentes = \Auth::user()->despachante->pedidosWithAtpvs()->where('status', 'pe')->count();
-        $qtdAtpvsSolicitadoCancelamento = \Auth::user()->despachante->pedidosWithAtpvs()->where('status', 'sc')->count();
+        $qtdProcessosAbertos = \Auth::user()->despachante->pedidosProcessos()->where('pedidos.status', 'ab')->count();
+        $qtdProcessosRetornados = \Auth::user()->despachante->pedidosProcessos()->where('pedidos.status', 'ab')->where('pedidos.retorno_pendencia', 1)->count();
+        $qtdProcessosEmAndamento = \Auth::user()->despachante->pedidosProcessos()->where('pedidos.status', 'ea')->count();
+        $qtdProcessosPendentes = \Auth::user()->despachante->pedidosProcessos()->where('pedidos.status', 'pe')->count();
+        $qtdAtpvsAbertos = \Auth::user()->despachante->pedidosAtpvs()->where('pedidos.status', 'ab')->count();
+        $qtdAtpvsRetornados = \Auth::user()->despachante->pedidosAtpvs()->where('pedidos.status', 'ab')->where('pedidos.retorno_pendencia', 1)->count();
+        $qtdAtpvsEmAndamento = \Auth::user()->despachante->pedidosAtpvs()->where('pedidos.status', 'ea')->count();
+        $qtdAtpvsPendentes = \Auth::user()->despachante->pedidosAtpvs()->where('pedidos.status', 'pe')->count();
+        $qtdAtpvsSolicitadoCancelamento = \Auth::user()->despachante->pedidosAtpvs()->where('pedidos.status', 'sc')->count();
         return view('livewire.despachante.dashboard', compact(
             'qtdProcessosAbertos',
+            'qtdProcessosRetornados',
             'qtdProcessosEmAndamento',
             'qtdProcessosPendentes',
             'qtdAtpvsAbertos',
+            'qtdAtpvsRetornados',
             'qtdAtpvsEmAndamento',
             'qtdAtpvsPendentes',
             'qtdAtpvsSolicitadoCancelamento',

@@ -14,11 +14,11 @@ return new class extends Migration {
             $table->id();
             $table->string('nome');
             $table->char('status', 2);
-            $table->float('preco_1_placa')->default(0);
-            $table->float('preco_2_placa')->default(0);
-            $table->float('preco_atpv')->default(0);
-            $table->float('preco_loja')->default(0);
-            $table->float('preco_terceiro')->default(0);
+            $table->decimal('preco_1_placa', 12)->default(0);
+            $table->decimal('preco_2_placa', 12)->default(0);
+            $table->decimal('preco_atpv', 12)->default(0);
+            $table->decimal('preco_loja', 12)->default(0);
+            $table->decimal('preco_terceiro', 12)->default(0);
             $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

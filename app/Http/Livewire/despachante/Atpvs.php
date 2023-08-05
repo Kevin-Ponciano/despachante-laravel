@@ -2,40 +2,112 @@
 
 namespace App\Http\Livewire\despachante;
 
-use App\Models\Atpv;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Atpvs extends Component
 {
-    public $atpvs;
-    public $clienteId;
-    public $teste = 'teste';
-    public $queryString;
+    use WithPagination;
 
-    protected $listeners = ['onChange'];
+    public $search;
+    public $paginate = 10;
+    public $sortField = 'id';
+    public $sortDirection = 'desc';
+    public $iconDirection = 'up';
+    public $clientes;
+    public $cliente;
+    public $status;
+    public $tipo;
+    public $retorno;
+    public $queryString = [
+        'cliente' =>
+            ['except' => ''],
+        'paginate' =>
+            ['except' => '10'],
+        'status' =>
+            ['except' => ''],
+        'tipo'
+        => ['except' => ''],
+        'retorno'
+        => ['except' => ''],
+    ];
 
-    public function onChange($clienteId)
+
+    protected $paginationTheme = 'bootstrap';
+    protected $listeners = [
+        '$refresh',
+        'resetSearch'
+    ];
+
+    public function mount()
     {
-        $this->clienteId = $clienteId;
-        debug($this->clienteId);
-        $this->emit('selected');
+        $this->clientes = Auth::user()->despachante->clientes;
     }
-    public function selected()
+
+    public function sortBy($field)
     {
-        debug($this->cliente);
-        $this->emit('selected');
+        $this->sortDirection = $this->sortField === $field
+            ? $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc'
+            : 'asc';
+
+        $this->sortField = $field;
     }
 
-    public function toRedirect($id)
+    public function clearFilters()
     {
-        return redirect()->route('despachante.atpvs.show', $id);
+        $this->reset([
+            'search',
+            'cliente',
+            'status',
+            'tipo',
+            'retorno',
+        ]);
     }
 
     public function render()
     {
-        $this->queryString = ['teste'];
-        $this->atpvs = Atpv::all();
-        return view('livewire.despachante.atpvs')
-            ->layout('layouts.despachante');
+        $pedidosQuery = Auth::user()->despachante->pedidosAtpvs()->with('atpv', 'cliente')
+            ->where('pedidos.status', '!=', 'ex')
+            ->when($this->cliente, function (Builder $query, $cliente) {
+                return $query->where('cliente_id', $cliente);
+            })
+            ->when($this->status, function (Builder $query, $status) {
+                return $query->where('pedidos.status', $status);
+            })
+            ->when($this->tipo, function (Builder $query, $tipo) {
+                if ($tipo == 'at') {
+                    return $query->whereHas('atpv', function (Builder $query) {
+                        $query->where('codigo_crv', null);
+                    });
+                } elseif ($tipo == 'rv') {
+                    return $query->whereHas('atpv', function (Builder $query) {
+                        $query->where('codigo_crv', '!=', null);
+                    });
+                }
+                return $query;
+            })
+            ->when($this->retorno, function (Builder $query, $retorno) {
+                return $query->where('pedidos.retorno_pendencia', $retorno);
+            })
+            ->when($this->sortField, function (Builder $query, $sortField) {
+                return $query->join('atpvs', 'atpvs.pedido_id', '=', 'pedidos.id')
+                    ->orderBy($sortField, $this->sortDirection);
+            });
+
+        $pedidos = $pedidosQuery
+            ->where(function (Builder $query) {
+                $query->where('comprador_nome', 'like', '%' . $this->search . '%');
+                $query->orWhere('pedidos.id', 'like', '%' . $this->search . '%');
+                $query->orWhere('clientes.nome', 'like', '%' . $this->search . '%');
+                $query->orWhere('pedidos.placa', 'like', '%' . $this->search . '%');
+            })
+            ->paginate($this->paginate);
+
+        $this->iconDirection = $this->sortDirection === 'asc' ? 'up' : 'down';
+        return view('livewire.despachante.atpvs', [
+            'pedidos' => $pedidos
+        ])->layout('layouts.despachante');
     }
 }
