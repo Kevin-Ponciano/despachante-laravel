@@ -1,5 +1,5 @@
 <div>
-    <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->id">
+    <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido">
         <x-slot:actions>
             <div x-data="{status : $wire.status }" class="btn-list">
                 <button class="btn">
@@ -52,9 +52,8 @@
                                         <label class="form-label">Nome do Comprador</label>
                                         <input type="text"
                                                class="form-control @error('compradorNome') is-invalid @enderror"
-                                               wire:model.defer="compradorNome" :readonly="!isEditing"
-                                               x-ref="inputRef"
-                                               x-init="$refs.inputRef = $el">
+                                               wire:model.defer="compradorNome"
+                                               x-ref="inputRef" x-init="$refs.inputRef = $el" :readonly="!isEditing">
                                         @error('compradorNome') <span
                                             class="invalid-feedback">{{ $message }}</span> @enderror
                                     </x-slot:nomeComprador>

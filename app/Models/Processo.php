@@ -18,6 +18,8 @@ class Processo extends Model
         'pedido_id',
     ];
 
+    protected $touches = ['pedido'];
+
     public function tipo()
     {
         $tipo = $this->tipo;

@@ -23,6 +23,14 @@
                                role="tab"
                                tabindex="-1">ATPV</a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-renave"
+                               class="nav-link"
+                               data-bs-toggle="tab"
+                               aria-selected="false"
+                               role="tab"
+                               tabindex="-1">RENAVE</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-body p-0">
@@ -32,6 +40,9 @@
                         </div>
                         <div class="tab-pane" id="tabs-atpv" role="tabpanel">
                             <livewire:atpv-novo/>
+                        </div>
+                        <div class="tab-pane" id="tabs-renave" role="tabpanel">
+                            <livewire:atpv-novo :is-renave="true"/>
                         </div>
                     </div>
                 </div>

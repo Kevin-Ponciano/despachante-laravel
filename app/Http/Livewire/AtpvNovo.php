@@ -6,7 +6,6 @@ use App\Models\Atpv;
 use App\Models\Endereco;
 use App\Models\Pedido;
 use App\Traits\FunctionsTrait;
-use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class AtpvNovo extends Component
@@ -25,12 +24,14 @@ class AtpvNovo extends Component
 
     protected $rules = [
         'clienteId' => 'required|exists:clientes,id',
-        'veiculo.placa' => 'required|min:7|max:7',
-        'veiculo.renavam' => 'required|min:11|max:11',
-        'veiculo.numeroCrv' => 'required|min:10|max:12',
-        'veiculo.codigoCrv' => 'required_if:isRenave,true|min:12|max:12',
+        'veiculo.placa' => 'required|between:7,7',
+        'veiculo.renavam' => 'required|between:11,11',
+        'veiculo.numeroCrv' => 'required|between:10,12',
+        'veiculo.codigoCrv' => 'required_if:isRenave,true|between:12,12',
         'veiculo.precoVenda' => 'required',
         'veiculo.veiculo' => 'required',
+        'veiculo.hodometro' => 'required_if:isRenave,true',
+        'veiculo.dataHodometro' => 'required_if:isRenave,true',
         'vendedor.email' => 'required|email',
         'vendedor.telefone' => 'required|celular_com_ddd',
         'vendedor.cpfCnpj' => 'required|cpf_ou_cnpj',
@@ -49,19 +50,17 @@ class AtpvNovo extends Component
         'clienteId.required' => 'Selecione um Cliente.',
         'clienteId.exists' => 'Selecione um Cliente.',
         'veiculo.placa.required' => 'Obrigatório.',
-        'veiculo.placa.min' => 'Placa inválida.',
-        'veiculo.placa.max' => 'Placa inválida.',
+        'veiculo.placa.between' => 'Placa inválida.',
         'veiculo.renavam.required' => 'Obrigatório.',
-        'veiculo.renavam.min' => 'Renavam inválido.',
-        'veiculo.renavam.max' => 'Renavam inválido.',
+        'veiculo.renavam.between' => 'Renavam inválido.',
         'veiculo.numeroCrv.required' => 'Obrigatório.',
-        'veiculo.numeroCrv.min' => 'Número CRV inválido.',
-        'veiculo.numeroCrv.max' => 'Número CRV inválido.',
+        'veiculo.numeroCrv.between' => 'Número CRV inválido.',
         'veiculo.codigoCrv.required_if' => 'Obrigatório.',
-        'veiculo.codigoCrv.min' => 'Código CRV inválido.',
-        'veiculo.codigoCrv.max' => 'Código CRV inválido.',
+        'veiculo.codigoCrv.between' => 'Código CRV inválido.',
         'veiculo.precoVenda.required' => 'Obrigatório.',
         'veiculo.veiculo.required' => 'Obrigatório.',
+        'veiculo.hodometro.required_if' => 'Obrigatório.',
+        'veiculo.dataHodometro.required_if' => 'Obrigatório.',
         'vendedor.email.required' => 'Obrigatório.',
         'vendedor.email.email' => 'E-mail inválido.',
         'vendedor.telefone.required' => 'Obrigatório.',
@@ -87,27 +86,6 @@ class AtpvNovo extends Component
     public function mount()
     {
         $this->clientes = \Auth::user()->despachante->clientes;
-    }
-
-    public function renaveSwitch()
-    {
-        $this->isRenave = !$this->isRenave;
-    }
-
-    public function setEndereco()
-    {
-        $cep = $this->onlyNumbers($this->endereco['cep']);
-        $response = HTTP::get("http://viacep.com.br/ws/$cep/json/", 'GET')->json();
-        if ($response === null)
-            return $this->addError('endereco.cep', 'CEP inválido.');
-        elseif (isset($response['erro']))
-            return $this->addError('endereco.cep', 'CEP Não encontrado.');
-        $this->endereco['cep'] = $response['cep'];
-        $this->endereco['logradouro'] = $response['logradouro'];
-        $this->endereco['bairro'] = $response['bairro'];
-        $this->endereco['cidade'] = $response['localidade'];
-        $this->endereco['uf'] = $response['uf'];
-        return $this->resetErrorBag('endereco.cep');
     }
 
     public function store()
@@ -160,8 +138,8 @@ class AtpvNovo extends Component
         $this->clearInputs();
         $this->emit('$refresh');
         $this->emit('success', [
-            'message' => 'ATPV criado com sucesso.',
-            'url' => route('despachante.atpvs.show', $atpv->id),
+            'message' => "$atpv->tipo() criado com sucesso.",
+            'url' => route('despachante.atpvs.show', $pedido->numero_pedido),
         ]);
     }
 
@@ -173,6 +151,7 @@ class AtpvNovo extends Component
         $this->endereco = null;
         $this->observacoes = null;
         $this->isRenave = false;
+        $this->resetErrorBag();
     }
 
     public function render()

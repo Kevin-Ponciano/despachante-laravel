@@ -48,7 +48,7 @@ class ProcessoShow extends Component
 
     public function mount($id)
     {
-        $this->pedido = Auth::user()->despachante->pedidos()->findOrFail($id);
+        $this->pedido = Auth::user()->despachante->pedidos()->where('numero_pedido', $id)->firstOrFail();
         $this->cliente = $this->pedido->cliente->nome;
         $this->compradorNome = $this->pedido->comprador_nome;
         $this->telefone = $this->pedido->comprador_telefone;
@@ -138,14 +138,12 @@ class ProcessoShow extends Component
             'comprador_telefone' => $this->telefone,
             'placa' => $this->placa,
             'veiculo' => $this->veiculo,
-            //'preco_honorario' => $this->regexMoney($this->precoHonorario),
             'observacoes' => $this->observacoes,
         ]);
         $this->pedido->processo->update([
             'tipo' => $this->processoTipo,
             'comprador_tipo' => $this->compradorTipo,
             'qtd_placas' => $this->qtdPlaca,
-            //'preco_placa' => $this->regexMoney($this->precoPlaca),
         ]);
         $this->isEditing = false;
         $this->emit('success', [

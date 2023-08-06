@@ -26,6 +26,8 @@ class Atpv extends Model
         'pedido_id',
     ];
 
+    protected $touches = ['pedido'];
+
     public function pedido()
     {
         return $this->belongsTo(Pedido::class);

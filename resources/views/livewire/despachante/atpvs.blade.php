@@ -49,7 +49,7 @@
         </x-slot:filters>
         <x-slot:thead>
             <tr>
-                <th wire:click="sortBy('id')">id
+                <th wire:click="sortBy('numero_pedido')">Num. Pedido
                     <i class="ti ti-arrow-big-{{$sortField === 'id' ? $iconDirection : null}}-filled"></i></th>
                 <th wire:click="sortBy('nome')">cliente
                     <i class="ti ti-arrow-big-{{$sortField === 'nome' ? $iconDirection : null}}-filled"></i></th>
@@ -68,8 +68,8 @@
         <x-slot:tbody>
             @forelse($pedidos as $pedido)
                 <tr class="cursor-pointer"
-                    onclick="window.location='{{route('despachante.atpvs.show', $pedido->id)}}'">
-                    <td>{{$pedido->id}}</td>
+                    onclick="window.location='{{route('despachante.atpvs.show', $pedido->numero_pedido)}}'">
+                    <td>{{$pedido->numero_pedido}}</td>
                     <td>{{$pedido->cliente->nome}}</td>
                     <td>{{$pedido->comprador_nome}}</td>
                     <td>{{$pedido->placa}}</td>

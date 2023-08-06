@@ -77,9 +77,9 @@ class ProcessoNovo extends Component
         if ($this->clienteId == null || $this->clienteId == -1)
             return;
         if ($this->qtdPlacas == 1)
-            $this->precoPlaca = $this->cliente->preco_1_placa;
+            $this->precoPlaca = $this->regexMoneyToView($this->cliente->preco_1_placa);
         elseif ($this->qtdPlacas == 2)
-            $this->precoPlaca = $this->cliente->preco_2_placa;
+            $this->precoPlaca = $this->regexMoneyToView($this->cliente->preco_2_placa);
         else
             $this->precoPlaca = 0;
     }
@@ -89,9 +89,9 @@ class ProcessoNovo extends Component
         if ($this->clienteId == null || $this->clienteId == -1)
             return;
         if ($this->compradorTipo == 'tc')
-            $this->precoHonorario = $this->cliente->preco_terceiro;
+            $this->precoHonorario = $this->regexMoneyToView($this->cliente->preco_terceiro);
         elseif ($this->compradorTipo == 'lj')
-            $this->precoHonorario = $this->cliente->preco_loja;
+            $this->precoHonorario = $this->regexMoneyToView($this->cliente->preco_loja);
     }
 
     public function setPrecos()
@@ -164,7 +164,7 @@ class ProcessoNovo extends Component
         $this->emit('$refresh');
         $this->emit('success', [
             'message' => 'Processo criado com sucesso.',
-            'url' => route('despachante.processos.show', $processo->id),
+            'url' => route('despachante.processos.show', $pedido->numero_pedido),
         ]);
     }
 

@@ -9,11 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PedidoServico extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'pedido_id',
         'servico_id',
         'preco',
     ];
+
+    protected $touches = ['pedido'];
 
     public function servico(): BelongsTo
     {
