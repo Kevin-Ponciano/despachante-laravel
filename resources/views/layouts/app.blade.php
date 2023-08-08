@@ -48,6 +48,7 @@
 </div>
 
 @stack('modals')
+@livewireScripts
 <!-- Imask -->
 <script src="https://unpkg.com/imask"></script>
 <script src="{{asset('assets/js/mask.config.js')}}"></script>
@@ -59,6 +60,15 @@
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset('assets/js/Toast.config.js')}}"></script>
-@livewireScripts
+@if(session()->has('error'))
+    <script>
+        error('{{session('error')}}')
+    </script>
+
+@elseif(session()->has('success'))
+    <script>
+        success('{{session('success')}}')
+    </script>
+@endif
 </body>
 </html>

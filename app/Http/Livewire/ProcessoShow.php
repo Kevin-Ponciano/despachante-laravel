@@ -29,6 +29,7 @@ class ProcessoShow extends Component
     public $servicos = [];
     public $servicoId;
     public $isEditing = false;
+    public $status;
 
     protected $rules = [
         'compradorNome' => 'required',
@@ -65,6 +66,7 @@ class ProcessoShow extends Component
             $this->servicos[] = $servico->toArray();
         }
         $this->servicosDespachante = Auth::user()->despachante->servicos;
+        $this->status = $this->pedido->status;
     }
 
     public function addServico()

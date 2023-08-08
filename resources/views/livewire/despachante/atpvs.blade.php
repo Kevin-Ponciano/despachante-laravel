@@ -19,7 +19,7 @@
                     <select class="form-select form-select-sm" wire:model="status">
                         <option value="">Todos</option>
                         <option value="ab">Abertos</option>
-                        <option value="em">Em Andamento</option>
+                        <option value="ea">Em Andamento</option>
                         <option value="pe">Pendentes</option>
                         <option value="sc">Cancelamento</option>
                         <option value="co">Concluídos</option>

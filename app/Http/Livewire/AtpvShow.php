@@ -22,7 +22,7 @@ class AtpvShow extends Component
     public $tipo;
     public $isRenave;
     public $isEditing = false;
-    public $status = 'ea';
+    public $status;
 
     protected $rules = [
         'veiculo.placa' => 'required|between:7,7',
@@ -119,6 +119,7 @@ class AtpvShow extends Component
         $this->endereco['uf'] = $this->pedido->atpv->compradorEndereco->estado;
         $this->observacoes = $this->pedido->observacoes;
         $this->precoHonorario = $this->regexMoneyToView($this->pedido->preco_honorario);
+        $this->status = $this->pedido->status;
     }
 
 
@@ -137,6 +138,10 @@ class AtpvShow extends Component
         if (!$this->isEditing)
             return;
         $this->validate();
+
+        if ($this->veiculo['dataHodometro'] === '') $this->veiculo['dataHodometro'] = null;
+        if ($this->veiculo['hodometro'] === '') $this->veiculo['hodometro'] = null;
+
         $this->pedido->update([
             'comprador_nome' => $this->comprador['nome'],
             'compreador_telefone' => $this->comprador['telefone'],

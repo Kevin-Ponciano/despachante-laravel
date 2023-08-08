@@ -1,22 +1,5 @@
 <div>
-    <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido">
-        <x-slot:actions>
-            <div x-data="{status : $wire.status }" class="btn-list">
-                <button class="btn">
-                    Imprimir
-                </button>
-                <button class="btn btn-success" x-show="status==='ab'">
-                    Play
-                </button>
-                <button class="btn btn-success" x-show="status==='ea'">
-                    Concluir
-                </button>
-                <button class="btn btn-danger" x-show="status!=='ex'">
-                    Excluir
-                </button>
-            </div>
-        </x-slot:actions>
-    </x-page-title>
+    <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status="true"/>
     <div class="mt-2">
         <div class="container">
             <div class="card">

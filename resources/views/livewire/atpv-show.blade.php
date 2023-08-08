@@ -1,33 +1,5 @@
 <div>
-    <x-page-title :title="$tipo" :subtitle="'Pedido: '.$pedido->numero_pedido">
-        <x-slot name="actions">
-            <div class="btn-list">
-                <button class="btn">
-                    Imprimir
-                </button>
-                @if($status!=='ex' && $status!=='cd')
-                    <button class="btn btn-warning">
-                        Dados Incorretos
-                    </button>
-                @endif
-                @if($status==='ab')
-                    <button class="btn btn-success">
-                        Play
-                    </button>
-                @endif
-                @if($status==='ea')
-                    <button class="btn btn-success">
-                        Concluir
-                    </button>
-                @endif
-                @if($status!=='ex')
-                    <button class="btn btn-danger">
-                        Excluir
-                    </button>
-                @endif
-            </div>
-        </x-slot>
-    </x-page-title>
+    <x-page-title :title="$tipo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status="true"/>
     <div class="mt-2">
         <div class="container">
             <div class="card">
@@ -52,7 +24,8 @@
                     @csrf
                     <div class="tab-content">
                         <div wire:ignore.self class="tab-pane active show" id="tabs-atpv-info" role="tabpanel">
-                            <div class="tab-content" x-data="{ isEditing: @entangle('isEditing'), inputRef: null }">
+                            <div class="tab-content"
+                                 x-data="{ isEditing: @entangle('isEditing'), status: @entangle('status'), inputRef: null }">
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="mb-3">
@@ -65,7 +38,7 @@
                                              :obs="true"
                                 />
                                 <div class="mt-3">
-                                    <a class="btn btn-primary" x-show="!isEditing"
+                                    <a class="btn btn-primary" x-show="!isEditing && status !== 'co' && status !== 'ex'"
                                        @click="isEditing = true;$nextTick(() => $refs.inputRef.focus())">
                                         Editar
                                     </a>
