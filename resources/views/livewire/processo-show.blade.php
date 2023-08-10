@@ -1,6 +1,8 @@
 <div>
-    <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status="true"/>
-    <div class="mt-2">
+    <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->status()"
+                  :status="$status" :responsavel="$pedido->usuarioResponsavel"
+                  :concluido-por="$pedido->usuarioConcluinte"/>
+    <div class="mt-2" x-data="{ isEditing: @entangle('isEditing'), status: @entangle('status'), inputRef: null }">
         <div class="container">
             <div class="card">
                 <div class="card-header">
@@ -16,8 +18,11 @@
                             </li>
                         @endif
                         <li class="nav-item" role="presentation">
-                            <a href="#tabs-documentos" class="nav-link" data-bs-toggle="tab"
-                               aria-selected="false" role="tab" tabindex="-1">Documentos</a>
+                            <a href="#tabs-documentos" class="nav-link position-relative" data-bs-toggle="tab"
+                               aria-selected="false" role="tab" tabindex="-1">Documentos
+                                <span x-show="status === 'pe'"
+                                      class="badge bg-orange badge-notification badge-blink"></span>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -25,7 +30,7 @@
                     @csrf
                     <div class="tab-content">
                         <div wire:ignore.self class="tab-pane active show" id="tabs-processo-info" role="tabpanel">
-                            <div class="tab-content" x-data="{ isEditing: @entangle('isEditing'), inputRef: null }">
+                            <div class="tab-content">
                                 <x-processo>
                                     <x-slot:cliente>
                                         <label class="form-label text-muted">Cliente Logista</label>
@@ -132,7 +137,7 @@
                                                   wire:model.defer="observacao"></textarea>
                                     </x-slot:observacao>
                                 </x-processo>
-                                <a class="btn btn-primary" x-show="!isEditing"
+                                <a class="btn btn-primary" x-show="!isEditing && status !== 'co' && status !== 'ex'"
                                    @click="isEditing = true; $nextTick(() => $refs.inputRef.focus())">
                                     Editar
                                 </a>

@@ -24,6 +24,10 @@ class AtpvShow extends Component
     public $isEditing = false;
     public $status;
 
+    protected $listeners = [
+        '$refresh',
+    ];
+
     protected $rules = [
         'veiculo.placa' => 'required|between:7,7',
         'veiculo.renavam' => 'required|between:11,11',
@@ -179,6 +183,7 @@ class AtpvShow extends Component
 
     public function render()
     {
+        debug($this->pedido->id);
         return view('livewire.atpv-show')
             ->layout('layouts.despachante');
     }

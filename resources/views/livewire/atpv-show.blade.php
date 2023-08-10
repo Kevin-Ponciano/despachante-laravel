@@ -1,5 +1,7 @@
 <div>
-    <x-page-title :title="$tipo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status="true"/>
+    <x-page-title :title="$tipo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->status()"
+                  :status="$status" :responsavel="$pedido->usuarioResponsavel"
+                  :concluido-por="$pedido->usuarioConcluinte"/>
     <div class="mt-2">
         <div class="container">
             <div class="card">

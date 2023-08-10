@@ -22,6 +22,8 @@ class Pedido extends Model
         'status',
         'observacoes',
         'criado_por',
+        'responsavel_por',
+        'concluido_por',
         'cliente_id',
     ];
 
@@ -88,5 +90,25 @@ class Pedido extends Model
     {
         return $this->belongsToMany(Servico::class, 'pedido_servicos')
             ->withPivot('preco');
+    }
+
+    public function status()
+    {
+        switch ($this->status) {
+            case 'ab':
+                return ['Aberto', 'bg-success'];
+            case 'ea':
+                return ['Em Andamento', 'bg-primary'];
+            case 'co':
+                return ['Concluído', 'bg-success'];
+            case 'sc':
+                return ['Solicitado Cancelamento', 'bg-warning'];
+            case 'ex':
+                return ['Excluído', 'bg-danger'];
+            case 'pe':
+                return ['Pendente', 'bg-warning'];
+            default:
+                return ['Desconhecido', 'bg-secondary'];
+        }
     }
 }

@@ -31,6 +31,10 @@ class ProcessoShow extends Component
     public $isEditing = false;
     public $status;
 
+    protected $listeners = [
+        '$refresh',
+    ];
+
     protected $rules = [
         'compradorNome' => 'required',
         'telefone' => 'required|between:14,15',

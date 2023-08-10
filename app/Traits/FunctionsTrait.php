@@ -50,6 +50,7 @@ trait FunctionsTrait
             'status' => 'ea',
             'responsavel_por' => Auth::user()->id,
         ]);
+        $this->emit('$refresh');
         $this->emit('info', ['message' => 'Pedido em andamento']);
     }
 

@@ -58,18 +58,22 @@
         </x-slot:filters>
         <x-slot:thead>
             <tr>
-                <th wire:click="sortBy('numero_pedido')">Num. Pedido
-                    <i class="ti ti-arrow-big-{{$sortField === 'id' ? $iconDirection : null}}-filled"></i></th>
-                <th wire:click="sortBy('nome')">cliente
+                <th class="cursor-pointer" wire:click="sortBy('numero_pedido')">Num. Pedido
+                    <i class="ti ti-arrow-big-{{$sortField === 'numero_pedido' ? $iconDirection : null}}-filled"></i>
+                </th>
+                <th class="cursor-pointer" wire:click="sortBy('nome')">cliente
                     <i class="ti ti-arrow-big-{{$sortField === 'nome' ? $iconDirection : null}}-filled"></i></th>
-                <th wire:click="sortBy('comprador_nome')">nome do comprador
+                <th class="cursor-pointer" wire:click="sortBy('comprador_nome')">nome do comprador
                     <i class="ti ti-arrow-big-{{$sortField === 'comprador_nome' ? $iconDirection : null}}-filled"></i>
                 </th>
-                <th wire:click="sortBy('placa')">placa
+                <th class="cursor-pointer" wire:click="sortBy('placa')">placa
                     <i class="ti ti-arrow-big-{{$sortField === 'placa' ? $iconDirection : null}}-filled"></i></th>
-                <th wire:click="sortBy('tipo')">Tipo Pedido
+                @if($status === 'ea')
+                    <th>responsável</th>
+                @endif
+                <th class="cursor-pointer" wire:click="sortBy('tipo')">Tipo Pedido
                     <i class="ti ti-arrow-big-{{$sortField === 'tipo' ? $iconDirection : null}}-filled"></i></th>
-                <th wire:click="sortBy('atualizado_em')">atualizado às
+                <th class="cursor-pointer" wire:click="sortBy('atualizado_em')">atualizado às
                     <i class="ti ti-arrow-big-{{$sortField === 'atualizado_em' ? $iconDirection : null}}-filled"></i>
                 </th>
             </tr>
@@ -82,6 +86,9 @@
                     <td>{{$pedido->cliente->nome}}</td>
                     <td>{{$pedido->comprador_nome}}</td>
                     <td>{{$pedido->placa}}</td>
+                    @if($status === 'ea')
+                        <td>{{$pedido->usuarioResponsavel->name??'-'}}</td>
+                    @endif
                     <td>{{$pedido->processo->tipo()}}</td>
                     <td>{{$pedido->atualizado_em()}}</td>
                 </tr>
