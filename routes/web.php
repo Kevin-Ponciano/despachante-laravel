@@ -48,6 +48,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/atpvs', Atpvs::class)->name('atpvs');
         Route::get('/atpvs/{id}', AtpvShow::class)->name('atpvs.show');
         Route::get('/clientes', Clientes::class)->name('clientes');
+        Route::get('/clientes/table', [Clientes::class, 'dataTable'])->name('clientes.table');
         Route::get('/clientes/{id}', ClienteEditar::class)->name('clientes.editar');
         Route::get('/usuarios', Usuarios::class)->name('usuarios');
         Route::get('/usuarios/{id}', UsuarioEditar::class)->name('usuarios.editar');

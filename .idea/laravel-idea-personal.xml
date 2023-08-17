@@ -4,6 +4,7 @@
     <option name="generationStringOptionValues">
       <map>
         <entry key="createHttpException.code" value="404" />
+        <entry key="createMailable.markdown" value="1" />
       </map>
     </option>
   </component>

@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
+            $table->string('numero_cliente');
             $table->string('nome');
             $table->char('status', 2);
             $table->decimal('preco_1_placa', 12)->default(0);

@@ -10,14 +10,13 @@
                         {{ $subtitle }}
                     </div>
                 </div>
-                <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-{{--                        <span class="d-none d-sm-inline">--}}
-{{--                            <a href="#" class="btn">--}}
-{{--                              New view--}}
-{{--                            </a>--}}
-{{--                        </span>--}}
+                        {{--                        <span class="d-none d-sm-inline">--}}
+                        {{--                            <a href="#" class="btn">--}}
+                        {{--                              New view--}}
+                        {{--                            </a>--}}
+                        {{--                        </span>--}}
                         {{$actions = $actions ?? ''}}
                     </div>
                 </div>
@@ -25,7 +24,7 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
+        <div>
             <table id="{{$id}}" class="card-table table table-hover">
                 <thead>
                 {{$thead}}

@@ -94,21 +94,14 @@ class Pedido extends Model
 
     public function status()
     {
-        switch ($this->status) {
-            case 'ab':
-                return ['Aberto', 'bg-success'];
-            case 'ea':
-                return ['Em Andamento', 'bg-primary'];
-            case 'co':
-                return ['Concluído', 'bg-success'];
-            case 'sc':
-                return ['Solicitado Cancelamento', 'bg-warning'];
-            case 'ex':
-                return ['Excluído', 'bg-danger'];
-            case 'pe':
-                return ['Pendente', 'bg-warning'];
-            default:
-                return ['Desconhecido', 'bg-secondary'];
-        }
+        return match ($this->status) {
+            'ab' => ['Aberto', 'bg-success'],
+            'ea' => ['Em Andamento', 'bg-primary'],
+            'co' => ['Concluído', 'bg-success'],
+            'sc' => ['Solicitado Cancelamento', 'bg-warning'],
+            'ex' => ['Excluído', 'bg-danger'],
+            'pe' => ['Pendente', 'bg-warning'],
+            default => ['Desconhecido', 'bg-secondary'],
+        };
     }
 }

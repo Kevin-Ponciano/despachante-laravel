@@ -1,4 +1,4 @@
-<div class="container-xl">
+<div class="container-fluid">
     <fieldset class="form-fieldset">
         <div class="d-flex justify-content-between mb-2">
             {{$filters}}

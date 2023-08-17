@@ -1,5 +1,5 @@
 <div>
-    <x-page-title title="Editar Cliente"/>
+    <x-page-title title="Editar Cliente" class="container-xl"/>
     <div class="page-body">
         <div class="container-xl">
             <div class="card">
@@ -13,22 +13,31 @@
                                         Alterado com sucesso!
                                     </x-action-message>
                                 </div>
-                                <input type="text" class="form-control w-33" name="nomeCliente"
-                                       wire:model.defer="nomeCliente" wire:change="changeName">
+                                <input type="text" class="form-control w-33 @error('nomeCliente') is-invalid @enderror"
+                                       name="nomeCliente"
+                                       wire:model.defer="nomeCliente" wire:change="updateNomeCliente">
+                                @error('nomeCliente') <span
+                                    class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="col-auto ms-auto d-print-none">
                             <div class="btn-list">
-                                <button class="btn btn-danger">
-                                    Inativar Cliente
-                                </button>
+                                @if($cliente->status == 'at')
+                                    <button class="btn btn-danger" wire:click="switchStatus">
+                                        Inativar Cliente
+                                    </button>
+                                @else
+                                    <button class="btn btn-success" wire:click="switchStatus">
+                                        Ativar Cliente
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
-                    <fieldset class="form-fieldset">
+                    <fieldset x-data class="form-fieldset">
                         <div class="d-flex">
                             <h4>Tabela de Preços</h4>
-                            <x-action-message class="ms-2" on="savedName">
+                            <x-action-message class="ms-2" on="savedPreco">
                                 Alterado com sucesso!
                             </x-action-message>
                         </div>
@@ -40,9 +49,9 @@
                                         <span class="input-icon-addon">
                                             <i class="ti ti-currency-real"></i>
                                         </span>
-                                        <input x-data x-mask:dynamic="$money($input, '.','')"
-                                               type="text" class="form-control" name="preco1Placa"
-                                               wire:model.defer="preco1Placa">
+                                        <input x-mask:dynamic="$money($input, ',','.')"
+                                               type="text" class="form-control"
+                                               wire:model.defer="preco.placa1">
                                     </div>
                                 </div>
                             </div>
@@ -53,9 +62,9 @@
                                         <span class="input-icon-addon">
                                             <i class="ti ti-currency-real"></i>
                                         </span>
-                                        <input x-data x-mask:dynamic="$money($input, '.','')"
-                                               type="text" class="form-control" name="preco2Placa"
-                                               wire:model.defer="preco2Placa">
+                                        <input x-mask:dynamic="$money($input, ',','.')"
+                                               type="text" class="form-control"
+                                               wire:model.defer="preco.placa2">
                                     </div>
                                 </div>
                             </div>
@@ -66,9 +75,9 @@
                                         <span class="input-icon-addon">
                                             <i class="ti ti-currency-real"></i>
                                         </span>
-                                        <input x-data x-mask:dynamic="$money($input, '.','')"
-                                               type="text" class="form-control" name="precoLoja"
-                                               wire:model.defer="precoLoja">
+                                        <input x-mask:dynamic="$money($input, ',','.')"
+                                               type="text" class="form-control"
+                                               wire:model.defer="preco.loja">
                                     </div>
                                 </div>
                             </div>
@@ -79,9 +88,9 @@
                                         <span class="input-icon-addon">
                                             <i class="ti ti-currency-real"></i>
                                         </span>
-                                        <input x-data x-mask:dynamic="$money($input, '.','')"
-                                               type="text" class="form-control" name="precoTerceiro"
-                                               wire:model.defer="precoTerceiro">
+                                        <input x-mask:dynamic="$money($input, ',','.')"
+                                               type="text" class="form-control"
+                                               wire:model.defer="preco.terceiro">
                                     </div>
                                 </div>
                             </div>
@@ -92,16 +101,16 @@
                                         <span class="input-icon-addon">
                                             <i class="ti ti-currency-real"></i>
                                         </span>
-                                        <input x-data x-mask:dynamic="$money($input, '.','')"
-                                               type="text" class="form-control" name="precoAtpv"
-                                               wire:model.defer="precoAtpv">
+                                        <input x-mask:dynamic="$money($input, ',','.')"
+                                               type="text" class="form-control"
+                                               wire:model.defer="preco.atpv">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-2">
-                                <button class="btn btn-primary" wire:click="alterarPrecos">Alterar Preços</button>
+                                <button class="btn btn-primary" wire:click="updatePreco">Alterar Preços</button>
                             </div>
                         </div>
                     </fieldset>
@@ -112,16 +121,19 @@
                                 <div class="mb-3">
                                     <div class="d-flex">
                                         <label class="form-label">Nome de Usuário</label>
-                                        <x-action-message class="ms-2" on="savedName">
+                                        <x-action-message class="ms-2" on="savedUserClienteName">
                                             Alterado com sucesso!
                                         </x-action-message>
                                     </div>
-                                    <input type="text" class="form-control" name="nome" wire:model.defer="nomeUsuario">
+                                    <input type="text" class="form-control @error('nomeUsuario') is-invalid @enderror"
+                                           wire:model.defer="nomeUsuario">
+                                    @error('nomeUsuario') <span
+                                        class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-primary" wire:click="alterarNomeUsuario">
+                            <button class="btn btn-primary" wire:click="updateUsuarioCliente">
                                 Alterar Nome de Usuário
                             </button>
                             <a href="#" class="btn btn-ghost-warning">

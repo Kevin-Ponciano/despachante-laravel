@@ -9,7 +9,7 @@
                 {{$modal_body}}
             </div>
             <div class="modal-footer">
-                {{$modal_footer}}
+                {{$modal_footer??''}}
             </div>
         </div>
     </div>

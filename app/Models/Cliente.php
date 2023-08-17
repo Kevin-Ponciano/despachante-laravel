@@ -10,6 +10,7 @@ class Cliente extends Model
     use HasFactory;
 
     protected $fillable = [
+        'numero_cliente',
         'nome',
         'status',
         'preco_1_placa',
@@ -19,6 +20,16 @@ class Cliente extends Model
         'preco_terceiro',
         'despachante_id',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($cliente) {
+            $numero_cliente = $cliente->despachante->clientes()->max('numero_cliente') + 1;
+            $cliente->numero_cliente = $numero_cliente;
+        });
+    }
 
     public function despachante()
     {
@@ -52,5 +63,13 @@ class Cliente extends Model
         return $this->pedidos()->with('atpv')->get()->reject(function ($value) {
             return $value->atpv == null;
         });
+    }
+
+    public function status()
+    {
+        return match ($this->status) {
+            'at' => 'Ativo',
+            'in' => 'Inativo',
+        };
     }
 }

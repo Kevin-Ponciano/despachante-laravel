@@ -2,23 +2,30 @@
 
 namespace App\Http\Livewire\despachante;
 
-use App\Models\Cliente;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Clientes extends Component
 {
-    public $clientes;
-    public $teste = 'ok';
-
-    public function teste()
+    public function dataTable()
     {
-        $this->teste='teste';
-        debug('teste');
-        $this->emit('refresh-datatable');
+        $data = [];
+        $clientes = Auth::user()->despachante->clientes;
+        foreach ($clientes as $cliente) {
+            $data[] = [
+                'numero_cliente' => $cliente->numero_cliente,
+                'nome' => $cliente->nome,
+                'status' => $cliente->status,
+            ];
+        }
+
+        return response()->json([
+            'data' => $data,
+        ]);
     }
+
     public function render()
     {
-        $this->clientes = Cliente::all();
         return view('livewire.despachante.clientes')
             ->layout('layouts.despachante');
     }
