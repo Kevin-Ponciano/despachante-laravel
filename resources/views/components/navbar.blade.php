@@ -27,8 +27,17 @@
                                           d="M21 21l-6 -6"></path></svg>
                                 </span>
                                     {{--                                    todo Criar uma rota que irá redirecionar para o pedido pesquisado--}}
-                                    <input type="text" class="form-control w-8" placeholder="Buscar Pedido"
-                                           aria-label="Search in website">
+                                    <input type="text" class="form-control w-75" placeholder="Buscar Pedido">
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('input').on('keypress', function (e) {
+                                                if (e.which === 13) {
+                                                    e.preventDefault();
+                                                    window.location.href = "{{$pedidoRoute}}/" + $(this).val()
+                                                }
+                                            })
+                                        })
+                                    </script>
                                 </div>
                             </form>
                         </div>

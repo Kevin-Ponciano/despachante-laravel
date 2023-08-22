@@ -31,6 +31,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => Hash::make('123'),
             'role' => 'du',
+            'status' => 'at',
             'despachante_id' => 1,
             'cliente_id' => null,
             'two_factor_secret' => null,

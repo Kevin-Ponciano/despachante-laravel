@@ -21,16 +21,17 @@
                             </div>
                         </div>
                         <div class="col-auto ms-auto d-print-none">
-                            <div class="btn-list">
-                                @if($cliente->status == 'at')
-                                    <button class="btn btn-danger" wire:click="switchStatus">
-                                        Inativar Cliente
-                                    </button>
-                                @else
-                                    <button class="btn btn-success" wire:click="switchStatus">
-                                        Ativar Cliente
-                                    </button>
-                                @endif
+                            <div x-data="{ status: @entangle('status')}" class="btn-list">
+                                <button x-show="status==='at'" class="btn btn-danger" wire:click="switchStatus">
+                                    Inativar Cliente
+                                </button>
+                                <button x-show="status==='in'" class="btn btn-ghost-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modal-delete">
+                                    Excluir Cliente
+                                </button>
+                                <button x-show="status==='in'" class="btn btn-success" wire:click="switchStatus">
+                                    Ativar Cliente
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -145,4 +146,5 @@
             </div>
         </div>
     </div>
+    <x-delete-confirmation/>
 </div>

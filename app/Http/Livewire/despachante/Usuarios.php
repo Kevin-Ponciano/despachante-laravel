@@ -2,15 +2,31 @@
 
 namespace App\Http\Livewire\despachante;
 
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Usuarios extends Component
 {
-    public $usuarios;
+    public function dataTable()
+    {
+        $data = [];
+        $usuarios = Auth::user()->despachante->users;
+        foreach ($usuarios as $usuario) {
+            $data[] = [
+                'id' => $usuario->id,
+                'name' => $usuario->name,
+                'email' => $usuario->email,
+                'role' => $usuario->getFuncao(),
+                'status' => $usuario->status,
+            ];
+        }
+        return response()->json([
+            'data' => $data,
+        ]);
+    }
+
     public function render()
     {
-        $this->usuarios = User::all();
         return view('livewire.despachante.usuarios')
             ->layout('layouts.despachante');
     }

@@ -229,7 +229,7 @@
                 <div class="mb-3">
                     <label class="form-label">UF</label>
                     <input x-mask:dynamic="alpineMaskUf" :readonly="!isEditing"
-                           id="uf" type="text"
+                           type="text"
                            class="form-control @error('endereco.uf') is-invalid @enderror text-uppercase px-2"
                            wire:model.defer="endereco.uf">
                     @error('endereco.uf')<span class="invalid-feedback"> {{ $message }}</span> @enderror

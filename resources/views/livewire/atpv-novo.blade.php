@@ -6,8 +6,8 @@
                 <div class="mb-3">
                     <label class="form-label">Cliente Logista</label>
                     <div wire:ignore>
-                        <select id="select-cliente-atpv-novo"
-                                class="form-control"
+                        <select @if($isRenave)id="select-cliente-renave-novo" @else id="select-cliente-atpv-novo" @endif
+                        class="form-control"
                                 wire:model.defer="clienteId">
                             @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
                             <option value="-1">Selecione o Cliente</option>

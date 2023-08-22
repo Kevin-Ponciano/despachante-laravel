@@ -5,28 +5,24 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('processos', function (Blueprint $table) {
+        Schema::create('pendencias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('nome');
             $table->char('tipo', 2);
-            $table->char('comprador_tipo', 2);
-            $table->tinyInteger('qtd_placas')->default(0);
-            $table->decimal('preco_placa', 12)->default(0);
-            $table->timestamps();
+            $table->char('status', 2);
+            $table->string('observacao')->nullable();
+            $table->dateTime('criado_em');
+            $table->dateTime('atualizado_em')->nullable();
+            $table->dateTime('concluido_em')->nullable();
             $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('processos');
+        Schema::dropIfExists('pendencias');
     }
 };

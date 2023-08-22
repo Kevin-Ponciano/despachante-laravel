@@ -51,6 +51,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/clientes/table', [Clientes::class, 'dataTable'])->name('clientes.table');
         Route::get('/clientes/{id}', ClienteEditar::class)->name('clientes.editar');
         Route::get('/usuarios', Usuarios::class)->name('usuarios');
+        Route::get('/usuarios/table', [Usuarios::class, 'dataTable'])->name('usuarios.table');
         Route::get('/usuarios/{id}', UsuarioEditar::class)->name('usuarios.editar');
         Route::get('/servicos', Servicos::class)->name('servicos');
         Route::get('/relatorios/pedidos', RelatorioPedidos::class)->name('relatorios.pedidos');

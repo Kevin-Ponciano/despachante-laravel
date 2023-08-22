@@ -62,7 +62,7 @@ class ProcessoNovo extends Component
     public function mount()
     {
         $this->clientes = \Auth::user()->despachante->clientes;
-        $this->servicosDespachante = \Auth::user()->despachante->servicos;
+        $this->servicosDespachante = \Auth::user()->despachante->servicos()->orderBy('nome')->get();
     }
 
     public function updatedArquivos()
@@ -158,7 +158,7 @@ class ProcessoNovo extends Component
             }
         }
         // todo verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
-        $this->saveFiles($this->arquivos, $this->cliente, $pedido);
+        //$this->uploadFiles($this->arquivos, $this->cliente, $pedido, 'processos');
 
         $this->clearInputs();
         $this->emit('$refresh');

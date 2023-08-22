@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="LaravelIdeaPersonalSettings">
+    <option name="findUnusedViewFilesOnCommit" value="true" />
     <option name="generationStringOptionValues">
       <map>
         <entry key="createHttpException.code" value="404" />
         <entry key="createMailable.markdown" value="1" />
+        <entry key="newModelSimpleOption:softDeletes" value="1" />
+        <entry key="postGeneration:databaseClassFactory" value="1" />
       </map>
     </option>
   </component>

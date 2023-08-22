@@ -16,6 +16,7 @@ class ClienteEditar extends Component
     public $nomeUsuario;
     public $emailUsuario;
     public $preco;
+    public $status;
 
     public function mount($id)
     {
@@ -31,6 +32,7 @@ class ClienteEditar extends Component
             'terceiro' => $this->regexMoneyToView($this->cliente->preco_terceiro),
             'atpv' => $this->regexMoneyToView($this->cliente->preco_atpv),
         ];
+        $this->status = $this->cliente->status;
     }
 
 
@@ -94,10 +96,11 @@ class ClienteEditar extends Component
             'status' => $this->cliente->status == 'at' ? 'in' : 'at',
         ]);
 
-        if ($this->cliente->status == 'at')
-            $this->emit('success', ['message' => 'Cliente Ativado Com Sucesso']);
-        else {
-            session()->flash('error', "Cliente Inativado Com Sucesso");
+        if ($this->cliente->status == 'at') {
+            $this->emit('success', ['message' => 'Cliente ativado com sucesso']);
+            $this->status = 'at';
+        } else {
+            session()->flash('error', "Cliente inativado com sucesso");
             redirect()->route('despachante.clientes');
         }
 
@@ -106,6 +109,14 @@ class ClienteEditar extends Component
     public function redefinirSenha($id)
     {
         # TODO Enviar um email para o usuario poder redefinir a senha
+    }
+
+    public function delete()
+    {
+        $this->cliente->delete();
+
+        session()->flash('success', "Cliente deletado com sucesso");
+        return redirect()->route('despachante.clientes');
     }
 
     public function render()

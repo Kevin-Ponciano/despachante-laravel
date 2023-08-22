@@ -16,8 +16,10 @@ return new class extends Migration {
             $table->decimal('preco', 12)->default(0);
             $table->string('descricao', 500)->nullable();
             $table->string('qtd_clientes');
-            $table->string('qtd_acessos_clientes');
+            $table->string('qtd_usuarios_clientes');
+            $table->string('qtd_usuarios');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

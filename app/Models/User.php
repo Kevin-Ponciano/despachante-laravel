@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -16,7 +17,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-
+    use softDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +29,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'status',
     ];
 
     /**
@@ -124,6 +126,7 @@ class User extends Authenticatable
         }
     }
 
+
     public function nomeEmpresa()
     {
         if ($this->isDespachante())
@@ -132,6 +135,14 @@ class User extends Authenticatable
             return $this->cliente->nome;
         else
             return 'undefined';
+    }
+
+    public function status()
+    {
+        return match ($this->status) {
+            'at' => 'Ativo',
+            'in' => 'Inativo',
+        };
     }
 
 

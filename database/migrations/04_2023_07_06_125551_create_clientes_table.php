@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade')->onDelete('cascade');
             $table->string('numero_cliente');
             $table->string('nome');
             $table->char('status', 2);
@@ -20,8 +21,8 @@ return new class extends Migration {
             $table->decimal('preco_atpv', 12)->default(0);
             $table->decimal('preco_loja', 12)->default(0);
             $table->decimal('preco_terceiro', 12)->default(0);
-            $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

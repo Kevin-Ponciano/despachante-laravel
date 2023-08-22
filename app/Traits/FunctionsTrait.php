@@ -73,7 +73,9 @@ trait FunctionsTrait
         $this->pedido->update([
             'status' => 'ex',
         ]);
+        $this->pedido->delete();
         session()->flash('error', "Pedido $numero_pedido Excluído");
         return redirect()->route('despachante.dashboard');
     }
+
 }

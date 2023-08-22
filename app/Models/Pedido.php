@@ -5,10 +5,12 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pedido extends Model
 {
     use HasFactory;
+    use softDeletes;
 
     const CREATED_AT = 'criado_em';
     const UPDATED_AT = 'atualizado_em';
@@ -74,6 +76,11 @@ class Pedido extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
+    }
+
+    public function pendencias()
+    {
+        return $this->hasMany(Pendencias::class);
     }
 
     public function atpv()

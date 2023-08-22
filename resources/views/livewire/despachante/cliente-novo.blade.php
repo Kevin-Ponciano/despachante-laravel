@@ -18,6 +18,16 @@
                     class="invalid-feedback">{{ $message }}</span> @enderror
             </div>
         </div>
+        <div class="col mt-5">
+            <div class="ms-7 fw-bold font-monospace">Disponível<span
+                    class="badge bg-red text-red-fg ms-2">{{$qtd_clientes}}</span>
+                <x-helper>
+                    <p>Representa o número de clientes que ainda podem ser cadastrados.</p>
+                    <p>Para aumentar o número de clientes disponíveis, entre em contato com o suporte
+                        <br> ou deleta os clientes inativos.</p>
+                </x-helper>
+            </div>
+        </div>
     </div>
     <fieldset class="form-fieldset">
         <h4>Tabela de Preços <span class="page-subtitle">opcional</span></h4>

@@ -1,4 +1,7 @@
 <div>
+    <div wire:loading>
+        <x-loading-page/>
+    </div>
     <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->status()"
                   :status="$status" :responsavel="$pedido->usuarioResponsavel"
                   :concluido-por="$pedido->usuarioConcluinte"/>
@@ -19,17 +22,19 @@
                         @endif
                         <li class="nav-item" role="presentation">
                             <a href="#tabs-documentos" class="nav-link position-relative" data-bs-toggle="tab"
-                               aria-selected="false" role="tab" tabindex="-1">Documentos
+                               aria-selected="false" role="tab" tabindex="-1"
+                               wire:click="getFilesLink">Documentos
                                 <span x-show="status === 'pe'"
                                       class="badge bg-orange badge-notification badge-blink"></span>
                             </a>
                         </li>
                     </ul>
                 </div>
-                <form class="card-body" wire:submit.prevent="update">
-                    @csrf
+                <div class="card-body">
                     <div class="tab-content">
-                        <div wire:ignore.self class="tab-pane active show" id="tabs-processo-info" role="tabpanel">
+                        <form wire:submit.prevent="update" wire:ignore.self class="tab-pane active show"
+                              id="tabs-processo-info" role="tabpanel">
+                            @csrf
                             <div class="tab-content">
                                 <x-processo>
                                     <x-slot:cliente>
@@ -145,7 +150,7 @@
                                     Salvar
                                 </button>
                             </div>
-                        </div>
+                        </form>
                         @if(Auth::user()->isDespachante())
                             <div wire:ignore.self class="tab-pane" id="tabs-pedido-info" role="tabpanel">
                                 <div class="tab-content">
@@ -219,7 +224,6 @@
                                         <div>
                                             <select class="form-select mb-2 w-33" wire:model.defer="servicoId">
                                                 <option value="-1" selected>Selecionar Serviço</option>
-                                                {{--                        todo: Aplicar com relacionamentos--}}
                                                 @foreach($servicosDespachante as $servico)
                                                     <option title="{{$servico->descricao}}"
                                                             value="{{$servico->id}}">{{$servico->nome}} </option>
@@ -232,10 +236,140 @@
                             </div>
                         @endif
                         <div wire:ignore.self class="tab-pane" id="tabs-documentos" role="tabpanel">
-                            Documentos
+                            <x-accordion id="accordion-docs" :active="true"
+                                         class="h3 mb-0">
+                                <x-slot:title>
+                                    Documentos Do Pedido
+                                    <x-helper>
+                                        <p>Documentos Enviados pelo Cliente</p>
+                                        <p>Durante a solicitação do serviço.</p>
+                                    </x-helper>
+                                </x-slot:title>
+                                <x-slot:body>
+                                    <div class="row row-deck row-cards mb-2">
+                                        @forelse($arquivosDoPedido as $arquivoPedido)
+                                            <x-file :nome="$arquivoPedido['name']"
+                                                    :link="$arquivoPedido['link']"
+                                                    :timestamp="$arquivoPedido['timestamp']"
+                                                    :path="$arquivoPedido['path']"/>
+                                        @empty
+                                            <div>
+                                                <div class="text-center text-muted">
+                                                    Nenhum documento enviado pelo cliente.
+                                                </div>
+                                            </div>
+                                        @endforelse
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <x-input-upload-files uploadMethod="uploadFiles" folder="processos"
+                                                                  label="Enviar Documentos para baixa"/>
+                                        </div>
+                                    </div>
+                                </x-slot:body>
+                            </x-accordion>
+                            <!-- TODO Adicionar opcoes para baixar todos os arquivos em um zip -->
+                            <div class="row gap-5 px-2 mt-2">
+                                <fieldset class="col form-fieldset">
+                                    <div class="h3">Código de Segurança/CRLV
+                                        <x-helper>
+                                            <h4>Documentos a serem baixados pelo Cliente</h4>
+                                        </x-helper>
+                                    </div>
+                                    <div class="row row-deck row-cards mb-2">
+                                        @forelse($arquivosCodCrlv as $arquivoCc)
+                                            <x-file :nome="$arquivoCc['name']"
+                                                    :link="$arquivoCc['link']"
+                                                    :timestamp="$arquivoCc['timestamp']"
+                                                    :path="$arquivoCc['path']"
+                                                    col="col"/>
+                                        @empty
+                                            <div>
+                                                <div class="text-center text-muted">
+                                                    Nenhum Documento Enviado.
+                                                </div>
+                                            </div>
+                                        @endforelse
+                                    </div>
+                                    <form wire:submit.prevent="uploadCodCrlv">
+                                        <div class="w-66">
+                                            <x-input-upload label="Código Segurança" prop-name="arquivoCodSeg"
+                                                            upload-method="uploadCodCrlv"/>
+                                        </div>
+                                        <div class="w-66">
+                                            <x-input-upload label="CRLV" prop-name="arquivoCrlv"
+                                                            upload-method="uploadCodCrlv"/>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            Enviar
+                                        </button>
+                                    </form>
+                                </fieldset>
+                                <fieldset class="col form-fieldset py-1">
+                                    <div class="h3 fw-bolder text-warning-emphasis">
+                                        Pendências
+                                        <i class="badge bg-warning badge-blink ms-1 p-1"></i>
+                                    </div>
+                                    <div class="pt-0">
+                                        <strong>This is the second item's accordion body.</strong> It is hidden by
+                                        default, until the collapse plugin adds the appropriate classes that we use
+                                        to style each element. These classes control the overall appearance, as well
+                                        as the showing and hiding via CSS transitions. You can modify any of this
+                                        with custom CSS or overriding our default variables. It's also worth noting
+                                        that just about any HTML can go within the <code>.accordion-body</code>,
+                                        though the transition does limit overflow.
+                                    </div>
+                                    <button class="btn btn-ghost-warning">
+                                        <i class="ti ti-alert-triangle px-2"></i>
+                                        Remover Pendência
+                                    </button>
+                                </fieldset>
+                            </div>
                         </div>
                     </div>
-                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-delete-file" tabindex="-1" style="display: none;"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-status bg-danger"></div>
+                <div class="modal-body text-center py-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
+                         height="24"
+                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path
+                            d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"></path>
+                        <path d="M12 9v4"></path>
+                        <path d="M12 17h.01"></path>
+                    </svg>
+                    <h2>Tem certeza?</h2>
+                    <h3 id="file-name-delete"></h3>
+                    <div class="text-muted">Ao deletar o arquivo não será mais possível recuperar.</div>
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col">
+                                <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                    Cancelar
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="#" class="btn btn-danger w-100"
+                                   onclick="$(window).trigger('deleteFileConfirm')">
+                                    Deletar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -22,21 +22,6 @@
                     </tr>
                 </x-slot:thead>
                 <x-slot:tbody>
-                    {{--                    @foreach($clientes as $cliente)--}}
-                    {{--                        <tr class="cursor-pointer"--}}
-                    {{--                            onclick="window.location='{{route('despachante.clientes.editar', $cliente->numero_cliente)}}'">--}}
-                    {{--                            <td>{{$cliente->numero_cliente}}</td>--}}
-                    {{--                            <td>{{$cliente->nome}}</td>--}}
-                    {{--                            <td class="text-center">{{$cliente->status()}}</td>--}}
-                    {{--                            <td class="text-center">--}}
-                    {{--                                <a href="{{route('despachante.clientes.editar', $cliente->numero_cliente)}}"--}}
-                    {{--                                   class="btn btn-primary btn-sm">--}}
-                    {{--                                    <i class="ti ti-pencil"></i>--}}
-                    {{--                                    Editar--}}
-                    {{--                                </a>--}}
-                    {{--                            </td>--}}
-                    {{--                        </tr>--}}
-                    {{--                    @endforeach--}}
                 </x-slot:tbody>
             </x-table>
         </div>

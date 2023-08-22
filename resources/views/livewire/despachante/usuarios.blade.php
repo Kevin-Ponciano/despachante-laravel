@@ -1,9 +1,9 @@
 <div>
     <div class="page-body">
-        <div class="container-xl">
+        <div class="container">
             <x-table id="usuarios-table"
                      title="Usuários"
-                     subtitle="Lista de Usuários com acesso ao sistema"
+                     subtitle="Lista de Usuários Cadastrados"
             >
                 <x-slot:actions>
                     <a href="#" class="btn btn-primary d-none d-sm-inline-block"
@@ -15,32 +15,23 @@
                 </x-slot:actions>
                 <x-slot:thead>
                     <tr>
-                        <th>id</th>
                         <th>Nome</th>
-                        <th>Função</th>
+                        <th>E-mail</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Função</th>
                         <th></th>
                     </tr>
                 </x-slot:thead>
                 <x-slot:tbody>
-                    @foreach($usuarios as $usuario)
-                        <tr class="cursor-pointer"
-                            onclick="window.location='{{route('despachante.usuarios.editar', $usuario->id)}}'">
-                            <td>{{$usuario->id}}</td>
-                            <td>{{$usuario->name}}</td>
-                            <td>{{$usuario->role}}</td>
-                            <td class="text-center">
-                                <a href="{{route('despachante.usuarios.editar', $usuario->id)}}"
-                                   class="btn btn-primary btn-sm">
-                                    <i class="ti ti-pencil"></i>
-                                    Editar
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
                 </x-slot:tbody>
             </x-table>
         </div>
     </div>
-    <livewire:despachante.usuario-novo/>
+    <x-modal id="modal-usuario-novo"
+             title="Cadastrar Novo Usuário"
+    >
+        <x-slot:modal_body>
+            <livewire:despachante.usuario-novo/>
+        </x-slot:modal_body>
+    </x-modal>
 </div>
-

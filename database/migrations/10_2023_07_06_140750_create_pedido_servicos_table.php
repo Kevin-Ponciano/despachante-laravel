@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreignId('servico_id')->constrained('servicos')->onUpdate('cascade');
             $table->decimal('preco', 12)->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

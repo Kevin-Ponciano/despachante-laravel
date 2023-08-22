@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,8 +20,9 @@ return new class extends Migration
             $table->string('bairro');
             $table->string('cidade');
             $table->char('estado', 2);
-            $table->char('cep',9);
+            $table->char('cep', 9);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

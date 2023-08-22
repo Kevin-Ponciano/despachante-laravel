@@ -15,6 +15,7 @@ class ClienteNovo extends Component
     public $nome;
     public $email;
     public $preco;
+    public $qtd_clientes;
 
     protected $rules = [
         'nome' => 'required|unique:clientes,nome',
@@ -29,8 +30,19 @@ class ClienteNovo extends Component
         'email.unique' => 'E-mail já cadastrado.',
     ];
 
+    public function mount()
+    {
+        $qtd_clientesTotal = Auth::user()->despachante->plano->qtd_clientes;
+        $qtd_clientesCadastrados = Auth::user()->despachante->clientes()->count();
+        $this->qtd_clientes = $qtd_clientesTotal - $qtd_clientesCadastrados;
+    }
+
     public function store()
     {
+        if ($this->qtd_clientes <= 0) {
+            $this->emit('error', "<b class='text-uppercase'>Limite de clientes atingido</b><br> Entre em contato com o suporte<br> para aumentar o limite de clientes");
+            return;
+        }
         $this->validate();
 
         $nomeUsuario = Str::lower(Str::replace(' ', '_', $this->nome));
@@ -59,11 +71,12 @@ class ClienteNovo extends Component
             'name' => $nomeUsuario,
             'email' => $this->email,
             'password' => $password,
-            'role' => 'ca' // cliente-admin
+            'role' => 'ca', // cliente-admin
+            'status' => 'at',
         ]);
 
         # TODO: send email to user
-        $this->emit('tableClientesRefresh');
+        $this->emit('tableRefresh');
         $this->emit('success', ['message' => 'Cliente cadastrado com sucesso']);
         $this->clearFields();
     }
@@ -73,6 +86,7 @@ class ClienteNovo extends Component
         $this->nome = null;
         $this->email = null;
         $this->preco = null;
+        $this->resetErrorBag();
     }
 
     public function render()

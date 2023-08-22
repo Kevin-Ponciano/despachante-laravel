@@ -14,4 +14,6 @@ $(document).ready(function () {
     $('.ts-control').addClass('py-0 px-1 text-muted')
     applySelect($("#select-cliente-processo-novo"))
     applySelect($("#select-cliente-atpv-novo"))
+    applySelect($("#select-cliente-renave-novo"))
+    applySelect($("#select-servico"))
 });

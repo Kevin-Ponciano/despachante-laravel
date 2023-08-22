@@ -60,11 +60,12 @@
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset('assets/js/Toast.config.js')}}"></script>
+<!-- Scripts -->
+<script src="{{asset('assets/js/app.js')}}"></script>
 @if(session()->has('error'))
     <script>
         error('{{session('error')}}')
     </script>
-
 @elseif(session()->has('success'))
     <script>
         success('{{session('success')}}')

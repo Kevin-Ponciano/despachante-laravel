@@ -6,6 +6,7 @@
         <cache>
           <versions>
             <info id="Local" version="10.2.3" />
+            <info id="LocalC:\Users\kevin\GitHub\SALED-Sistema-Despachante\vendor\autoload.php" version="10.3.2" />
           </versions>
         </cache>
       </tool>

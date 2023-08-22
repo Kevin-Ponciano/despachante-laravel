@@ -61,23 +61,65 @@ $(document).ready(function () {
         }
     });
 
-    Livewire.on('tableClientesRefresh', () => {
-        $('#modal-cliente-novo').modal('hide');
-        clientesTable.ajax.reload();
-    })
-
-
     $('#atpvs-table').DataTable({
         ...configDefault,
     });
 
-    $('#usuarios-table').DataTable({
+    let usuariosTable = $('#usuarios-table').DataTable({
         ...configDefault,
+        'order': [[3, 'asc']],
+        'ajax': '/despachante/usuarios/table',
+        'columns': [
+            {'data': 'name'},
+            {'data': 'email'},
+            {
+                'data': 'status',
+                'createdCell': function (td, cellData, rowData, row, col) {
+                    $(td).addClass('text-center');
+                },
+                'render': function (data, type, row) {
+                    let status = row.status === 'at' ? 'Ativo' : 'Inativo';
+                    let color = row.status === 'at' ? 'success' : 'danger';
+                    return '<span class="badge bg-' + color + '">' + status + '</span>';
+                }
+            },
+            {
+                'data': 'role',
+                'createdCell': function (td, cellData, rowData, row, col) {
+                    $(td).addClass('text-center');
+                },
+            },
+            {
+                'createdCell': function (td) {
+                    $(td).addClass('text-center');
+                },
+                'defaultContent': '<a href="#" class="btn btn-sm btn-primary">Editar</a>',
+                'render': function (data, type, row) {
+                    let url = '/despachante/usuarios/' + row.id;
+                    return '<a href="' + url + '" class="btn btn-sm btn-primary">Editar</a>';
+                }
+            },
+        ],
+        'rowCallback': function (row, data, index) {
+            let url = '/despachante/usuarios/' + data.id;
+            $(row).attr('data-href', url);
+            $(row).css('cursor', 'pointer');
+            $(row).on('click', function () {
+                window.location.href = $(this).data('href');
+            });
+        }
     });
 
     $('#servicos-table').DataTable({
         ...configDefault,
     });
+
+    Livewire.on('tableRefresh', () => {
+        $('#modal-cliente-novo').modal('hide');
+        $('#modal-usuario-novo').modal('hide');
+        clientesTable.ajax.reload();
+        usuariosTable.ajax.reload();
+    })
 });
 
 

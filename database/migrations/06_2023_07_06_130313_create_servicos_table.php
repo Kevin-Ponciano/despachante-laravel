@@ -12,11 +12,12 @@ return new class extends Migration {
     {
         Schema::create('servicos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nome');
             $table->decimal('preco', 12)->default(0);
             $table->string('descricao', 500)->nullable();
-            $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

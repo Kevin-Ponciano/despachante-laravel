@@ -4,12 +4,17 @@ namespace App\Http\Livewire;
 
 use App\Models\PedidoServico;
 use App\Traits\FunctionsTrait;
+use App\Traits\HandinFilesTrait;
 use Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ProcessoShow extends Component
 {
+    use WithFileUploads;
     use FunctionsTrait;
+    use HandinFilesTrait;
 
     public $pedido;
     public $cliente;
@@ -30,9 +35,15 @@ class ProcessoShow extends Component
     public $servicoId;
     public $isEditing = false;
     public $status;
+    public $arquivosDoPedido = [];
+    public $arquivosCodCrlv = [];
+    public $arquivoCodSeg;
+    public $arquivoCrlv;
+
 
     protected $listeners = [
         '$refresh',
+        'deleteFile',
     ];
 
     protected $rules = [
@@ -50,6 +61,49 @@ class ProcessoShow extends Component
         'placa.between' => 'Placa inválida.',
         'veiculo.required' => 'Obrigatório.',
     ];
+
+    protected $rulesArquivos = [
+        'arquivos.*' => 'mimes:pdf|max:10240', // 10MB Max
+    ];
+
+    protected $messagesArquivos = [
+        'arquivos.*.mimes' => 'Formato inválido (Somente PDF).',
+        'arquivos.*.max' => 'Tamanho máximo de 10MB.',
+    ];
+
+    protected $rulesArquivoCodSeg = [
+        'arquivoCodSeg' => 'mimes:pdf|max:10240', // 10MB Max
+    ];
+
+    protected $messagesArquivoCodSeg = [
+        'arquivoCodSeg.mimes' => 'Formato inválido (Somente PDF).',
+        'arquivoCodSeg.max' => 'Tamanho máximo de 10MB.',
+    ];
+
+    protected $rulesArquivoCrlv = [
+        'arquivoCrlv' => 'mimes:pdf|max:10240', // 10MB Max
+    ];
+
+    protected $messagesArquivoCrlv = [
+        'arquivoCrlv.mimes' => 'Formato inválido (Somente PDF).',
+        'arquivoCrlv.max' => 'Tamanho máximo de 10MB.',
+    ];
+
+    public function updatedArquivos()
+    {
+        $this->validate($this->rulesArquivos, $this->messagesArquivos);
+    }
+
+    public function updatedArquivoCodSeg()
+    {
+        $this->validate($this->rulesArquivoCodSeg, $this->messagesArquivoCodSeg);
+    }
+
+    public function updatedArquivoCrlv()
+    {
+        $this->validate($this->rulesArquivoCrlv, $this->messagesArquivoCrlv);
+    }
+
 
     public function mount($id)
     {
@@ -69,7 +123,7 @@ class ProcessoShow extends Component
             $servico->preco = $this->regexMoneyToView($servico->pivot->preco);
             $this->servicos[] = $servico->toArray();
         }
-        $this->servicosDespachante = Auth::user()->despachante->servicos;
+        $this->servicosDespachante = Auth::user()->despachante->servicos()->orderBy('nome')->get();
         $this->status = $this->pedido->status;
     }
 
@@ -155,6 +209,62 @@ class ProcessoShow extends Component
         $this->emit('success', [
             'message' => 'Processo Salvo com sucesso',
         ]);
+    }
+
+    public function getFilesLink()
+    {
+        $this->arquivosDoPedido = $this->_getFilesLink($this->pedido->cliente_id, $this->pedido, 'processos');
+        $this->arquivosCodCrlv = $this->_getFilesLink($this->pedido->cliente_id, $this->pedido, 'cod_crlv');
+    }
+
+    public function uploadFiles($folder)
+    {
+        if (empty($this->arquivos)) {
+            $this->addError('arquivos.*', 'Obrigatório.');
+            return;
+        }
+        $this->arquivos = array_filter($this->arquivos, function ($file) {
+            return $file != null;
+        });
+        $this->_uploadFiles($this->arquivos, $this->pedido->cliente_id, $this->pedido->id, $folder);
+        $this->getFilesLink();
+        $this->emit('success', [
+            'message' => 'Arquivos enviados com sucesso.',
+        ]);
+    }
+
+    public function uploadCodCrlv()
+    {
+        $this->_uploadCodCrlv([
+            'cod' => $this->arquivoCodSeg,
+            'crlv' => $this->arquivoCrlv,
+        ], $this->pedido->cliente_id, $this->pedido);
+        $this->getFilesLink();
+        $this->emit('success', [
+            'message' => 'Arquivos enviados com sucesso.',
+        ]);
+    }
+
+    public function downloadFile($path)
+    {
+        return Storage::download($path);
+    }
+
+    public function downloadAllFiles($folder)
+    {
+        return $this->_downloadAllFiles($this->pedido->cliente_id, $this->pedido->id, $folder);
+    }
+
+    public function deleteFile($path)
+    {
+        Storage::delete($path);
+        $this->arquivosDoPedido = array_filter($this->arquivosDoPedido, function ($file) use ($path) {
+            return $file['path'] != $path;
+        });
+        $this->arquivosCodCrlv = array_filter($this->arquivosCodCrlv, function ($file) use ($path) {
+            return $file['path'] != $path;
+        });
+        $this->emit('error', 'Arquivo deletado com sucesso.');
     }
 
     public function render()

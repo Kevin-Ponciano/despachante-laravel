@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Plano extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'nome',
         'preco',
         'descricao',
         'qtd_clientes',
-        'qtd_acessos_clientes',
+        'qtd_usuarios_clientes',
+        'qtd_usuarios',
     ];
 
     public function despachantes()

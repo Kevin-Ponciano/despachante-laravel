@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -13,7 +16,8 @@
         "laravel/tinker": "^2.8",
         "laravellegends/pt-br-validator": "^10.0",
         "league/flysystem-aws-s3-v3": "3.0",
-        "livewire/livewire": "^2.11"
+        "livewire/livewire": "^2.11",
+        "ext-zip": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

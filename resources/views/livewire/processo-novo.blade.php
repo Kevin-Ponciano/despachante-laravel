@@ -15,7 +15,7 @@
         </li>
     </ul>
     <form wire:submit.prevent="store"
-          x-data="{ isUploading: false, error: false,input: $('#uploadFile') }"
+          x-data="{ isUploading: false, error: false,input: $('#upload-file-np') }"
           x-on:livewire-upload-start="isUploading = true"
           x-on:livewire-upload-finish="isUploading = false;input.addClass('is-valid')"
           x-on:livewire-upload-error="error = true"
@@ -126,7 +126,7 @@
                             <div class="input-icon">
                                 <input :disabled="isUploading"
                                        class="form-control @error('arquivos.*') is-invalid @enderror"
-                                       id="uploadFile" type="file" accept="application/pdf" multiple
+                                       id="upload-file-np" type="file" accept="application/pdf" multiple
                                        wire:model="arquivos">
                                 @error('arquivos.*') <span x-show="!isUploading"
                                                            class="invalid-feedback">{{ $message }}</span> @enderror

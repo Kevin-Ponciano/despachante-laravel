@@ -1,5 +1,6 @@
 <x-navbar :nome="\Auth::user()->nomeEmpresa()" :dashboard-route="route('despachante.dashboard')"
-          :nome-usuario="\Auth::user()->name" :funcao="\Auth::user()->getFuncao()">
+          :nome-usuario="\Auth::user()->name" :funcao="\Auth::user()->getFuncao()"
+          pedido-route="processos">
     <x-slot:navItens>
         <li class="nav-item">
             <a href="#" class="nav-link" data-bs-toggle="modal"

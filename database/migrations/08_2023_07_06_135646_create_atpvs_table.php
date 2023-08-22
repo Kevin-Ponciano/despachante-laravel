@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('atpvs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
             $table->char('renavam', 11);
             $table->char('numero_crv', 12);
             $table->char('codigo_crv', 12)->nullable();
@@ -26,8 +27,8 @@ return new class extends Migration {
             $table->string('comprador_email');
             $table->foreignId('comprador_endereco_id')->constrained('enderecos')->onUpdate('cascade');
             $table->decimal('preco_venda', 12)->default(0);
-            $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

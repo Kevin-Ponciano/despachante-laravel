@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('numero_pedido');
+            $table->foreignId('cliente_id')->constrained('clientes')->onUpdate('cascade');
 
             $table->string('comprador_nome');
             $table->char('comprador_telefone', 15);
@@ -21,7 +22,6 @@ return new class extends Migration {
             $table->decimal('preco_honorario', 12)->default(0);
             $table->char('status', 2);
 
-            $table->string('dados_inconsistentes')->nullable();
             $table->boolean('retorno_pendencia')->default(false);
             $table->boolean('documento_enviado')->default(false);
             $table->text('observacoes')->nullable();
@@ -30,11 +30,11 @@ return new class extends Migration {
             $table->dateTime('atualizado_em')->nullable();
             $table->dateTime('concluido_em')->nullable();
             $table->dateTime('visualizado_em')->nullable();
+            $table->softDeletes();
 
             $table->foreignId('criado_por')->constrained('usuarios')->onUpdate('cascade');
             $table->foreignId('responsavel_por')->nullable()->constrained('usuarios')->onUpdate('cascade');
             $table->foreignId('concluido_por')->nullable()->constrained('usuarios')->onUpdate('cascade');
-            $table->foreignId('cliente_id')->constrained('clientes')->onUpdate('cascade');
         });
     }
 
