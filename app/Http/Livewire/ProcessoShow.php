@@ -40,6 +40,10 @@ class ProcessoShow extends Component
     public $arquivoCodSeg;
     public $arquivoCrlv;
 
+    public $despachanteId;
+    public $numeroCliente;
+    public $numeroPedido;
+
 
     protected $listeners = [
         '$refresh',
@@ -125,6 +129,10 @@ class ProcessoShow extends Component
         }
         $this->servicosDespachante = Auth::user()->despachante->servicos()->orderBy('nome')->get();
         $this->status = $this->pedido->status;
+
+        $this->despachanteId = Auth::user()->despachante->id;
+        $this->numeroCliente = $this->pedido->cliente->numero_cliente;
+        $this->numeroPedido = $this->pedido->numero_pedido;
     }
 
     public function addServico()
@@ -213,8 +221,8 @@ class ProcessoShow extends Component
 
     public function getFilesLink()
     {
-        $this->arquivosDoPedido = $this->_getFilesLink($this->pedido->cliente_id, $this->pedido, 'processos');
-        $this->arquivosCodCrlv = $this->_getFilesLink($this->pedido->cliente_id, $this->pedido, 'cod_crlv');
+        $this->arquivosDoPedido = $this->_getFilesLink($this->despachanteId, $this->numeroCliente, $this->numeroPedido, 'processos');
+        $this->arquivosCodCrlv = $this->_getFilesLink($this->despachanteId, $this->numeroCliente, $this->numeroPedido, 'cod_crlv');
     }
 
     public function uploadFiles($folder)
@@ -226,7 +234,7 @@ class ProcessoShow extends Component
         $this->arquivos = array_filter($this->arquivos, function ($file) {
             return $file != null;
         });
-        $this->_uploadFiles($this->arquivos, $this->pedido->cliente_id, $this->pedido->id, $folder);
+        $this->_uploadFiles($this->arquivos, $this->despachanteId, $this->numeroCliente, $this->numeroPedido, $folder);
         $this->getFilesLink();
         $this->emit('success', [
             'message' => 'Arquivos enviados com sucesso.',
@@ -238,7 +246,7 @@ class ProcessoShow extends Component
         $this->_uploadCodCrlv([
             'cod' => $this->arquivoCodSeg,
             'crlv' => $this->arquivoCrlv,
-        ], $this->pedido->cliente_id, $this->pedido);
+        ], $this->despachanteId, $this->numeroCliente, $this->numeroPedido, $this->placa);
         $this->getFilesLink();
         $this->emit('success', [
             'message' => 'Arquivos enviados com sucesso.',
@@ -252,7 +260,7 @@ class ProcessoShow extends Component
 
     public function downloadAllFiles($folder)
     {
-        return $this->_downloadAllFiles($this->pedido->cliente_id, $this->pedido->id, $folder);
+        return $this->_downloadAllFiles($this->despachanteId, $this->numeroCliente, $this->numeroPedido, $folder);
     }
 
     public function deleteFile($path)
