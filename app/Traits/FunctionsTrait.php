@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Http\Livewire\Pendencias;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -45,6 +46,9 @@ trait FunctionsTrait
 
     public function play()
     {
+        if (Pendencias::hasPendingStatic($this->pedido->id))
+            return $this->emit('modal-aviso');
+        
         $this->status = 'ea';
         $this->pedido->update([
             'status' => 'ea',
@@ -56,6 +60,9 @@ trait FunctionsTrait
 
     public function conclude()
     {
+        if (Pendencias::hasPendingStatic($this->pedido->id))
+            return $this->emit('modal-aviso');
+
         $numero_pedido = $this->pedido->numero_pedido;
         $this->status = 'co';
         $this->pedido->update([
@@ -68,6 +75,9 @@ trait FunctionsTrait
 
     public function delete()
     {
+        if (Pendencias::hasPendingStatic($this->pedido->id))
+            return $this->emit('modal-aviso');
+
         $numero_pedido = $this->pedido->numero_pedido;
         $this->status = 'ex';
         $this->pedido->update([

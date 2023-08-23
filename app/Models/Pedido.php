@@ -80,7 +80,7 @@ class Pedido extends Model
 
     public function pendencias()
     {
-        return $this->hasMany(Pendencias::class);
+        return $this->hasMany(Pendencia::class);
     }
 
     public function atpv()

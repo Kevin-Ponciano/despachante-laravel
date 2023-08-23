@@ -5,7 +5,8 @@
             <button wire:ignore.self class="accordion-button @if($active === false) collapsed @endif" type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#{{$id}}"
-                    aria-expanded="false">
+                    aria-expanded="false"
+                    id="accordion-btn-{{$id}}">
                 <div class="{{$class}}">
                     {{ $title }}
                 </div>

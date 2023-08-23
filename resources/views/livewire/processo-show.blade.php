@@ -1,4 +1,6 @@
 <div>
+    <!-- TODO: Adicionar target no loading -->
+    <!-- TODO: Imposibilitar edição das informações do Pedido -->
     <div wire:loading>
         <x-loading-page/>
     </div>
@@ -19,6 +21,7 @@
                                 <a href="#tabs-pedido-info" class="nav-link" data-bs-toggle="tab"
                                    aria-selected="false" role="tab" tabindex="-1">Informações do Pedido</a>
                             </li>
+
                         @endif
                         <li class="nav-item" role="presentation">
                             <a href="#tabs-documentos" class="nav-link position-relative" data-bs-toggle="tab"
@@ -164,9 +167,9 @@
                                                     </x-action-message>
                                                 </div>
                                                 <div class="input-icon">
-                                                    <span class="input-icon-addon">
-                                                        <i class="ti ti-currency-real"></i>
-                                                    </span>
+                                <span class="input-icon-addon">
+                                    <i class="ti ti-currency-real"></i>
+                                </span>
                                                     <input x-data x-mask:dynamic="$money($input, ',','.')"
                                                            type="text" class="form-control px-5 w-50"
                                                            wire:model.defer="precoPlaca" wire:change="savePrecoPlaca">
@@ -182,9 +185,9 @@
                                                     </x-action-message>
                                                 </div>
                                                 <div class="input-icon">
-                                                <span class="input-icon-addon">
-                                                    <i class="ti ti-currency-real"></i>
-                                                </span>
+                            <span class="input-icon-addon">
+                                <i class="ti ti-currency-real"></i>
+                            </span>
                                                     <input x-data x-mask:dynamic="$money($input, ',','.')"
                                                            type="text" class="form-control px-5 w-50"
                                                            wire:model.defer="precoHonorario"
@@ -220,6 +223,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         @endforeach
                                         <div>
                                             <select class="form-select mb-2 w-33" wire:model.defer="servicoId">
@@ -227,6 +231,7 @@
                                                 @foreach($servicosDespachante as $servico)
                                                     <option title="{{$servico->descricao}}"
                                                             value="{{$servico->id}}">{{$servico->nome}} </option>
+
                                                 @endforeach
                                             </select>
                                             <a class="btn btn-ghost-primary" wire:click="addServico">Adicionar</a>
@@ -234,6 +239,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         @endif
                         <div wire:ignore.self class="tab-pane" id="tabs-documentos" role="tabpanel">
                             <x-accordion id="accordion-docs" :active="true"
@@ -252,12 +258,14 @@
                                                     :link="$arquivoPedido['link']"
                                                     :timestamp="$arquivoPedido['timestamp']"
                                                     :path="$arquivoPedido['path']"/>
+
                                         @empty
                                             <div>
                                                 <div class="text-center text-muted">
                                                     Nenhum documento enviado pelo cliente.
                                                 </div>
                                             </div>
+
                                         @endforelse
                                     </div>
                                     <div class="d-flex justify-content-between">
@@ -269,61 +277,47 @@
                                 </x-slot:body>
                             </x-accordion>
                             <!-- TODO Adicionar opcoes para baixar todos os arquivos em um zip -->
-                            <div class="row gap-5 px-2 mt-2">
-                                <fieldset class="col form-fieldset">
-                                    <div class="h3">Código de Segurança/CRLV
-                                        <x-helper>
-                                            <h4>Documentos a serem baixados pelo Cliente</h4>
-                                        </x-helper>
-                                    </div>
-                                    <div class="row row-deck row-cards mb-2">
-                                        @forelse($arquivosCodCrlv as $arquivoCc)
-                                            <x-file :nome="$arquivoCc['name']"
-                                                    :link="$arquivoCc['link']"
-                                                    :timestamp="$arquivoCc['timestamp']"
-                                                    :path="$arquivoCc['path']"
-                                                    col="col"/>
-                                        @empty
-                                            <div>
-                                                <div class="text-center text-muted">
-                                                    Nenhum Documento Enviado.
+                            <div class="row mt-2">
+                                <div class="col-5">
+                                    <fieldset class="form-fieldset">
+                                        <div class="h3">Código de Segurança/CRLV
+                                            <x-helper>
+                                                <h4>Documentos a serem baixados pelo Cliente</h4>
+                                            </x-helper>
+                                        </div>
+                                        <div class="row row-deck row-cards mb-2">
+                                            @forelse($arquivosCodCrlv as $arquivoCc)
+                                                <x-file :nome="$arquivoCc['name']"
+                                                        :link="$arquivoCc['link']"
+                                                        :timestamp="$arquivoCc['timestamp']"
+                                                        :path="$arquivoCc['path']"
+                                                        col="col"/>
+                                            @empty
+                                                <div>
+                                                    <div class="text-center text-muted">
+                                                        Nenhum Documento Enviado.
+                                                    </div>
                                                 </div>
+                                            @endforelse
+                                        </div>
+                                        <form wire:submit.prevent="uploadCodCrlv">
+                                            <div>
+                                                <x-input-upload label="Código Segurança" prop-name="arquivoCodSeg"
+                                                                upload-method="uploadCodCrlv"/>
                                             </div>
-                                        @endforelse
-                                    </div>
-                                    <form wire:submit.prevent="uploadCodCrlv">
-                                        <div class="w-66">
-                                            <x-input-upload label="Código Segurança" prop-name="arquivoCodSeg"
-                                                            upload-method="uploadCodCrlv"/>
-                                        </div>
-                                        <div class="w-66">
-                                            <x-input-upload label="CRLV" prop-name="arquivoCrlv"
-                                                            upload-method="uploadCodCrlv"/>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">
-                                            Enviar
-                                        </button>
-                                    </form>
-                                </fieldset>
-                                <fieldset class="col form-fieldset py-1">
-                                    <div class="h3 fw-bolder text-warning-emphasis">
-                                        Pendências
-                                        <i class="badge bg-warning badge-blink ms-1 p-1"></i>
-                                    </div>
-                                    <div class="pt-0">
-                                        <strong>This is the second item's accordion body.</strong> It is hidden by
-                                        default, until the collapse plugin adds the appropriate classes that we use
-                                        to style each element. These classes control the overall appearance, as well
-                                        as the showing and hiding via CSS transitions. You can modify any of this
-                                        with custom CSS or overriding our default variables. It's also worth noting
-                                        that just about any HTML can go within the <code>.accordion-body</code>,
-                                        though the transition does limit overflow.
-                                    </div>
-                                    <button class="btn btn-ghost-warning">
-                                        <i class="ti ti-alert-triangle px-2"></i>
-                                        Remover Pendência
-                                    </button>
-                                </fieldset>
+                                            <div>
+                                                <x-input-upload label="CRLV" prop-name="arquivoCrlv"
+                                                                upload-method="uploadCodCrlv"/>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">
+                                                Enviar
+                                            </button>
+                                        </form>
+                                    </fieldset>
+                                </div>
+                                <div class="col">
+                                    <livewire:pendencias/>
+                                </div>
                             </div>
                         </div>
                     </div>

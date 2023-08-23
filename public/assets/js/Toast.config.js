@@ -54,6 +54,13 @@ let error = (data) => {
     })
 }
 
+let warning = (data) => {
+    Toast.fire({
+        icon: 'warning',
+        html: `<div class='fw-semibold mt-2 ${titleToast}'>${data}</div>`
+    })
+}
+
 Livewire.on('success', (data) => {
     success(data);
 })
@@ -66,4 +73,9 @@ Livewire.on('error', (data) => {
     error(data);
 })
 
+Livewire.on('warning', (data) => {
+    warning(data);
+})
+
+// TODO: refatorar deixando apenas uma função
 

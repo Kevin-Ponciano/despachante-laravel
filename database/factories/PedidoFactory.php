@@ -20,7 +20,6 @@ class PedidoFactory extends Factory
             'veiculo' => $faker->word,
             'preco_honorario' => $faker->randomFloat(2, 100, 1000),
             'status' => 'ab',//$faker->randomElement(['ab', 'ea', 'pe', 'co']),
-            'dados_inconsistentes' => null,
             'retorno_pendencia' => 0,
             'documento_enviado' => 0,
             'criado_por' => 1,

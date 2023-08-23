@@ -12,6 +12,7 @@ use Livewire\WithFileUploads;
 
 class ProcessoShow extends Component
 {
+    //TODO: Adicionar prevenções de erros em cada método
     use WithFileUploads;
     use FunctionsTrait;
     use HandinFilesTrait;
@@ -128,8 +129,6 @@ class ProcessoShow extends Component
             $this->servicos[] = $servico->toArray();
         }
         $this->servicosDespachante = Auth::user()->despachante->servicos()->orderBy('nome')->get();
-        $this->status = $this->pedido->status;
-
         $this->despachanteId = Auth::user()->despachante->id;
         $this->numeroCliente = $this->pedido->cliente->numero_cliente;
         $this->numeroPedido = $this->pedido->numero_pedido;
@@ -243,10 +242,14 @@ class ProcessoShow extends Component
 
     public function uploadCodCrlv()
     {
-        $this->_uploadCodCrlv([
+        $path = $this->_uploadCodCrlv([
             'cod' => $this->arquivoCodSeg,
             'crlv' => $this->arquivoCrlv,
         ], $this->despachanteId, $this->numeroCliente, $this->numeroPedido, $this->placa);
+        if (empty($path)) {
+            $this->emit('error', 'Erro ao enviar os arquivos.');
+            return;
+        }
         $this->getFilesLink();
         $this->emit('success', [
             'message' => 'Arquivos enviados com sucesso.',
@@ -277,6 +280,7 @@ class ProcessoShow extends Component
 
     public function render()
     {
+        $this->status = $this->pedido->status;
         if (auth()->user()->isDespachante())
             return view('livewire.processo-show')->layout('layouts.despachante');
         elseif (auth()->user()->isCliente())

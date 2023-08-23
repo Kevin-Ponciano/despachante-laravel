@@ -42,8 +42,10 @@ trait HandinFilesTrait
     {
         $filesSaved = [];
         $path = "$this->rootPath/$despachanteId/$clienteId/$pedidoId/cod_crlv";
-        $filesSaved[] = Storage::putFileAs($path, $files['cod'], "COD_$placa.pdf");
-        $filesSaved[] = Storage::putFileAs($path, $files['crlv'], "CRLV_$placa.pdf");
+        if (!empty($files['cod']))
+            $filesSaved[] = Storage::putFileAs($path, $files['cod'], "COD_$placa.pdf");
+        if (!empty($files['crlv']))
+            $filesSaved[] = Storage::putFileAs($path, $files['crlv'], "CRLV_$placa.pdf");
         return $filesSaved;
     }
 

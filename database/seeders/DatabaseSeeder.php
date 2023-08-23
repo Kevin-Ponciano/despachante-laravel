@@ -8,6 +8,7 @@ use App\Models\Despachante;
 use App\Models\Endereco;
 use App\Models\Pedido;
 use App\Models\PedidoServico;
+use App\Models\Pendencia;
 use App\Models\Plano;
 use App\Models\Processo;
 use App\Models\Servico;
@@ -54,6 +55,9 @@ class DatabaseSeeder extends Seeder
                             'despachante_id' => $pedido->cliente->despachante->id,
                         ])->id,
                     ]);
+                    Pendencia::factory()->create([
+                        'pedido_id' => $pedido->id,
+                    ]);
                 });
                 Pedido::factory(5)->create([
                     'criado_por' => $user->id,
@@ -68,6 +72,9 @@ class DatabaseSeeder extends Seeder
                             'despachante_id' => $pedido->cliente->despachante->id,
                         ])->id,
                         'preco' => $faker->randomFloat(2, 1, 10000),
+                    ]);
+                    Pendencia::factory()->create([
+                        'pedido_id' => $pedido->id,
                     ]);
                 });
             });

@@ -10,4 +10,9 @@ $(document).ready(function () {
             $(window).off('deleteFileConfirm');
         });
     })
+
+    Livewire.on('modal-aviso', function (data) {
+        let modalAviso = new bootstrap.Modal(document.getElementById('modal-aviso'))
+        modalAviso.show()
+    })
 });

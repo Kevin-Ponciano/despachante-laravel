@@ -36,7 +36,7 @@
                 </div>
                 <div class="mt-2">
                     <div x-data="{status : @entangle('status') }" class="btn-list">
-                        <button class="btn btn-primary" x-show="status==='ab'" wire:click="play">
+                        <button class="btn btn-primary" x-show="status==='ab' || status==='pe'" wire:click="play">
                             Play
                         </button>
                         <button class="btn @if($status==='sc') btn-warning @else btn-success @endif"
@@ -51,6 +51,12 @@
                     </div>
                 </div>
                 <x-delete-confirmation/>
+                <x-modal-aviso>
+                    <div class="text-center">
+                        <h3>Pedido Possui Pendências.</h3>
+                        <div>Para prosseguir o pedido é necessário resolver as pendências.</div>
+                    </div>
+                </x-modal-aviso>
             @endif
         </div>
     </div>
