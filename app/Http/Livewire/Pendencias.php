@@ -16,6 +16,12 @@ class Pendencias extends Component
     public $tipo;
     public $observacao;
     public $createPendencia = false;
+    public $isModal = false;
+
+    protected $listeners = [
+        '$refresh',
+        'storeInputPendencias'
+    ];
 
     public function mount()
     {
@@ -63,6 +69,8 @@ class Pendencias extends Component
                 $pendencia->save();
             }
         }
+        $this->setPedidoAberto();
+        $this->emit('$refresh');
     }
 
     public function store()
@@ -92,6 +100,50 @@ class Pendencias extends Component
     {
         $pendencia = Pendencia::find($id);
         $pendencia->delete();
+    }
+
+    public function storeInputPendencias($inputPendencias)
+    {
+        $count = 0;
+        $nomePadrao = "A informação %s está incorreta";
+        $inputPendencias = array_reverse($inputPendencias);
+        foreach ($inputPendencias as $key => $inputPendencia) {
+            if ($inputPendencia) {
+                $keyFormatado = Str::of($key)->replace('_', ' ');
+                $nome = sprintf($nomePadrao, Str::upper($keyFormatado));
+                $matchingPendencia = $this->pendencias->firstWhere('input', $key);
+
+                if (!$matchingPendencia) {
+                    Pendencia::create([
+                        'pedido_id' => $this->pedidoId,
+                        'nome' => $nome,
+                        'input' => $key,
+                        'observacao' => "Esta informação está incorreta, por favor corrigir.",
+                        'tipo' => 'cp',
+                        'status' => 'pe',
+                    ]);
+                } else {
+                    $matchingPendencia->update([
+                        'status' => 'pe',
+                        'concluido_em' => null,
+                    ]);
+                }
+                $count++;
+            }
+        }
+        if ($count > 0) {
+            Auth::user()->despachante->pedidos()->find($this->pedidoId)->update(['status' => 'pe']);
+            $this->emit('success', ['message' => 'Pendências criadas com sucesso!']);
+            $this->emit('$refresh');
+        } else {
+            $this->emit('warning', 'Nenhuma pendência selecionada.');
+        }
+    }
+
+    public function setPedidoAberto()
+    {
+        Auth::user()->despachante->pedidos()->find($this->pedidoId)->update(['status' => 'ab']);
+        $this->emit('success', ['message' => 'Pedido em Aberto!']);
     }
 
     public function clearFields()

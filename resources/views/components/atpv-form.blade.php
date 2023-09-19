@@ -1,10 +1,20 @@
 <div>
     <fieldset class="form-fieldset">
-        <h4>Informações do Veículo</h4>
+        <h4>Informações do Veículo
+            @if($atpvShow?? false)
+                <span x-show="checkPendencia" class="ms-1 badge-blink text-warning">Marque os campos que estiverem incorretos</span>
+            @endif
+        </h4>
         <div class="row">
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-label">Placa</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Placa</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" wire:model="inputPendencias.placa" type="checkbox"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input type="text"
                            class="form-control @error('veiculo.placa') is-invalid @enderror text-uppercase"
                            maxlength="7" wire:model.defer="veiculo.placa"
@@ -14,7 +24,13 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-label">Renavam</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Renavam</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" wire:model="inputPendencias.renavam" type="checkbox"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input x-mask:dynamic="alpineMaskNumero11" :readonly="!isEditing"
                            type="text" class="form-control @error('veiculo.renavam') is-invalid @enderror"
                            wire:model.defer="veiculo.renavam">
@@ -23,7 +39,13 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-label">Número CRV</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Número CRV</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.número_crv"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input x-mask:dynamic="alpineMaskNumero12" :readonly="!isEditing"
                            type="text" class="form-control @error('veiculo.numeroCrv') is-invalid @enderror"
                            wire:model.defer="veiculo.numeroCrv">
@@ -33,7 +55,14 @@
             @if($isRenave)
                 <div class="col">
                     <div class="mb-3">
-                        <label class="form-label">Código Segurança CRV</label>
+                        <div class="row">
+                            <label class="form-label col-auto">Código Segurança CRV</label>
+                            @if($atpvShow?? false)
+                                <input x-show="checkPendencia" type="checkbox"
+                                       wire:model="inputPendencias.código_segurança_crv"
+                                       class="form-check-input-warning mt-1"/>
+                            @endif
+                        </div>
                         <input x-mask:dynamic="alpineMaskNumero12" :readonly="!isEditing"
                                type="text" class="form-control @error('veiculo.codigoCrv') is-invalid @enderror"
                                wire:model.defer="veiculo.codigoCrv">
@@ -45,9 +74,15 @@
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">Hodômetro @if(!$isRenave)
-                            <span class="text-muted">opcional</span>
-                        @endif</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Hodômetro @if(!$isRenave)
+                                <span class="text-muted">opcional</span>
+                            @endif</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.hodômetro"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <div class="input-icon">
                         <input x-mask:dynamic="alpineMaskNumero" :readonly="!isEditing"
                                type="text" class="form-control @error('veiculo.hodometro') is-invalid @enderror"
@@ -61,9 +96,16 @@
             </div>
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">Data Hora Medição @if(!$isRenave)
-                            <span class="text-muted">opcional</span>
-                        @endif</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Data Hora Medição @if(!$isRenave)
+                                <span class="text-muted">opcional</span>
+                            @endif</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox"
+                                   wire:model="inputPendencias.data_hora_medição"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input type="datetime-local" :readonly="!isEditing"
                            class="form-control @error('veiculo.dataHodometro') is-invalid @enderror"
                            wire:model.defer="veiculo.dataHodometro">
@@ -74,7 +116,13 @@
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">Valor de Venda</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Valor de Venda</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.valor_de_venda"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <div class="input-icon">
                                     <span class="input-icon-addon">
                                         <i class="ti ti-currency-real"></i>
@@ -89,7 +137,13 @@
             </div>
             <div class="col-8">
                 <div class="mb-3">
-                    <label class="form-label">Veículo</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Veículo</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.veículo"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text" class="form-control @error('veiculo.veiculo') is-invalid @enderror"
                            wire:model.defer="veiculo.veiculo">
@@ -103,7 +157,14 @@
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">E-mail</label>
+                    <div class="row">
+                        <label class="form-label col-auto">E-mail</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox"
+                                   wire:model="inputPendencias.email_do_vendedor"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            class="form-control @error('vendedor.email') is-invalid @enderror"
                            wire:model.defer="vendedor.email">
@@ -112,7 +173,14 @@
             </div>
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">Telefone</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Telefone</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox"
+                                   wire:model="inputPendencias.telefone_do_vendedor"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text"
                            class="form-control @error('vendedor.telefone') is-invalid @enderror imask-telefone"
@@ -122,7 +190,14 @@
             </div>
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">CPF/CNPJ</label>
+                    <div class="row">
+                        <label class="form-label col-auto">CPF/CNPJ</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox"
+                                   wire:model="inputPendencias.cpf/cnpj_do_vendedor"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text"
                            class="form-control @error('vendedor.cpfCnpj') is-invalid @enderror imask-cpf-cnpj"
@@ -137,7 +212,14 @@
         <div class="row">
             <div class="col-12">
                 <div class="mb-3">
-                    <label class="form-label">Nome</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Nome</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox"
+                                   wire:model="inputPendencias.nome_do_comprador"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text" class="form-control @error('comprador.nome') is-invalid @enderror"
                            wire:model.defer="comprador.nome">
@@ -148,7 +230,14 @@
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">E-mail</label>
+                    <div class="row">
+                        <label class="form-label col-auto">E-mail</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox"
+                                   wire:model="inputPendencias.email_do_comprador"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            class="form-control @error('comprador.email') is-invalid @enderror"
                            wire:model.defer="comprador.email">
@@ -157,7 +246,14 @@
             </div>
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">Telefone</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Telefone</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox"
+                                   wire:model="inputPendencias.telefone_do_comprador"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text"
                            class="form-control @error('comprador.telefone') is-invalid @enderror imask-telefone"
@@ -167,7 +263,14 @@
             </div>
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">CPF/CNPJ</label>
+                    <div class="row">
+                        <label class="form-label col-auto">CPF/CNPJ</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox"
+                                   wire:model="inputPendencias.cpf/cnpj_do_comprador"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text"
                            class="form-control @error('comprador.cpfCnpj') is-invalid @enderror imask-cpf-cnpj"
@@ -179,7 +282,13 @@
         <div class="row">
             <div class="col-3">
                 <div class="mb-3">
-                    <label class="form-label">CEP</label>
+                    <div class="row">
+                        <label class="form-label col-auto">CEP</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.cep"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input x-mask:dynamic="alpineMaskCep" :readonly="!isEditing"
                            type="text" class="form-control @error('endereco.cep') is-invalid @enderror"
                            wire:model.defer="endereco.cep" wire:change="setEndereco">
@@ -188,7 +297,13 @@
             </div>
             <div class="col-7">
                 <div class="mb-3">
-                    <label class="form-label">Logradouro</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Logradouro</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.logradouro"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text" class="form-control @error('endereco.logradouro') is-invalid @enderror"
                            wire:model.defer="endereco.logradouro">
@@ -197,7 +312,13 @@
             </div>
             <div class="col-2">
                 <div class="mb-3">
-                    <label class="form-label">Número</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Número</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.número"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            x-mask:dynamic="alpineMaskNumero"
                            type="text" class="form-control @error('endereco.numero') is-invalid @enderror"
@@ -209,7 +330,13 @@
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
-                    <label class="form-label">Bairro</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Bairro</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.bairro"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text" class="form-control @error('endereco.bairro') is-invalid @enderror"
                            wire:model.defer="endereco.bairro">
@@ -218,7 +345,13 @@
             </div>
             <div class="col-6">
                 <div class="mb-3">
-                    <label class="form-label">Cidade</label>
+                    <div class="row">
+                        <label class="form-label col-auto">Cidade</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.cidade"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input :readonly="!isEditing"
                            type="text" class="form-control @error('endereco.cidade') is-invalid @enderror"
                            wire:model.defer="endereco.cidade">
@@ -227,7 +360,13 @@
             </div>
             <div class="col-2">
                 <div class="mb-3">
-                    <label class="form-label">UF</label>
+                    <div class="row">
+                        <label class="form-label col-auto">UF</label>
+                        @if($atpvShow?? false)
+                            <input x-show="checkPendencia" type="checkbox" wire:model="inputPendencias.uf"
+                                   class="form-check-input-warning mt-1"/>
+                        @endif
+                    </div>
                     <input x-mask:dynamic="alpineMaskUf" :readonly="!isEditing"
                            type="text"
                            class="form-control @error('endereco.uf') is-invalid @enderror text-uppercase px-2"
@@ -239,7 +378,7 @@
     </fieldset>
     <div class="row">
         <div class="col-12">
-            <label class="form-label">Observação @if($obs?? false)
+            <label class="form-label col-auto">Observação @if($obs?? false)
                 @else
                     <span class="text-muted">opcional</span>
                 @endif</label>

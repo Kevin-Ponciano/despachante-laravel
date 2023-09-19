@@ -31,6 +31,8 @@ class ClienteEditar extends Component
             'loja' => $this->regexMoneyToView($this->cliente->preco_loja),
             'terceiro' => $this->regexMoneyToView($this->cliente->preco_terceiro),
             'atpv' => $this->regexMoneyToView($this->cliente->preco_atpv),
+            'renaveEntrada' => $this->regexMoneyToView($this->cliente->preco_renave_entrada),
+            'renaveSaida' => $this->regexMoneyToView($this->cliente->preco_renave_saida),
         ];
         $this->status = $this->cliente->status;
     }
@@ -60,6 +62,8 @@ class ClienteEditar extends Component
             'loja' => $this->regexMoney($this->preco['loja'] ?? 0),
             'terceiro' => $this->regexMoney($this->preco['terceiro'] ?? 0),
             'atpv' => $this->regexMoney($this->preco['atpv'] ?? 0),
+            'renaveEntrada' => $this->regexMoney($this->preco['renaveEntrada'] ?? 0),
+            'renaveSaida' => $this->regexMoney($this->preco['renaveSaida'] ?? 0),
         ];
 
         $this->cliente->update([
@@ -68,6 +72,8 @@ class ClienteEditar extends Component
             'preco_atpv' => $preco['loja'],
             'preco_loja' => $preco['terceiro'],
             'preco_terceiro' => $preco['atpv'],
+            'preco_renave_entrada' => $preco['renaveEntrada'],
+            'preco_renave_saida' => $preco['renaveSaida'],
         ]);
 
         $this->emit('savedPreco');

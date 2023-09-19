@@ -78,11 +78,6 @@ class Pedido extends Model
         return $this->belongsTo(Cliente::class);
     }
 
-    public function pendencias()
-    {
-        return $this->hasMany(Pendencia::class);
-    }
-
     public function atpv()
     {
         return $this->hasOne(Atpv::class);
@@ -91,6 +86,16 @@ class Pedido extends Model
     public function processo()
     {
         return $this->hasOne(Processo::class);
+    }
+
+    public function pendencias()
+    {
+        return $this->hasMany(Pendencia::class);
+    }
+
+    public function arquivos()
+    {
+        return $this->hasMany(Arquivo::class);
     }
 
     public function servicos()

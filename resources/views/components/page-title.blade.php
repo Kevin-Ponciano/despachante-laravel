@@ -1,6 +1,5 @@
 <div class="page-header m-0 d-print-none">
-    {{--    <div {{$attributes->merge(['class'=>"container-fluid"])}}>--}}
-    <div class="container">
+    <div class="{{$classContainer?? 'container'}}">
         <div class="d-flex justify-content-between">
             <div>
                 <div class="d-flex gap-2">

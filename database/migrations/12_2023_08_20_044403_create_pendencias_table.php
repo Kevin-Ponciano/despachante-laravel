@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('nome');
             $table->char('tipo', 2);
             $table->char('status', 2);
+            $table->string('input')->nullable();
             $table->string('observacao')->nullable();
             $table->dateTime('criado_em');
             $table->dateTime('atualizado_em')->nullable();

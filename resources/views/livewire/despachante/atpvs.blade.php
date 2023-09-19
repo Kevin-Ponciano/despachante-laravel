@@ -1,5 +1,5 @@
 <div>
-    <x-page-title title="ATPVs"/>
+    <x-page-title class-container="container-fluid" title="Transferências"/>
     <x-livewire-table :data="$pedidos">
         <x-slot:filters>
             <div class="">
@@ -29,13 +29,25 @@
             <div class="">
                 Tipo:
                 <div class="me-2 d-inline-block text-muted">
-                    <select class="form-select form-select-sm" wire:model="tipo">
+                    <select class="form-select form-select-sm" wire:click="checkTipo" wire:model="tipo">
                         <option value="">Todos</option>
                         <option value="at">ATPV</option>
                         <option value="rv">RENAVE</option>
                     </select>
                 </div>
             </div>
+            @if($tipo === 'rv')
+                <div class="">
+                    Movimentação:
+                    <div class="me-2 d-inline-block text-muted">
+                        <select class="form-select form-select-sm" wire:model="movimentacao">
+                            <option value="">Todos</option>
+                            <option value="in">ENTRADA</option>
+                            <option value="out">SAÍDA</option>
+                        </select>
+                    </div>
+                </div>
+            @endif
             <div class="">
                 Retorno da Pendência:
                 <div class="me-2 d-inline-block text-muted">
@@ -64,6 +76,11 @@
                 @endif
                 <th class="cursor-pointer" wire:click="sortBy('codigo_crv')">Tipo
                     <i class="ti ti-arrow-big-{{$sortField === 'codigo_crv' ? $iconDirection : null}}-filled"></i></th>
+                @if($tipo === 'rv')
+                    <th class="cursor-pointer" wire:click="sortBy('movimentacao')">Movimentação
+                        <i class="ti ti-arrow-big-{{$sortField === 'movimentacao' ? $iconDirection : null}}-filled"></i>
+                    </th>
+                @endif
                 <th class="cursor-pointer" wire:click="sortBy('atualizado_em')">atualizado às
                     <i class="ti ti-arrow-big-{{$sortField === 'atualizado_em' ? $iconDirection : null}}-filled"></i>
                 </th>
@@ -81,6 +98,9 @@
                         <td>{{$pedido->usuarioResponsavel->name??'-'}}</td>
                     @endif
                     <td>{{$pedido->atpv->tipo()}}</td>
+                    @if($tipo === 'rv')
+                        <td>{{$pedido->atpv->movimentacao()}}</td>
+                    @endif
                     <td>{{$pedido->atualizado_em()}}</td>
                 </tr>
             @empty

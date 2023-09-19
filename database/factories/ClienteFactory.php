@@ -21,6 +21,8 @@ class ClienteFactory extends Factory
             'preco_atpv' => $faker->randomFloat(2, 100, 1000),
             'preco_loja' => $faker->randomFloat(2, 100, 1000),
             'preco_terceiro' => $faker->randomFloat(2, 100, 1000),
+            'preco_renave_entrada' => $faker->randomFloat(2, 100, 1000),
+            'preco_renave_saida' => $faker->randomFloat(2, 100, 1000),
             'despachante_id' => 1,
         ];
     }

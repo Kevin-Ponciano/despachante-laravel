@@ -1,9 +1,9 @@
 <div>
-    <!-- TODO: Adicionar target no loading -->
-    <!-- TODO: Imposibilitar edição das informações do Pedido -->
-    <div wire:loading>
+    <div wire:loading wire:target="downloadAllFiles, downloadFile">
         <x-loading-page/>
     </div>
+    <!-- TODO: Imposibilitar edição das informações do Pedido -->
+
     <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->status()"
                   :status="$status" :responsavel="$pedido->usuarioResponsavel"
                   :concluido-por="$pedido->usuarioConcluinte"/>
@@ -19,14 +19,12 @@
                         @if(Auth::user()->isDespachante())
                             <li class="nav-item" role="presentation">
                                 <a href="#tabs-pedido-info" class="nav-link" data-bs-toggle="tab"
-                                   aria-selected="false" role="tab" tabindex="-1">Informações do Pedido</a>
+                                   aria-selected="false" role="tab" tabindex="-1">Valores/Serviços</a>
                             </li>
-
                         @endif
                         <li class="nav-item" role="presentation">
                             <a href="#tabs-documentos" class="nav-link position-relative" data-bs-toggle="tab"
-                               aria-selected="false" role="tab" tabindex="-1"
-                               wire:click="getFilesLink">Documentos
+                               aria-selected="false" role="tab" tabindex="-1">Documentos
                                 <span x-show="status === 'pe'"
                                       class="badge bg-orange badge-notification badge-blink"></span>
                             </a>
@@ -167,9 +165,9 @@
                                                     </x-action-message>
                                                 </div>
                                                 <div class="input-icon">
-                                <span class="input-icon-addon">
-                                    <i class="ti ti-currency-real"></i>
-                                </span>
+                                                    <span class="input-icon-addon">
+                                                        <i class="ti ti-currency-real"></i>
+                                                    </span>
                                                     <input x-data x-mask:dynamic="$money($input, ',','.')"
                                                            type="text" class="form-control px-5 w-50"
                                                            wire:model.defer="precoPlaca" wire:change="savePrecoPlaca">
@@ -185,9 +183,9 @@
                                                     </x-action-message>
                                                 </div>
                                                 <div class="input-icon">
-                            <span class="input-icon-addon">
-                                <i class="ti ti-currency-real"></i>
-                            </span>
+                                                    <span class="input-icon-addon">
+                                                        <i class="ti ti-currency-real"></i>
+                                                    </span>
                                                     <input x-data x-mask:dynamic="$money($input, ',','.')"
                                                            type="text" class="form-control px-5 w-50"
                                                            wire:model.defer="precoHonorario"
@@ -223,7 +221,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         @endforeach
                                         <div>
                                             <select class="form-select mb-2 w-33" wire:model.defer="servicoId">
@@ -231,7 +228,6 @@
                                                 @foreach($servicosDespachante as $servico)
                                                     <option title="{{$servico->descricao}}"
                                                             value="{{$servico->id}}">{{$servico->nome}} </option>
-
                                                 @endforeach
                                             </select>
                                             <a class="btn btn-ghost-primary" wire:click="addServico">Adicionar</a>
@@ -239,7 +235,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         @endif
                         <div wire:ignore.self class="tab-pane" id="tabs-documentos" role="tabpanel">
                             <x-accordion id="accordion-docs" :active="true"
@@ -268,12 +263,14 @@
 
                                         @endforelse
                                     </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <x-input-upload-files uploadMethod="uploadFiles" folder="processos"
-                                                                  label="Enviar Documentos para baixa"/>
+                                    @if($status === 'pe')
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <x-input-upload-files uploadMethod="uploadFiles" folder="processos"
+                                                                      label="Enviar Documentos para baixa"/>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 </x-slot:body>
                             </x-accordion>
                             <!-- TODO Adicionar opcoes para baixar todos os arquivos em um zip -->
@@ -325,46 +322,5 @@
             </div>
         </div>
     </div>
-    <div class="modal modal-blur fade" id="modal-delete-file" tabindex="-1" style="display: none;"
-         aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <div class="modal-status bg-danger"></div>
-                <div class="modal-body text-center py-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
-                         height="24"
-                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                         stroke-linecap="round"
-                         stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path
-                            d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"></path>
-                        <path d="M12 9v4"></path>
-                        <path d="M12 17h.01"></path>
-                    </svg>
-                    <h2>Tem certeza?</h2>
-                    <h3 id="file-name-delete"></h3>
-                    <div class="text-muted">Ao deletar o arquivo não será mais possível recuperar.</div>
-                </div>
-                <div class="modal-footer">
-                    <div class="w-100">
-                        <div class="row">
-                            <div class="col">
-                                <a href="#" class="btn w-100" data-bs-dismiss="modal">
-                                    Cancelar
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="#" class="btn btn-danger w-100"
-                                   onclick="$(window).trigger('deleteFileConfirm')">
-                                    Deletar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-delete-file-confirm/>
 </div>

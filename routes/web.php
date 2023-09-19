@@ -45,8 +45,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::get('/processos', Processos::class)->name('processos');
         Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');
-        Route::get('/atpvs', Atpvs::class)->name('atpvs');
-        Route::get('/atpvs/{id}', AtpvShow::class)->name('atpvs.show');
+        Route::get('/transferencias', Atpvs::class)->name('atpvs');
+        Route::get('/transferencias/{id}', AtpvShow::class)->name('atpvs.show');
         Route::get('/clientes', Clientes::class)->name('clientes');
         Route::get('/clientes/table', [Clientes::class, 'dataTable'])->name('clientes.table');
         Route::get('/clientes/{id}', ClienteEditar::class)->name('clientes.editar');
@@ -60,7 +60,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/dashboard', ClienteDashboard::class)->name('dashboard');
         Route::get('/processos', ClienteProcessos::class)->name('processos');
         Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');
-        Route::get('/atpvs', ClienteAtpvs::class)->name('atpvs');
-        Route::get('/atpvs/{id}', AtpvShow::class)->name('atpvs.show');
+        Route::get('/transferencias', ClienteAtpvs::class)->name('atpvs');
+        Route::get('/transferencias/{id}', AtpvShow::class)->name('atpvs.show');
     });
 });

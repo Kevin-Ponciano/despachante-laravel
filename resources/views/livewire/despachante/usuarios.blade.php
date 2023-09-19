@@ -30,8 +30,8 @@
     <x-modal id="modal-usuario-novo"
              title="Cadastrar Novo Usuário"
     >
-        <x-slot:modal_body>
+        <x-slot:modalBody>
             <livewire:despachante.usuario-novo/>
-        </x-slot:modal_body>
+        </x-slot:modalBody>
     </x-modal>
 </div>

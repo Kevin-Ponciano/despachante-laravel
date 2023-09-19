@@ -5,7 +5,7 @@
                data-bs-toggle="tab"
                aria-selected="false"
                role="tab"
-               tabindex="-1">Informações Pedido</a>
+               tabindex="-1">Valores/Serviços</a>
         </li>
         <li class="nav-item" role="presentation">
             <a href="#tabs-processo2" class="nav-link active"
@@ -189,6 +189,7 @@
                         </div>
                     @endforeach
                     <div>
+                        {{--                        TODO: Adicionar o Select para selecionar os serviços--}}
                         <select class="form-select mb-2 w-33" wire:model.defer="servicoId">
                             <option value="-1" selected>Selecionar Serviço</option>
                             @foreach($servicosDespachante as $servico)

@@ -19,6 +19,7 @@ class AtpvFactory extends Factory
             'renavam' => $faker->numerify('###########'),
             'numero_crv' => $faker->numerify('############'),
             'codigo_crv' => $faker->randomElement([null, $faker->numerify('############')]),
+            'movimentacao' => $faker->randomElement([null, 'in', 'out']),
             'hodometro' => $this->faker->randomFloat(2, 0, 1000),
             'data_hodometro' => $datetime->format('Y-m-d H:i'),
             'vendedor_email' => $faker->email,

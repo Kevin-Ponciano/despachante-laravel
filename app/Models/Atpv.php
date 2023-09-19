@@ -14,6 +14,7 @@ class Atpv extends Model
         'renavam',
         'numero_crv',
         'codigo_crv',
+        'movimentacao',
         'hodometro',
         'data_hodometro',
         'vendedor_email',
@@ -44,6 +45,15 @@ class Atpv extends Model
             return 'RENAVE';
         } else {
             return 'ATPV';
+        }
+    }
+
+    public function movimentacao()
+    {
+        if ($this->movimentacao === 'in') {
+            return 'ENTRADA';
+        } elseif ($this->movimentacao === 'out') {
+            return 'SAÍDA';
         }
     }
 }

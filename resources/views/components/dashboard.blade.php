@@ -31,7 +31,7 @@
     </div>
     <div class="page-body">
         <div class="container-xl">
-            <div class="page-pretitle">
+            <div class="h4 m-1 page-pretitle">
                 PROCESSOS
             </div>
             <div class="row row-deck row-cards">
@@ -57,43 +57,45 @@
                     />
                 </div>
                 <div class="col-sm-6 col-lg-3">
-                    <x-card bg="bg-danger-lt" titulo="Processos" subtitulo="Pendentes" :numero="$qtdProcessosPendentes"
+                    <x-card bg="bg-warning-lt" titulo="Processos" subtitulo="Pendentes" :numero="$qtdProcessosPendentes"
                             :route="$routeProcessosPendentes"
                             icon="ti ti-file-report"
                     />
                 </div>
             </div>
-            <div class="page-pretitle mt-2">
-                ATPVs
+            <div class="h4 m-1 page-pretitle mt-4">
+                Transferências
             </div>
             <div class="row row-deck row-cards">
                 <div class="col-sm-6 col-lg-3">
-                    <x-card bg="bg-success-lt" titulo="ATPVs" subtitulo="Abertos" :numero="$qtdAtpvsAbertos"
+                    <x-card bg="bg-success-lt" titulo="Transferências" subtitulo="Abertos" :numero="$qtdAtpvsAbertos"
                             :route="$routeAtpvsAbertos"
                             icon="ti ti-file-plus"
                     />
                 </div>
                 <div class="col-sm-6 col-lg-3">
-                    <x-card bg="bg-warning-lt" titulo="ATPVs" subtitulo="Retornados"
+                    <x-card bg="bg-warning-lt" titulo="Transferências" subtitulo="Retornados"
                             :numero="$qtdAtpvsRetornados"
                             :route="$routeAtpvsRetornados"
                             icon="ti ti-file-symlink"
                     />
                 </div>
                 <div class="col-sm-6 col-lg-2">
-                    <x-card bg="bg-primary-lt" titulo="ATPVs" subtitulo="Em andamento" :numero="$qtdAtpvsEmAndamento"
+                    <x-card bg="bg-primary-lt" titulo="Transferências" subtitulo="Em andamento"
+                            :numero="$qtdAtpvsEmAndamento"
                             :route="$routeAtpvsEmAndamento"
                             icon="ti ti-file-analytics"
                     />
                 </div>
                 <div class="col-sm-6 col-lg-auto">
-                    <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Pendentes" :numero="$qtdAtpvsPendentes"
+                    <x-card bg="bg-warning-lt" titulo="Transferências" subtitulo="Pendentes"
+                            :numero="$qtdAtpvsPendentes"
                             :route="$routeAtpvsPendentes"
                             icon="ti ti-file-report"
                     />
                 </div>
                 <div class="col-sm-6 col-lg">
-                    <x-card bg="bg-danger-lt" titulo="ATPVs" subtitulo="Solicitado Cancelamento"
+                    <x-card bg="bg-danger-lt" titulo="Transferências" subtitulo="Solicitado Cancelamento"
                             :numero="$qtdAtpvsSolicitadoCancelamento"
                             :route="$routeAtpvsSolicitadoCancelamento"
                             icon="ti ti-file-x"

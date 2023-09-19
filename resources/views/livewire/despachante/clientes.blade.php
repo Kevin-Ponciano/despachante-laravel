@@ -29,8 +29,8 @@
     <x-modal id="modal-cliente-novo"
              title="Cadastrar Novo Cliente"
     >
-        <x-slot:modal_body>
+        <x-slot:modalBody>
             <livewire:despachante.cliente-novo/>
-        </x-slot:modal_body>
+        </x-slot:modalBody>
     </x-modal>
 </div>

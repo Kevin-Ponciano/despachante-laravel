@@ -1,86 +1,36 @@
-<x-accordion id="accordion-pendencias" :active="false" class="h3 mb-0">
-    <x-slot:title>
-        <div
-            class="@if($this->hasPending()) text-warning @endif">
+<div>
+    @if($isModal)
+        <a class="btn bg-body @if($this->hasPending()) text-warning @endif position-relative"
+           data-bs-target="#modal-pendencias" data-bs-toggle="modal">
             Pendências
             @if($this->hasPending())
-                <i class="badge bg-warning badge-blink ms-1 p-1"></i>
+                <span class="badge bg-orange badge-notification badge-blink"></span>
             @endif
-        </div>
-    </x-slot:title>
-    <x-slot:body>
-        <div id="pendencias" x-data="{createPendencia: @entangle('createPendencia')}">
-            <div class="pt-0 table-responsive">
-                <table class="table table-hover table-sm ">
-                    <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Concluída em</th>
-                        <th class="text-center">
-                            Resolvido
-                            <i class="ti ti-check text-green"></i>
-                        </th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr x-show="createPendencia">
-                        <td>
-                            <input type="text" class="form-control form-control-sm" wire:model.defer="name"
-                                   placeholder="Nome">
-                        </td>
-                        <td colspan="2">
-                            <input type="text" class="form-control form-control-sm" wire:model.defer="observacao"
-                                   placeholder="Observação">
-                        </td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-primary" wire:click="store">
-                                Criar pendência
-                            </button>
-                        </td>
-                        <td></td>
-                    </tr>
-                    @forelse($pendencias as $pendencia)
-                        <tr data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-original-title="OBS.: {{$pendencia->observacao}}">
-                            <td class="text-break">{{$pendencia->nome}}</td>
-                            <td class="text-center">
-                                {{--TODO: Centralizar o badge--}}
-                                <span
-                                    class="badge @if($pendencia->status==='co') bg-success @else bg-warning @endif">{{$pendencia->status()}}</span>
-                            </td>
-                            <td class="text-center text-nowrap">{{$pendencia->concluido_em()}}</td>
-                            <td class="text-center">
-                                <input type="checkbox" class="form-check-input" @if($pendencia->status==='co') checked
-                                       @endif
-                                       wire:click="resolverPendencia({{$pendencia->id}})">
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-ghost-red"
-                                        wire:click="deletePendencia({{$pendencia->id}})">
-                                    <i class="ti ti-trash-x"></i>
-                                </button>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="text-center">Nenhuma pendência encontrada</td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
-
-            </div>
-            <div class="mt-2 d-flex justify-content-between">
-                <button x-on:click="createPendencia=true" class="btn btn-sm btn-ghost-warning">
-                    <i class="ti ti-alert-triangle px-2"></i>
-                    Nova pendência
+        </a>
+        <x-modal id="modal-pendencias" title="Pendências" class-body="p-1">
+            <x-slot:modal-body>
+                <x-pendencias-table :pendencias="$pendencias"/>
+            </x-slot:modal-body>
+            <x-slot:modal-footer>
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Fechar
                 </button>
-                <button class="btn btn-sm btn-ghost-blue" wire:click="resolverTodas">
-                    <i class="ti ti-checks px-2"></i>
-                    Resolver todas
-                </button>
-            </div>
-        </div>
-    </x-slot:body>
-</x-accordion>
+            </x-slot:modal-footer>
+        </x-modal>
+    @else
+        <x-accordion id="accordion-pendencias" :active="false" class="h3 mb-0">
+            <x-slot:title>
+                <div
+                    class="@if($this->hasPending()) text-warning @endif">
+                    Pendências
+                    @if($this->hasPending())
+                        <i class="badge bg-warning badge-blink ms-1 p-1"></i>
+                    @endif
+                </div>
+            </x-slot:title>
+            <x-slot:body>
+                <x-pendencias-table :pendencias="$pendencias"/>
+            </x-slot:body>
+        </x-accordion>
+    @endif
+</div>

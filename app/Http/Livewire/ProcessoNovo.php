@@ -8,11 +8,9 @@ use App\Models\Processo;
 use App\Traits\FunctionsTrait;
 use App\Traits\HandinFilesTrait;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class ProcessoNovo extends Component
 {
-    use WithFileUploads;
     use HandinFilesTrait;
     use FunctionsTrait;
 
@@ -27,7 +25,6 @@ class ProcessoNovo extends Component
     public $compradorTipo = 'tc';
     public $processoTipo = 'ss';
     public $observacoes;
-    public $arquivos = [];
     public $precoPlaca;
     public $precoHonorario;
     public $servicosDespachante = [];
@@ -35,6 +32,7 @@ class ProcessoNovo extends Component
     public $servicos = [];
     public $servicoId;
     public $precoSettado = false;
+    public $pedido;
 
     protected $rules = [
         'clienteId' => 'required|exists:clientes,id',
@@ -158,7 +156,9 @@ class ProcessoNovo extends Component
             }
         }
         // todo verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
-        //$this->uploadFiles($this->arquivos, $this->cliente, $pedido, 'processos');
+        $this->pedido = $pedido;
+        if (!empty($this->arquivos))
+            $this->uploadFiles('processos');
 
         $this->clearInputs();
         $this->emit('$refresh');

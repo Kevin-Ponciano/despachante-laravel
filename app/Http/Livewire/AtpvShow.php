@@ -3,12 +3,14 @@
 namespace App\Http\Livewire;
 
 use App\Traits\FunctionsTrait;
+use App\Traits\HandinFilesTrait;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class AtpvShow extends Component
 {
     use FunctionsTrait;
+    use HandinFilesTrait;
 
     public $pedido;
     public $cliente;
@@ -19,13 +21,22 @@ class AtpvShow extends Component
     public $endereco;
     public $observacoes;
     public $precoHonorario;
+
     public $tipo;
     public $isRenave;
     public $isEditing = false;
+    public $movimentacao;
     public $status;
+
+    public $despachanteId;
+    public $numeroCliente;
+    public $numeroPedido;
+
+    public $inputPendencias = [];
 
     protected $listeners = [
         '$refresh',
+        'deleteFile',
     ];
 
     protected $rules = [
@@ -96,6 +107,7 @@ class AtpvShow extends Component
             case 'RENAVE':
                 $this->isRenave = true;
                 $this->veiculo['codigoCrv'] = $this->pedido->atpv->codigo_crv;
+                $this->movimentacao = $this->pedido->atpv->movimentacao();
                 break;
             case 'ATPV':
                 $this->isRenave = false;
@@ -123,7 +135,9 @@ class AtpvShow extends Component
         $this->endereco['uf'] = $this->pedido->atpv->compradorEndereco->estado;
         $this->observacoes = $this->pedido->observacoes;
         $this->precoHonorario = $this->regexMoneyToView($this->pedido->preco_honorario);
-        $this->status = $this->pedido->status;
+        $this->despachanteId = Auth::user()->despachante->id;
+        $this->numeroCliente = $this->pedido->cliente->numero_cliente;
+        $this->numeroPedido = $this->pedido->numero_pedido;
     }
 
 
@@ -181,9 +195,22 @@ class AtpvShow extends Component
         ]);
     }
 
+    public function storeInputPendencias()
+    {
+        $this->emit('storeInputPendencias', $this->inputPendencias);
+        $this->inputPendencias = [];
+    }
+
     public function render()
     {
-        debug($this->pedido->id);
+        $this->status = $this->pedido->status;
+        if ($this->isRenave) {
+            $this->arquivosDoPedido = $this->_getFilesLink('renave/despachante');
+            $this->arquivosRenave = $this->_getFilesLink('renave/cliente');
+        } else
+            $this->arquivosAtpvs = $this->_getFilesLink('atpv');
+
+
         return view('livewire.atpv-show')
             ->layout('layouts.despachante');
     }

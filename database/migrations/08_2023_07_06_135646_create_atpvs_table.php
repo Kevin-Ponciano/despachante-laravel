@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->char('renavam', 11);
             $table->char('numero_crv', 12);
             $table->char('codigo_crv', 12)->nullable();
+            $table->char('movimentacao', 3)->nullable();
 
             $table->string('hodometro')->nullable()->default(0);
             $table->dateTime('data_hodometro')->nullable();

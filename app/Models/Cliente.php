@@ -20,6 +20,8 @@ class Cliente extends Model
         'preco_atpv',
         'preco_loja',
         'preco_terceiro',
+        'preco_renave_entrada',
+        'preco_renave_saida',
         'despachante_id',
     ];
 

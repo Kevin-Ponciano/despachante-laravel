@@ -137,6 +137,26 @@ class User extends Authenticatable
             return 'undefined';
     }
 
+    public function getIdDespachante()
+    {
+        if ($this->isDespachante())
+            return $this->despachante->id;
+        elseif ($this->isCliente())
+            return $this->cliente->despachante->id;
+        else
+            abort(500, 'Erro ao obter ID do despachante.');
+    }
+
+    public function empresa()
+    {
+        if ($this->isDespachante())
+            return $this->despachante;
+        elseif ($this->isCliente())
+            return $this->cliente;
+        else
+            abort(500, 'Erro ao obter a empresa.');
+    }
+
     public function status()
     {
         return match ($this->status) {

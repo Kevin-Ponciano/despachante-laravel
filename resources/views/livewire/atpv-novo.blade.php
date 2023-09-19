@@ -20,8 +20,44 @@
                     @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
                 </div>
             </div>
+            @if($isRenave)
+                <div class="col-auto">
+                    <label class="form-label">Movimentação Renave</label>
+                    <select class="form-control @error('movimentacao') is-invalid @enderror"
+                            wire:model.defer="movimentacao">
+                        <option value="">Selecione a Movimentação</option>
+                        <option value="in">Entrada</option>
+                        <option value="out">Saída</option>
+                    </select>
+                    @error('movimentacao')<span class="invalid-feedback"> {{ $message }}</span> @enderror
+                </div>
+            @endif
         </div>
         <x-atpv-form :is-renave="$isRenave"/>
+        @if($isRenave)
+            <div class="row mt-2" x-data="{ isUploading: false, error: false,input: $('#upload-file-nr') }"
+                 x-on:livewire-upload-start="isUploading = true"
+                 x-on:livewire-upload-finish="isUploading = false;input.addClass('is-valid')"
+                 x-on:livewire-upload-error="error = true"
+                 x-on:livewire-upload-progress="input.removeClass('is-invalid');input.removeClass('is-valid')">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <div class="form-label">Enviar Documentos .pdf</div>
+                        <div class="input-icon">
+                            <input :disabled="isUploading"
+                                   class="form-control @error('arquivos.*') is-invalid @enderror"
+                                   id="upload-file-nr" type="file" accept="application/pdf" multiple
+                                   wire:model="arquivos">
+                            @error('arquivos.*') <span x-show="!isUploading"
+                                                       class="invalid-feedback">{{ $message }}</span> @enderror
+                            <span x-show="isUploading" class="input-icon-addon">
+                                        <div class="spinner-border spinner-border-sm text-muted" role="status"></div>
+                                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
     <div class="modal-footer p-3">
         <a href="#" wire:click="clearInputs" class="btn btn-link link-secondary"

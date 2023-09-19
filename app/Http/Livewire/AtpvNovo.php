@@ -6,10 +6,13 @@ use App\Models\Atpv;
 use App\Models\Endereco;
 use App\Models\Pedido;
 use App\Traits\FunctionsTrait;
+use App\Traits\HandinFilesTrait;
+use Auth;
 use Livewire\Component;
 
 class AtpvNovo extends Component
 {
+    use HandinFilesTrait;
     use FunctionsTrait;
 
     public $clientes;
@@ -20,6 +23,8 @@ class AtpvNovo extends Component
 
     public $endereco;
     public $observacoes;
+    public $pedido;
+    public $movimentacao;
     public $isRenave = false;
 
     protected $rules = [
@@ -45,7 +50,9 @@ class AtpvNovo extends Component
         'endereco.bairro' => 'required',
         'endereco.cidade' => 'required',
         'endereco.uf' => 'required|uf',
+        'movimentacao' => 'required',
     ];
+
     protected $messages = [
         'clienteId.required' => 'Selecione um Cliente.',
         'clienteId.exists' => 'Selecione um Cliente.',
@@ -81,31 +88,42 @@ class AtpvNovo extends Component
         'endereco.cidade.required' => 'Obrigatório.',
         'endereco.uf.required' => 'Obrigatório.',
         'endereco.uf.uf' => 'UF inválida.',
+        'movimentacao.required' => 'Obrigatório.',
     ];
 
     public function mount()
     {
-        $this->clientes = \Auth::user()->despachante->clientes;
+        $this->clientes = Auth::user()->despachante->clientes;
     }
 
     public function store()
     {
         $this->validate();
 
-        $precoAtpv = \Auth::user()->despachante->clientes()->find($this->clienteId)->preco_atpv;
+        if ($this->isRenave) {
+            if ($this->movimentacao === 'in') {
+                $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_renave_entrada;
+            } elseif ($this->movimentacao === 'out') {
+                $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_renave_saida;
+            }
+        } else {
+            $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_atpv;
+        }
+
         $codigoCrv = $this->isRenave ? $this->veiculo['codigoCrv'] : null;
         $hodometro = $this->veiculo['hodometro'] ?? null;
         $dataHodometro = $this->veiculo['dataHodometro'] ?? null;
+        $movimentacao = $this->movimentacao ?? null;
 
         $pedido = Pedido::create([
             'comprador_nome' => $this->comprador['nome'],
             'comprador_telefone' => $this->comprador['telefone'],
             'placa' => $this->veiculo['placa'],
             'veiculo' => $this->veiculo['veiculo'],
-            'preco_honorario' => $precoAtpv,
+            'preco_honorario' => $preco,
             'status' => 'ab',
             'observacoes' => $this->observacoes,
-            'criado_por' => \Auth::user()->id,
+            'criado_por' => Auth::user()->id,
             'cliente_id' => $this->clienteId,
         ]);
 
@@ -122,6 +140,7 @@ class AtpvNovo extends Component
             'renavam' => $this->veiculo['renavam'],
             'numero_crv' => $this->veiculo['numeroCrv'],
             'codigo_crv' => $codigoCrv,
+            'movimentacao' => $movimentacao,
             'hodometro' => $hodometro,
             'data_hodometro' => $dataHodometro,
             'vendedor_email' => $this->vendedor['email'],
@@ -134,16 +153,23 @@ class AtpvNovo extends Component
             'pedido_id' => $pedido->id,
         ]);
 
+// todo verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
+        $this->pedido = $pedido;
+        if ($this->isRenave)
+            if (!empty($this->arquivos))
+                $this->uploadFiles('renave/despachante');
+
 
         $this->clearInputs();
         $this->emit('$refresh');
         $this->emit('success', [
-            'message' => "$atpv->tipo() criado com sucesso.",
+            'message' => $atpv->tipo() . " criado com sucesso.",
             'url' => route('despachante.atpvs.show', $pedido->numero_pedido),
         ]);
     }
 
-    public function clearInputs()
+    public
+    function clearInputs()
     {
         $this->veiculo = null;
         $this->vendedor = null;
@@ -154,7 +180,8 @@ class AtpvNovo extends Component
         $this->resetErrorBag();
     }
 
-    public function render()
+    public
+    function render()
     {
         return view('livewire.atpv-novo');
     }

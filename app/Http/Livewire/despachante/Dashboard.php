@@ -19,6 +19,7 @@ class Dashboard extends Component
         $qtdAtpvsEmAndamento = \Auth::user()->despachante->pedidosAtpvs()->where('pedidos.status', 'ea')->count();
         $qtdAtpvsPendentes = \Auth::user()->despachante->pedidosAtpvs()->where('pedidos.status', 'pe')->count();
         $qtdAtpvsSolicitadoCancelamento = \Auth::user()->despachante->pedidosAtpvs()->where('pedidos.status', 'sc')->count();
+
         return view('livewire.despachante.dashboard', compact(
             'qtdProcessosAbertos',
             'qtdProcessosRetornados',

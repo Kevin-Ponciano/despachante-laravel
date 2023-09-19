@@ -20,6 +20,7 @@ class Pendencia extends Model
         'nome',
         'tipo',
         'status',
+        'input',
         'observacao',
         'criado_em',
         'atualizado_em',

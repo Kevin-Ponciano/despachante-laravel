@@ -1,4 +1,6 @@
 <x-app-layout>
-    <x-navbar-cliente/>
-    {{$slot}}
+    <div class="page-wrapper">
+        {{$slot}}
+    </div>
+    <x-footer/>
 </x-app-layout>

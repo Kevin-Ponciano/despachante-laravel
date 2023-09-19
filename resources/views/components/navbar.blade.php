@@ -6,7 +6,7 @@
                     <a class="card-link" href="{{route('welcome')}}">
                         <img src="{{asset('assets/img/logo3.png')}}" alt="Saled"
                              class="navbar-brand-image">
-                        ALED
+                        .A.L.E.D
                     </a>
                 </h1>
                 <div class="fw-bolder text-capitalize text-center w-8">
@@ -15,8 +15,7 @@
                 <div class="navbar-nav flex-row order-md-last">
                     <div class="d-none d-md-flex">
                         <div class="nav-item w-auto">
-                            <form>
-                                <div class="input-icon">
+                            <div class="input-icon">
                                 <span class="input-icon-addon">
                                   <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -26,20 +25,22 @@
                                           d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path
                                           d="M21 21l-6 -6"></path></svg>
                                 </span>
-                                    {{--                                    todo Criar uma rota que irá redirecionar para o pedido pesquisado--}}
+                                {{--                                    todo Criar uma rota que irá redirecionar para o pedido pesquisado--}}
+                                <form>
+                                    @csrf
                                     <input type="text" class="form-control w-75" placeholder="Buscar Pedido">
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('input').on('keypress', function (e) {
-                                                if (e.which === 13) {
-                                                    e.preventDefault();
-                                                    window.location.href = "{{$pedidoRoute}}/" + $(this).val()
-                                                }
-                                            })
+                                </form>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('input').on('keypress', function (e) {
+                                            if (e.which === 13) {
+                                                e.preventDefault();
+                                                window.location.href = "{{$pedidoRoute}}/" + $(this).val()
+                                            }
                                         })
-                                    </script>
-                                </div>
-                            </form>
+                                    })
+                                </script>
+                            </div>
                         </div>
                         <a class="nav-link px-0 hide-theme-dark cursor-pointer" data-bs-toggle="tooltip"
                            data-bs-placement="bottom" aria-label="Enable dark mode"
@@ -218,7 +219,9 @@
                             <form method="POST" action="{{ route('logout') }}" id="logout">
                                 @csrf
                             </form>
-                            <a href="#" onclick="$('#logout').submit()" class="dropdown-item">Logout</a>
+                            <a href="#" onclick="$('#logout').submit()" class="dropdown-item">
+                                <i class="dropdown-item-icon icon ti ti-logout"></i>
+                                Sair</a>
                         </div>
                     </div>
                 </div>
@@ -235,7 +238,7 @@
                                           d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path></svg>
                                 </span>
                             <span class="nav-link-title">
-                                    Home
+                                    Dashboard
                             </span>
                         </a>
                     </li>

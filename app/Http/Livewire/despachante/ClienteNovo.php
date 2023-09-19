@@ -55,6 +55,8 @@ class ClienteNovo extends Component
             'loja' => $this->regexMoney($this->preco['loja'] ?? 0),
             'terceiro' => $this->regexMoney($this->preco['terceiro'] ?? 0),
             'atpv' => $this->regexMoney($this->preco['atpv'] ?? 0),
+            'renaveEntrada' => $this->regexMoney($this->preco['renaveEntrada'] ?? 0),
+            'renaveSaida' => $this->regexMoney($this->preco['renaveSaida'] ?? 0),
         ];
 
         $cliente = Auth::user()->despachante->clientes()->create([
@@ -65,6 +67,8 @@ class ClienteNovo extends Component
             'preco_atpv' => $preco['loja'],
             'preco_loja' => $preco['terceiro'],
             'preco_terceiro' => $preco['atpv'],
+            'preco_renave_entrada' => $preco['renaveEntrada'],
+            'preco_renave_saida' => $preco['renaveSaida'],
         ]);
 
         $cliente->users()->create([

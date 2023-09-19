@@ -20,18 +20,15 @@ class Atpvs extends Component
     public $cliente;
     public $status;
     public $tipo;
+    public $movimentacao;
     public $retorno;
     public $queryString = [
-        'cliente' =>
-            ['except' => ''],
-        'paginate' =>
-            ['except' => '10'],
-        'status' =>
-            ['except' => ''],
-        'tipo'
-        => ['except' => ''],
-        'retorno'
-        => ['except' => ''],
+        'cliente' => ['except' => ''],
+        'paginate' => ['except' => '10'],
+        'status' => ['except' => ''],
+        'tipo' => ['except' => ''],
+        'retorno' => ['except' => ''],
+        'movimentacao' => ['except' => ''],
     ];
 
 
@@ -55,6 +52,12 @@ class Atpvs extends Component
         $this->sortField = $field;
     }
 
+    public function checkTipo()
+    {
+        if (!$this->tipo == 'rv')
+            $this->movimentacao = null;
+    }
+
     public function clearFilters()
     {
         $this->reset([
@@ -63,6 +66,7 @@ class Atpvs extends Component
             'status',
             'tipo',
             'retorno',
+            'movimentacao'
         ]);
     }
 
@@ -87,6 +91,9 @@ class Atpvs extends Component
                     });
                 }
                 return $query;
+            })
+            ->when($this->movimentacao, function (Builder $query, $movimentacao) {
+                return $query->where('atpvs.movimentacao', $movimentacao);
             })
             ->when($this->retorno, function (Builder $query, $retorno) {
                 return $query->where('pedidos.retorno_pendencia', $retorno);

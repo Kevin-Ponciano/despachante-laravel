@@ -54,7 +54,7 @@ return [
             'scheme' => env('AWS_SCHEME', 'http'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            'throw' => true,
+            'throw' => false,
         ],
 
     ],

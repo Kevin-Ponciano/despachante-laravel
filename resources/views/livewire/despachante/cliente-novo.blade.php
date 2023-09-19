@@ -102,6 +102,32 @@
                     </div>
                 </div>
             </div>
+            <div class="col-3">
+                <div class="mb-3">
+                    <label class="form-label">RENAVE Entrada</label>
+                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-currency-real"></i>
+                                        </span>
+                        <input x-mask:dynamic="$money($input, ',','.')"
+                               type="text" class="form-control"
+                               wire:model.defer="preco.renaveEntrada">
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="mb-3">
+                    <label class="form-label">RENAVE Saída</label>
+                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-currency-real"></i>
+                                        </span>
+                        <input x-mask:dynamic="$money($input, ',','.')"
+                               type="text" class="form-control"
+                               wire:model.defer="preco.renaveSaida">
+                    </div>
+                </div>
+            </div>
         </div>
     </fieldset>
     <div class="d-flex justify-content-between mx-1">
