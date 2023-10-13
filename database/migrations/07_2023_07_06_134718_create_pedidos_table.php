@@ -22,8 +22,7 @@ return new class extends Migration {
             $table->decimal('preco_honorario', 12)->default(0);
             $table->char('status', 2);
 
-            $table->boolean('retorno_pendencia')->default(false);
-            $table->boolean('documento_enviado')->default(false);
+            $table->boolean('solicitado_cancelamento')->default(false);
             $table->text('observacoes')->nullable();
 
             $table->dateTime('criado_em');

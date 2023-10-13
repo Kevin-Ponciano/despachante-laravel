@@ -1,5 +1,5 @@
 <x-navbar :nome="Auth::user()->nomeEmpresa()" :dashboard-route="route('cliente.dashboard')"
-          :nome-usuario="\Auth::user()->name" :funcao="\Auth::user()->getFuncao()">
+          :nome-usuario="Auth::user()->name" :funcao="Auth::user()->getFuncao()" pedido-route="processos">
     <x-slot:navItens>
         <li class="nav-item">
             <a href="#" class="nav-link" data-bs-toggle="modal"
@@ -42,18 +42,15 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{route('cliente.atpvs')}}">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-car" width="24"
-                         height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
-                         stroke-linecap="round" stroke-linejoin="round">
-                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                       <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                       <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                       <path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"></path>
-                    </svg>
-                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-transfer" width="24"
+                     height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M20 10h-16l5.5 -6"></path>
+                    <path d="M4 14h16l-5.5 6"></path>
+                </svg>
                 <span class="nav-link-title">
-                    ATPVs
+                    Transferências
                 </span>
             </a>
         </li>

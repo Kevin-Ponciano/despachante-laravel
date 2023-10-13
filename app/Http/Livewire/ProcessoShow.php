@@ -60,7 +60,7 @@ class ProcessoShow extends Component
 
     public function mount($id)
     {
-        $this->pedido = Auth::user()->despachante->pedidos()->where('numero_pedido', $id)->firstOrFail();
+        $this->pedido = Auth::user()->empresa()->pedidosProcessos()->where('numero_pedido', $id)->firstOrFail();
         $this->cliente = $this->pedido->cliente->nome;
         $this->compradorNome = $this->pedido->comprador_nome;
         $this->telefone = $this->pedido->comprador_telefone;
@@ -76,12 +76,13 @@ class ProcessoShow extends Component
             $servico->preco = $this->regexMoneyToView($servico->pivot->preco);
             $this->servicos[] = $servico->toArray();
         }
-        $this->servicosDespachante = Auth::user()->despachante->servicos()->orderBy('nome')->get();
+        if (Auth::user()->isDespachante())
+            $this->servicosDespachante = Auth::user()->despachante->servicos()->orderBy('nome')->get();
     }
 
     public function addServico()
     {
-        if ($this->servicoId == null || $this->servicoId == -1)
+        if ($this->servicoId == null || $this->servicoId == -1 || $this->hasConludeOrExcluded())
             return;
         $servico = Auth::user()->despachante->servicos()->find($this->servicoId)->toArray();
         $serviceIds = array_map(function ($service) {
@@ -101,6 +102,8 @@ class ProcessoShow extends Component
 
     public function removeServico($id)
     {
+        if ($this->hasConludeOrExcluded())
+            return;
         $this->servicos = array_filter($this->servicos, function ($servico) use ($id) {
             return $servico['id'] != $id;
         });
@@ -110,6 +113,8 @@ class ProcessoShow extends Component
 
     public function savePriceServico($index)
     {
+        if ($this->hasConludeOrExcluded())
+            return;
         $servico = $this->servicos[$index];
         if ($servico['preco'] == null)
             return;
@@ -122,7 +127,7 @@ class ProcessoShow extends Component
 
     public function savePrecoPlaca()
     {
-        if ($this->precoPlaca == null)
+        if ($this->precoPlaca == null || $this->hasConludeOrExcluded())
             return;
         $this->pedido->processo->update([
             'preco_placa' => $this->regexMoney($this->precoPlaca),
@@ -132,7 +137,7 @@ class ProcessoShow extends Component
 
     public function savePrecoHonorario()
     {
-        if ($this->precoHonorario == null)
+        if ($this->precoHonorario == null || $this->hasConludeOrExcluded())
             return;
         $this->pedido->update([
             'preco_honorario' => $this->regexMoney($this->precoHonorario),
@@ -142,7 +147,7 @@ class ProcessoShow extends Component
 
     public function update()
     {
-        if (!$this->isEditing)
+        if (!$this->isEditing || $this->hasConludeOrExcluded())
             return;
         $this->validate();
         $this->pedido->update([
@@ -170,11 +175,7 @@ class ProcessoShow extends Component
         $this->arquivosDoPedido = $this->_getFilesLink('processos');
         $this->arquivosCodCrlv = $this->_getFilesLink('cod_crlv');
 
-        if (auth()->user()->isDespachante())
-            return view('livewire.processo-show')->layout('layouts.despachante');
-        elseif (auth()->user()->isCliente())
-            return view('livewire.processo-show')->layout('layouts.cliente');
-        else
-            abort(500);
+
+        return view('livewire.processo-show');
     }
 }

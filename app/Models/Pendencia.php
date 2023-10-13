@@ -45,6 +45,7 @@ class Pendencia extends Model
         return match ($this->status) {
             'co' => 'Concluído',
             'pe' => 'Pendente',
+            'rp' => 'Em Análise',
             default => '-',
         };
 

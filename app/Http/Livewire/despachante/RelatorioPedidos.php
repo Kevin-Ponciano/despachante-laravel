@@ -16,10 +16,10 @@ class RelatorioPedidos extends Component
         debug($this->teste);
         $this->emit('teste');
     }
+
     public function render()
     {
         $this->pedidos = Pedido::all();
-        return view('livewire.despachante.relatorio-pedidos')
-            ->layout('layouts.despachante');
+        return view('livewire.despachante.relatorio-pedidos');
     }
 }

@@ -50,7 +50,7 @@ class AtpvNovo extends Component
         'endereco.bairro' => 'required',
         'endereco.cidade' => 'required',
         'endereco.uf' => 'required|uf',
-        'movimentacao' => 'required',
+        'movimentacao' => 'required_if:isRenave,true',
     ];
 
     protected $messages = [
@@ -88,26 +88,41 @@ class AtpvNovo extends Component
         'endereco.cidade.required' => 'Obrigatório.',
         'endereco.uf.required' => 'Obrigatório.',
         'endereco.uf.uf' => 'UF inválida.',
-        'movimentacao.required' => 'Obrigatório.',
+        'movimentacao.required_if' => 'Obrigatório.',
     ];
 
     public function mount()
     {
-        $this->clientes = Auth::user()->despachante->clientes;
+        if (\Auth::user()->isDespachante()) {
+            $this->clientes = \Auth::user()->despachante->clientes;
+        } else {
+            $this->clienteId = \Auth::user()->cliente->id;
+        }
     }
 
     public function store()
     {
         $this->validate();
-
+        if (\Auth::user()->isCliente() && empty($this->arquivos) && $this->isRenave) {
+            return $this->addError('arquivos.*', 'Obrigatório.');
+        }
         if ($this->isRenave) {
             if ($this->movimentacao === 'in') {
-                $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_renave_entrada;
+                if (Auth::user()->isDespachante())
+                    $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_renave_entrada;
+                else
+                    $preco = Auth::user()->cliente->despachante->clientes()->find($this->clienteId)->preco_renave_entrada;
             } elseif ($this->movimentacao === 'out') {
-                $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_renave_saida;
+                if (Auth::user()->isDespachante())
+                    $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_renave_saida;
+                else
+                    $preco = Auth::user()->cliente->despachante->clientes()->find($this->clienteId)->preco_renave_saida;
             }
         } else {
-            $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_atpv;
+            if (Auth::user()->isDespachante())
+                $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_atpv;
+            else
+                $preco = Auth::user()->cliente->despachante->clientes()->find($this->clienteId)->preco_atpv;
         }
 
         $codigoCrv = $this->isRenave ? $this->veiculo['codigoCrv'] : null;
@@ -161,10 +176,15 @@ class AtpvNovo extends Component
 
 
         $this->clearInputs();
+        if (\Auth::user()->isDespachante()) {
+            $url = route('despachante.atpvs.show', $pedido->numero_pedido);
+        } else {
+            $url = route('cliente.atpvs.show', $pedido->numero_pedido);
+        }
         $this->emit('$refresh');
         $this->emit('success', [
             'message' => $atpv->tipo() . " criado com sucesso.",
-            'url' => route('despachante.atpvs.show', $pedido->numero_pedido),
+            'url' => $url,
         ]);
     }
 

@@ -92,7 +92,6 @@ class UsuarioEditar extends Component
 
     public function render()
     {
-        return view('livewire.despachante.usuario-editar')
-            ->layout('layouts.despachante');
+        return view('livewire.despachante.usuario-editar');
     }
 }

@@ -23,11 +23,6 @@ trait FunctionsTrait
         ]);
     }
 
-    public function onlyNumbers($string)
-    {
-        return preg_replace('/[^0-9]/', '', $string);
-    }
-
     public function setEndereco()
     {
         $cep = $this->onlyNumbers($this->endereco['cep']);
@@ -44,11 +39,16 @@ trait FunctionsTrait
         return $this->resetErrorBag('endereco.cep');
     }
 
+    public function onlyNumbers($string)
+    {
+        return preg_replace('/[^0-9]/', '', $string);
+    }
+
     public function play()
     {
         if (Pendencias::hasPendingStatic($this->pedido->id))
             return $this->emit('modal-aviso');
-        
+
         $this->status = 'ea';
         $this->pedido->update([
             'status' => 'ea',
@@ -56,6 +56,16 @@ trait FunctionsTrait
         ]);
         $this->emit('$refresh');
         $this->emit('info', ['message' => 'Pedido em andamento']);
+    }
+
+    public function reopen()
+    {
+        $this->status = 'ab';
+        $this->pedido->update([
+            'status' => 'ab',
+        ]);
+        $this->emit('$refresh');
+        $this->emit('success', ['message' => 'Pedido Reaberto']);
     }
 
     public function conclude()
@@ -68,6 +78,7 @@ trait FunctionsTrait
         $this->pedido->update([
             'status' => 'co',
             'concluido_por' => Auth::user()->id,
+            'concluido_em' => now(),
         ]);
         session()->flash('success', "Pedido $numero_pedido Concluído");
         return redirect()->route('despachante.dashboard');
@@ -86,6 +97,16 @@ trait FunctionsTrait
         $this->pedido->delete();
         session()->flash('error', "Pedido $numero_pedido Excluído");
         return redirect()->route('despachante.dashboard');
+    }
+
+    public function hasConludeOrExcluded()
+    {
+        if ($this->status === 'co' || $this->status === 'ex') {
+            $this->emit('warning', 'Pedido concluído ou excluído não pode ser editado.');
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

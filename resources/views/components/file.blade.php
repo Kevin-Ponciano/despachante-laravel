@@ -17,9 +17,11 @@
                         <div class="dropdown-menu">
                             <a href="{{$link}}" target="_blank" class="dropdown-item">Visualizar</a>
                             <a href="#" wire:click="downloadFile('{{$path}}')" class="dropdown-item">Download</a>
-                            <a href="#"
-                               onclick="$(window).trigger('deleteFile', {path: '{{$path}}',nome: '{{$nome}}',})"
-                               class=" dropdown-item deleteFile text-danger">Excluir</a>
+                            @if(Auth::user()->isDespachante())
+                                <a href="#"
+                                   onclick="$(window).trigger('deleteFile', {path: '{{$path}}',nome: '{{$nome}}',})"
+                                   class=" dropdown-item deleteFile text-danger">Excluir</a>
+                            @endif
                         </div>
                     </div>
                 </div>

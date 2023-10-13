@@ -1,27 +1,30 @@
-<form wire:submit.prevent="store" x-data="{isEditing:true}">
+<form wire:submit.prevent="store" x-data="{isEditing:true, isPendingInput: false}">
     @csrf
     <div class="p-3">
         <div class="d-flex justify-content-between">
-            <div class="col-auto">
-                <div class="mb-3">
-                    <label class="form-label">Cliente Logista</label>
-                    <div wire:ignore>
-                        <select @if($isRenave)id="select-cliente-renave-novo" @else id="select-cliente-atpv-novo" @endif
-                        class="form-control"
-                                wire:model.defer="clienteId">
-                            @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
-                            <option value="-1">Selecione o Cliente</option>
-                            @foreach($clientes as $cliente)
-                                <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="is-invalid"></div>
-                    @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
-                </div>
-            </div>
-            @if($isRenave)
+            @if(Auth::user()->isDespachante())
                 <div class="col-auto">
+                    <div class="mb-3">
+                        <label class="form-label">Cliente Logista</label>
+                        <div wire:ignore>
+                            <select @if($isRenave)id="select-cliente-renave-novo" @else id="select-cliente-atpv-novo"
+                                    @endif
+                                    class="form-control"
+                                    wire:model.defer="clienteId">
+                                @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
+                                <option value="-1">Selecione o Cliente</option>
+                                @foreach($clientes as $cliente)
+                                    <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="is-invalid"></div>
+                        @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
+                    </div>
+                </div>
+            @endif
+            @if($isRenave)
+                <div class="col-auto mb-3">
                     <label class="form-label">Movimentação Renave</label>
                     <select class="form-control @error('movimentacao') is-invalid @enderror"
                             wire:model.defer="movimentacao">

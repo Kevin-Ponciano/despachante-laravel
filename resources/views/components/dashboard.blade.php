@@ -35,72 +35,96 @@
                 PROCESSOS
             </div>
             <div class="row row-deck row-cards">
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-3">
                     <x-card bg="bg-success-lt" titulo="Processos" subtitulo="Abertos"
                             :numero="$qtdProcessosAbertos"
                             :route="$routeProcessosAbertos"
                             icon="ti ti-file-plus"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                    <x-card bg="bg-warning-lt" titulo="Processos" subtitulo="Retornados"
-                            :numero="$qtdProcessosRetornados"
-                            :route="$routeProcessosRetornados"
-                            icon="ti ti-file-symlink"
-                    />
-                </div>
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-3">
                     <x-card bg="bg-primary-lt" titulo="Processos" subtitulo="Em andamento"
                             :numero="$qtdProcessosEmAndamento"
                             :route="$routeProcessosEmAndamento"
                             icon="ti ti-file-analytics"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                    <x-card bg="bg-warning-lt" titulo="Processos" subtitulo="Pendentes" :numero="$qtdProcessosPendentes"
+                <div class="col-3">
+                    <x-card bg="bg-warning-lt" titulo="Processos"
+                            :subtitulo="Auth::user()->isCliente() ? 'Em Análise' : 'Retornados da Pendência'"
+                            :numero="$qtdProcessosRetornados"
+                            :route="$routeProcessosRetornados"
+                            icon="ti ti-file-symlink"
+                    />
+                </div>
+                <div class="col-3">
+                    <x-card bg="bg-warning-lt" titulo="Processos" subtitulo="Pendentes"
+                            :numero="$qtdProcessosPendentes"
                             :route="$routeProcessosPendentes"
                             icon="ti ti-file-report"
                     />
                 </div>
+
+                @if(Auth::user()->isCliente())
+                    <div class="col-3">
+                        <x-card bg="bg-instagram-lt" titulo="Processos" subtitulo="Disponível Para Download"
+                                :numero="$qtdProcessosDisponivelDownload"
+                                :route="$routeProcessosDisponivelDownload"
+                                icon="ti ti-download"
+                        />
+                    </div>
+                @endif
             </div>
             <div class="h4 m-1 page-pretitle mt-4">
                 Transferências
             </div>
             <div class="row row-deck row-cards">
-                <div class="col-sm-6 col-lg-3">
-                    <x-card bg="bg-success-lt" titulo="Transferências" subtitulo="Abertos" :numero="$qtdAtpvsAbertos"
+                <div class="col-3">
+                    <x-card bg="bg-success-lt" titulo="Transferências" subtitulo="Abertos"
+                            :numero="$qtdAtpvsAbertos"
                             :route="$routeAtpvsAbertos"
                             icon="ti ti-file-plus"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                    <x-card bg="bg-warning-lt" titulo="Transferências" subtitulo="Retornados"
-                            :numero="$qtdAtpvsRetornados"
-                            :route="$routeAtpvsRetornados"
-                            icon="ti ti-file-symlink"
-                    />
-                </div>
-                <div class="col-sm-6 col-lg-2">
+                <div class="col-3">
                     <x-card bg="bg-primary-lt" titulo="Transferências" subtitulo="Em andamento"
                             :numero="$qtdAtpvsEmAndamento"
                             :route="$routeAtpvsEmAndamento"
                             icon="ti ti-file-analytics"
                     />
                 </div>
-                <div class="col-sm-6 col-lg-auto">
+                <div class="col-3">
+                    <x-card bg="bg-warning-lt" titulo="Transferências"
+                            :subtitulo="Auth::user()->isCliente() ? 'Em Análise' : 'Retornados da Pendência'"
+                            :numero="$qtdAtpvsRetornados"
+                            :route="$routeAtpvsRetornados"
+                            icon="ti ti-file-symlink"
+                    />
+                </div>
+                <div class="col-3">
                     <x-card bg="bg-warning-lt" titulo="Transferências" subtitulo="Pendentes"
                             :numero="$qtdAtpvsPendentes"
                             :route="$routeAtpvsPendentes"
                             icon="ti ti-file-report"
                     />
                 </div>
-                <div class="col-sm-6 col-lg">
+                <div class="col-3">
                     <x-card bg="bg-danger-lt" titulo="Transferências" subtitulo="Solicitado Cancelamento"
                             :numero="$qtdAtpvsSolicitadoCancelamento"
                             :route="$routeAtpvsSolicitadoCancelamento"
                             icon="ti ti-file-x"
                     />
                 </div>
+
+                @if(Auth::user()->isCliente())
+                    <div class="col-3">
+                        <x-card bg="bg-instagram-lt" titulo="Transferências" subtitulo="Disponível Para Download"
+                                :numero="$qtdAtpvsDisponivelDownload"
+                                :route="$routeAtpvsDisponivelDownload"
+                                icon="ti ti-download"
+                        />
+                    </div>
+                @endif
             </div>
         </div>
     </div>

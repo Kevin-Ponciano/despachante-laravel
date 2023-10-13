@@ -127,7 +127,6 @@ class ClienteEditar extends Component
 
     public function render()
     {
-        return view('livewire.despachante.cliente-editar')
-            ->layout('layouts.despachante');
+        return view('livewire.despachante.cliente-editar');
     }
 }

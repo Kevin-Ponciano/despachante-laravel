@@ -102,6 +102,13 @@ trait HandinFilesTrait
             $this->emit('success', [
                 'message' => 'Arquivos enviados com sucesso.',
             ]);
+            if (Auth::user()->isCliente()) {
+                if ($this->pedido->status == 'pe') {
+                    $this->pedido->update(['status' => 'rp']);
+                    $this->pedido->pendencias()->where('tipo', 'dc')->update(['status' => 'rp']);
+                    $this->emit('modal-sucesso-documento');
+                }
+            }
         }
 
         $this->arquivos = [];

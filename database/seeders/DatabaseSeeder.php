@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('123'),
             'role' => 'ca',
             'status' => 'at',
-            'cliente_id' => Cliente::first()->id,
+            'cliente_id' => 7,
         ]);
     }
 }

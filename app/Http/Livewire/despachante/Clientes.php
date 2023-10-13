@@ -26,7 +26,6 @@ class Clientes extends Component
 
     public function render()
     {
-        return view('livewire.despachante.clientes')
-            ->layout('layouts.despachante');
+        return view('livewire.despachante.clientes');
     }
 }

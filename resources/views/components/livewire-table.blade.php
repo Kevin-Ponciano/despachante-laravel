@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <fieldset class="form-fieldset">
-        <div class="d-flex justify-content-between mb-2">
+        <div class="d-flex justify-content-start gap-2 mb-2">
             {{$filters}}
             <div>
                 <a class="btn btn-sm btn-secondary mb-1" data-bs-toggle="tooltip" data-bs-placement="top"

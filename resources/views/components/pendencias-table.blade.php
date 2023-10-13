@@ -14,23 +14,25 @@
             </tr>
             </thead>
             <tbody class="px-1">
-            <tr x-show="createPendencia">
-                <td>
-                    <input type="text" class="form-control form-control-sm" wire:model.defer="name"
-                           placeholder="Nome">
-                </td>
-                <td colspan="2">
-                    <input type="text" class="form-control form-control-sm"
-                           wire:model.defer="observacao"
-                           placeholder="Observação">
-                </td>
-                <td class="text-center">
-                    <button class="btn btn-sm btn-primary" wire:click="store">
-                        Criar pendência
-                    </button>
-                </td>
-                <td></td>
-            </tr>
+            @if(Auth::user()->isDespachante())
+                <tr x-show="createPendencia">
+                    <td>
+                        <input type="text" class="form-control form-control-sm" wire:model.defer="name"
+                               placeholder="Nome">
+                    </td>
+                    <td colspan="2">
+                        <input type="text" class="form-control form-control-sm"
+                               wire:model.defer="observacao"
+                               placeholder="Observação">
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary" wire:click="store">
+                            Criar pendência
+                        </button>
+                    </td>
+                    <td></td>
+                </tr>
+            @endif
             @forelse($pendencias as $pendencia)
                 <tr data-bs-toggle="tooltip" data-bs-placement="top"
                     data-bs-original-title="OBS.: {{$pendencia->observacao}}">
@@ -43,37 +45,43 @@
                     <td class="text-center text-nowrap">{{$pendencia->concluido_em()}}</td>
                     <td class="text-center">
                         <input type="checkbox" class="form-check-input-success"
+                               @if(!Auth::user()->isDespachante()) disabled @endif
                                @if($pendencia->status==='co') checked
                                @endif
                                wire:click="resolverPendencia({{$pendencia->id}})">
                     </td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-ghost-red"
-                                wire:click="deletePendencia({{$pendencia->id}})">
-                            <i class="ti ti-trash-x"></i>
-                        </button>
+                    @if(Auth::user()->isDespachante())
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-ghost-red"
+                                    wire:click="deletePendencia({{$pendencia->id}})">
+                                <i class="ti ti-trash-x"></i>
+                            </button>
+                        </td>
+                    @endif
                 </tr>
             @empty
                 <tr>
-                    <td colspan="2" class="text-center">Nenhuma pendência encontrada</td>
+                    <td colspan="5" class="text-center">Nenhuma pendência encontrada</td>
                 </tr>
             @endforelse
             </tbody>
         </table>
     </div>
-    <div class="mt-2 d-flex justify-content-between">
-        <button x-on:click="createPendencia=true" class="btn btn-sm btn-ghost-warning"
-                data-bs-placement="top" data-bs-toggle="tooltip"
-                data-bs-original-title="Cria uma Pendência para o personalizada para o Pedido">
-            <i class="ti ti-alert-triangle px-2"></i>
-            Nova pendência
-        </button>
-        <button class="btn btn-sm btn-ghost-blue" wire:click="resolverTodas"
-                data-bs-placement="top" data-bs-toggle="tooltip"
-                data-bs-original-title="Marca as pendências como resolvidas e define o Status do Pedido como Aberto"
-                data-bs-dismiss="modal">
-            <i class="ti ti-checks px-2"></i>
-            Resolver todas
-        </button>
-    </div>
+    @if(Auth::user()->isDespachante())
+        <div class="mt-2 d-flex justify-content-between">
+            <button x-on:click="createPendencia=true" class="btn btn-sm btn-ghost-warning"
+                    data-bs-placement="top" data-bs-toggle="tooltip"
+                    data-bs-original-title="Cria uma Pendência para o personalizada para o Pedido">
+                <i class="ti ti-alert-triangle px-2"></i>
+                Nova pendência
+            </button>
+            <button class="btn btn-sm btn-ghost-blue" wire:click="resolverTodas"
+                    data-bs-placement="top" data-bs-toggle="tooltip"
+                    data-bs-original-title="Marca as pendências como resolvidas e define o Status do Pedido como Aberto"
+                    data-bs-dismiss="modal">
+                <i class="ti ti-checks px-2"></i>
+                Resolver todas
+            </button>
+        </div>
+    @endif
 </div>

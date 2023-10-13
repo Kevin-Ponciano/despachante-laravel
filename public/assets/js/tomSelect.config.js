@@ -16,4 +16,5 @@ $(document).ready(function () {
     applySelect($("#select-cliente-atpv-novo"))
     applySelect($("#select-cliente-renave-novo"))
     applySelect($("#select-servico"))
+    applySelect($("#select-servico-novo"))
 });

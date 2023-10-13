@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Traits\FunctionsTrait;
 use App\Traits\HandinFilesTrait;
+use Arr;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -31,8 +32,12 @@ class AtpvShow extends Component
     public $despachanteId;
     public $numeroCliente;
     public $numeroPedido;
+    public $solicitadoCancelamento = false;
+    public $servicoSC;
 
     public $inputPendencias = [];
+
+    public $inputPendenciasCliente = [];
 
     protected $listeners = [
         '$refresh',
@@ -100,7 +105,7 @@ class AtpvShow extends Component
 
     public function mount($id)
     {
-        $this->pedido = Auth::user()->despachante->pedidos()->where('numero_pedido', $id)->firstOrFail();
+        $this->pedido = Auth::user()->empresa()->pedidosAtpvs()->where('numero_pedido', $id)->firstOrFail();
         $this->cliente = $this->pedido->cliente->nome;
         $this->tipo = $this->pedido->atpv->tipo();
         switch ($this->tipo) {
@@ -135,15 +140,33 @@ class AtpvShow extends Component
         $this->endereco['uf'] = $this->pedido->atpv->compradorEndereco->estado;
         $this->observacoes = $this->pedido->observacoes;
         $this->precoHonorario = $this->regexMoneyToView($this->pedido->preco_honorario);
-        $this->despachanteId = Auth::user()->despachante->id;
         $this->numeroCliente = $this->pedido->cliente->numero_cliente;
         $this->numeroPedido = $this->pedido->numero_pedido;
+        $this->solicitadoCancelamento = $this->pedido->solicitado_cancelamento;
+        $this->servicoSC = $this->pedido->servicos()->where('nome', 'Solicitação de Cancelamento')->first()?->toArray();
+        if ($this->solicitadoCancelamento && $this->servicoSC)
+            $this->servicoSC['preco'] = $this->regexMoneyToView($this->servicoSC['pivot']['preco']);
+
+        if (Auth::user()->isDespachante())
+            $this->despachanteId = Auth::user()->despachante->id;
+        if (Auth::user()->isCliente()) {
+            $this->inputPendenciasCliente = Arr::collapse(
+                Arr::map(
+                    $this->pedido->pendencias->where('tipo', 'cp')->where('status', 'pe')->toArray(),
+                    function ($pendencia) {
+                        return [
+                            $pendencia['input'] => true
+                        ];
+                    }));
+            if (empty($this->inputPendenciasCliente))
+                $this->inputPendenciasCliente = false;
+        }
     }
 
 
     public function savePrecoHonorario()
     {
-        if ($this->precoHonorario == null)
+        if ($this->precoHonorario == null || $this->hasConludeOrExcluded())
             return;
         $this->pedido->update([
             'preco_honorario' => $this->regexMoney($this->precoHonorario),
@@ -151,47 +174,90 @@ class AtpvShow extends Component
         $this->emit('savedPrecoHonorario');
     }
 
+    public function savePrecoServico()
+    {
+        if ($this->servicoSC['preco'] == null || $this->hasConludeOrExcluded())
+            return;
+        $this->pedido->servicos()->updateExistingPivot($this->servicoSC['id'], [
+            'preco' => $this->regexMoney($this->servicoSC['preco']),
+        ]);
+        $this->emit('savedPrecoServico');
+    }
+
     public function update()
     {
-        if (!$this->isEditing)
+        if ($this->hasConludeOrExcluded())
             return;
-        $this->validate();
+        if ($this->isEditing || $this->inputPendenciasCliente) {
+            $this->validate();
 
-        if ($this->veiculo['dataHodometro'] === '') $this->veiculo['dataHodometro'] = null;
-        if ($this->veiculo['hodometro'] === '') $this->veiculo['hodometro'] = null;
+            if ($this->veiculo['dataHodometro'] === '') $this->veiculo['dataHodometro'] = null;
+            if ($this->veiculo['hodometro'] === '') $this->veiculo['hodometro'] = null;
 
+            $this->pedido->update([
+                'comprador_nome' => $this->comprador['nome'],
+                'compreador_telefone' => $this->comprador['telefone'],
+                'placa' => $this->veiculo['placa'],
+                'veiculo' => $this->veiculo['veiculo'],
+                'observacoes' => $this->observacoes,
+            ]);
+            $this->pedido->atpv->update([
+                'renavam' => $this->veiculo['renavam'],
+                'numero_crv' => $this->veiculo['numeroCrv'],
+                'codigo_crv' => $this->veiculo['codigoCrv'] ?? null,
+                'hodometro' => $this->veiculo['hodometro'],
+                'data_hodometro' => $this->veiculo['dataHodometro'],
+                'preco_venda' => $this->regexMoney($this->veiculo['precoVenda']),
+                'vendedor_email' => $this->vendedor['email'],
+                'vendedor_telefone' => $this->vendedor['telefone'],
+                'vendedor_cpf_cnpj' => $this->vendedor['cpfCnpj'],
+                'comprador_email' => $this->comprador['email'],
+                'comprador_telefone' => $this->comprador['telefone'],
+                'comprador_cpf_cnpj' => $this->comprador['cpfCnpj'],
+            ]);
+            $this->pedido->atpv->compradorEndereco->update([
+                'cep' => $this->endereco['cep'],
+                'logradouro' => $this->endereco['logradouro'],
+                'numero' => $this->endereco['numero'],
+                'bairro' => $this->endereco['bairro'],
+                'cidade' => $this->endereco['cidade'],
+                'estado' => $this->endereco['uf'],
+            ]);
+            if (Auth::user()->isDespachante()) {
+                $this->isEditing = false;
+                $this->emit('success', [
+                    'message' => "$this->tipo atualizado com sucesso!",
+                ]);
+            } else {
+                $this->pedido->pendencias()->where('tipo', 'cp')->where('status', 'pe')->update(['status' => 'rp']);
+                $this->pedido->update(['status' => 'rp']);
+                $this->emit('modal-sucesso-campos');
+            }
+        }
+    }
+
+    public function solicitarCancelamento()
+    {
+        if ($this->status === 'ex')
+            return;
+        $this->solicitadoCancelamento = true;
         $this->pedido->update([
-            'comprador_nome' => $this->comprador['nome'],
-            'compreador_telefone' => $this->comprador['telefone'],
-            'placa' => $this->veiculo['placa'],
-            'veiculo' => $this->veiculo['veiculo'],
-            'observacoes' => $this->observacoes,
+            'status' => 'sc',
+            'solicitado_cancelamento' => $this->solicitadoCancelamento,
         ]);
-        $this->pedido->atpv->update([
-            'renavam' => $this->veiculo['renavam'],
-            'numero_crv' => $this->veiculo['numeroCrv'],
-            'codigo_crv' => $this->veiculo['codigoCrv'] ?? null,
-            'hodometro' => $this->veiculo['hodometro'],
-            'data_hodometro' => $this->veiculo['dataHodometro'],
-            'preco_venda' => $this->regexMoney($this->veiculo['precoVenda']),
-            'vendedor_email' => $this->vendedor['email'],
-            'vendedor_telefone' => $this->vendedor['telefone'],
-            'vendedor_cpf_cnpj' => $this->vendedor['cpfCnpj'],
-            'comprador_email' => $this->comprador['email'],
-            'comprador_telefone' => $this->comprador['telefone'],
-            'comprador_cpf_cnpj' => $this->comprador['cpfCnpj'],
-        ]);
-        $this->pedido->atpv->compradorEndereco->update([
-            'cep' => $this->endereco['cep'],
-            'logradouro' => $this->endereco['logradouro'],
-            'numero' => $this->endereco['numero'],
-            'bairro' => $this->endereco['bairro'],
-            'cidade' => $this->endereco['cidade'],
-            'estado' => $this->endereco['uf'],
-        ]);
-        $this->isEditing = false;
+        if (!$this->servicoSC) {
+            $servico = Auth::user()->cliente->despachante->servicos()->where('nome', 'Solicitação de Cancelamento')->first();
+            if (!$servico) {
+                $servico = Auth::user()->cliente->despachante->servicos()->create([
+                    'nome' => 'Solicitação de Cancelamento',
+                    'preco' => 0,
+                ]);
+            }
+            $this->pedido->servicos()->attach($servico->id);
+            $this->servicoSC = $this->pedido->servicos()->where('nome', 'Solicitação de Cancelamento')->first()->toArray();
+        }
         $this->emit('success', [
-            'message' => "$this->tipo atualizado com sucesso!",
+            'message' => 'Solicitação de cancelamento enviada com sucesso!',
         ]);
     }
 
@@ -211,7 +277,6 @@ class AtpvShow extends Component
             $this->arquivosAtpvs = $this->_getFilesLink('atpv');
 
 
-        return view('livewire.atpv-show')
-            ->layout('layouts.despachante');
+        return view('livewire.atpv-show');
     }
 }

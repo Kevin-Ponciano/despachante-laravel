@@ -47,6 +47,34 @@
             {{$processo_tipo}}
         </div>
     </div>
+    @if(Auth::user()->isCliente())
+        @if($tipoProcesso === "ss")
+            <div class="col-12">
+                <fieldset class="form-fieldset mb-3">
+                    <div class="is-invalid"></div>
+                    @error('servicos')<span class="invalid-feedback"> {{ $message }}</span> @enderror
+                    <h4>Serviços</h4>
+                    {{$select_servico??''}}
+                    <div class="row gap-3">
+                        @foreach($servicos as $servico)
+                            <div class="col-auto position-relative">
+                                <li class="mb-1 me-2 fw-semibold" title="{{$servico['descricao']}}">
+                                    {{$servico['nome']}}
+                                </li>
+                                @if($novoProcesso??false)
+                                    <span title="Remover Serviço"
+                                          class="cursor-pointer badge bg-red text-red-fg badge-notification badge-pill"
+                                          wire:click="removeServico({{$servico['id']}})">
+                                <i class="ti ti-x"></i>
+                            </span>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </fieldset>
+            </div>
+        @endif
+    @endif
     <div class="col-12">
         <div class="mb-3">
             {{$observacao}}

@@ -1,21 +1,23 @@
 <div>
-    <ul wire:ignore class="nav nav-tabs card-header-tabs flex-row-reverse m-0" data-bs-toglgle="tabs">
-        <li class="nav-item" role="presentation" wire:click="setPrecos">
-            <a href="#tabs-info-pedido" class="nav-link"
-               data-bs-toggle="tab"
-               aria-selected="false"
-               role="tab"
-               tabindex="-1">Valores/Serviços</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a href="#tabs-processo2" class="nav-link active"
-               data-bs-toggle="tab"
-               aria-selected="true"
-               role="tab">Informações Processo</a>
-        </li>
-    </ul>
+    @if(Auth::user()->isDespachante())
+        <ul wire:ignore class="nav nav-tabs card-header-tabs flex-row-reverse m-0" data-bs-toglgle="tabs">
+            <li class="nav-item" role="presentation" wire:click="setPrecos">
+                <a href="#tabs-info-pedido" class="nav-link"
+                   data-bs-toggle="tab"
+                   aria-selected="false"
+                   role="tab"
+                   tabindex="-1">Valores/Serviços</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="#tabs-processo2" class="nav-link active"
+                   data-bs-toggle="tab"
+                   aria-selected="true"
+                   role="tab">Informações Processo</a>
+            </li>
+        </ul>
+    @endif
     <form wire:submit.prevent="store"
-          x-data="{ isUploading: false, error: false,input: $('#upload-file-np') }"
+          x-data="{ isUploading: false, error: false,input: $('#upload-file-np')}"
           x-on:livewire-upload-start="isUploading = true"
           x-on:livewire-upload-finish="isUploading = false;input.addClass('is-valid')"
           x-on:livewire-upload-error="error = true"
@@ -23,21 +25,23 @@
         @csrf
         <div class="tab-content p-3">
             <div wire:ignore.self class="tab-pane active show" id="tabs-processo2" role="tabpanel">
-                <x-processo>
+                <x-processo :servicos="$servicos" :novo-processo="true" :tipo-processo="$processoTipo">
                     <x-slot:cliente>
-                        <label class="form-label">Cliente Logista</label>
-                        <div wire:ignore>
-                            <select id="select-cliente-processo-novo"
-                                    class="form-control"
-                                    wire:model.defer="clienteId">
-                                <option value="-1">Selecione o Cliente</option>
-                                @foreach($clientes as $cliente)
-                                    <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="is-invalid"></div>
-                        @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
+                        @if(Auth::user()->isDespachante())
+                            <label class="form-label">Cliente Logista</label>
+                            <div wire:ignore>
+                                <select id="select-cliente-processo-novo"
+                                        class="form-control"
+                                        wire:model.defer="clienteId">
+                                    <option value="-1">Selecione o Cliente</option>
+                                    @foreach($clientes as $cliente)
+                                        <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="is-invalid"></div>
+                            @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
+                        @endif
                     </x-slot:cliente>
                     <x-slot:nomeComprador>
                         <label class="form-label">Nome do Comprador</label>
@@ -104,16 +108,34 @@
                         <div>
                             <label class="form-check">
                                 <input class="form-check-input" type="radio" checked name="processoTipo" value="ss"
-                                       wire:model.defer="processoTipo">
+                                       wire:model="processoTipo">
                                 <span class="form-check-label">Solicitação Serviço</span>
                             </label>
                             <label class="form-check">
                                 <input class="form-check-input" type="radio" name="processoTipo" value="rv"
-                                       wire:model.defer="processoTipo">
-                                <span class="form-check-label">RENAV</span>
+                                       wire:model="processoTipo">
+                                <span class="form-check-label">RENAVE</span>
                             </label>
                         </div>
                     </x-slot:processo_tipo>
+                    <x-slot:select_servico>
+                        <div class="row mb-2" wire:ignore>
+                            <div class="col-auto">
+                                <select id="select-servico-novo" class="form-select mb-2"
+                                        wire:model.defer="servicoId">
+                                    <option value="-1" selected>Selecionar Serviço</option>
+                                    @foreach($servicosDespachante as $servico)
+                                        <option title="{{$servico->descricao}}"
+                                                value="{{$servico->id}}">{{$servico->nome}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <a class="btn btn-ghost-primary" wire:click="addServico">Adicionar</a>
+                            </div>
+                        </div>
+                    </x-slot:select_servico>
+
                     <x-slot:observacao>
                         <div class="form-label">Observação <span class="text-muted">opcional</span></div>
                         <textarea class="form-control" name="observacoes" wire:model.defer="observacoes"></textarea>
@@ -138,69 +160,79 @@
                     </div>
                 </div>
             </div>
-            <div wire:ignore.self class="tab-pane" id="tabs-info-pedido" role="tabpanel">
-                <h4>Informação do Pedido</h4>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="mb-3">
-                            <label class="form-label">Valor Placas</label>
-                            <div class="input-icon">
-                            <span class="input-icon-addon">
-                                <i class="ti ti-currency-real"></i>
-                            </span>
-                                <input x-mask:dynamic="$money($input, ',','.')"
-                                       type="text" class="form-control px-5 w-66"
-                                       wire:model.defer="precoPlaca">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="mb-3">
-                            <label class="form-label">Valor Honorário</label>
-                            <div class="input-icon">
-                            <span class="input-icon-addon">
-                                <i class="ti ti-currency-real"></i>
-                            </span>
-                                <input x-mask:dynamic="$money($input, ',','.')"
-                                       type="text" class="form-control px-5 w-66"
-                                       wire:model.defer="precoHonorario">
-                            </div>
-                        </div>
-                    </div>
-                    <h4>Serviços</h4>
-                    @foreach($servicos as $index => $servico)
-                        <div class="col-lg-3">
+            @if(Auth::user()->isDespachante())
+                <div wire:ignore.self class="tab-pane" id="tabs-info-pedido" role="tabpanel">
+                    <h4>Informação do Pedido</h4>
+                    <div class="row">
+                        <div class="col-lg-4">
                             <div class="mb-3">
-                                <label class="form-label">Valor {{$servico['nome']}}</label>
+                                <label class="form-label">Valor Placas</label>
                                 <div class="input-icon">
                                     <span class="input-icon-addon">
                                         <i class="ti ti-currency-real"></i>
                                     </span>
                                     <input x-mask:dynamic="$money($input, ',','.')"
-                                           type="text" class="form-control px-5"
-                                           wire:model.defer="servicos.{{ $index }}.preco">
-                                    <a class="btn btn-danger btn-remove-service px-0 py-0 rounded-5"
-                                       title="Remover Serviço"
-                                       wire:click="removeServico({{$servico['id']}})">
-                                        <i class="ti ti-minus"></i>
-                                    </a>
+                                           type="text" class="form-control px-5 w-66"
+                                           wire:model.defer="precoPlaca">
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                    <div>
-                        {{--                        TODO: Adicionar o Select para selecionar os serviços--}}
-                        <select class="form-select mb-2 w-33" wire:model.defer="servicoId">
-                            <option value="-1" selected>Selecionar Serviço</option>
-                            @foreach($servicosDespachante as $servico)
-                                <option title="{{$servico->descricao}}"
-                                        value="{{$servico->id}}">{{$servico->nome}} </option>
-                            @endforeach
-                        </select>
-                        <a class="btn btn-ghost-primary" wire:click="addServico">Adicionar</a>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">Valor Honorário</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="ti ti-currency-real"></i>
+                                    </span>
+                                    <input x-mask:dynamic="$money($input, ',','.')"
+                                           type="text" class="form-control px-5 w-66"
+                                           wire:model.defer="precoHonorario">
+                                </div>
+                            </div>
+                        </div>
+                        <fieldset class="form-fieldset">
+                            <h4>Serviços</h4>
+                            <div class="row" wire:ignore>
+                                <div class="col-auto">
+                                    <select id="select-servico-novo" class="form-select mb-2"
+                                            wire:model.defer="servicoId">
+                                        <option value="-1" selected>Selecionar Serviço</option>
+                                        @foreach($servicosDespachante as $servico)
+                                            <option title="{{$servico->descricao}}"
+                                                    value="{{$servico->id}}">{{$servico->nome}} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <a class="btn btn-ghost-primary" wire:click="addServico">Adicionar</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @foreach($servicos as $index => $servico)
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Valor {{$servico['nome']}}</label>
+                                            <div class="input-icon">
+                                                <span class="input-icon-addon">
+                                                    <i class="ti ti-currency-real"></i>
+                                                </span>
+                                                <input x-mask:dynamic="$money($input, ',','.')"
+                                                       type="text" class="form-control px-5"
+                                                       wire:model.defer="servicos.{{ $index }}.preco">
+                                                <a class="btn btn-danger btn-remove-service px-0 py-0 rounded-5"
+                                                   title="Remover Serviço"
+                                                   wire:click="removeServico({{$servico['id']}})">
+                                                    <i class="ti ti-minus"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
         <div class="modal-footer p-3">
             <a href="#" wire:click="clearInputs" class="btn btn-link link-secondary"

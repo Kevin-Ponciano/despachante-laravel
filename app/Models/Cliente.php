@@ -69,6 +69,16 @@ class Cliente extends Model
         });
     }
 
+    public function pedidosProcessos()
+    {
+        return $this->pedidos()->has('processo');
+    }
+
+    public function pedidosAtpvs()
+    {
+        return $this->pedidos()->has('atpv');
+    }
+
     public function status()
     {
         return match ($this->status) {

@@ -40,7 +40,7 @@ class ProcessoNovo extends Component
         'telefone' => 'required|min:14|max:15',
         'placa' => 'required|between:7,7',
         'veiculo' => 'required',
-        'arquivos.*' => 'mimes:pdf|max:10240', // 10MB Max
+        'servicos' => 'required_if:processoTipo,ss',
     ];
 
     protected $messages = [
@@ -53,21 +53,18 @@ class ProcessoNovo extends Component
         'placa.min' => 'Placa inválida.',
         'placa.max' => 'Placa inválida.',
         'veiculo.required' => 'Obrigatório.',
-        'arquivos.*.mimes' => 'Formato inválido (Somente PDF).',
-        'arquivos.*.max' => 'Tamanho máximo de 10MB.',
+        'servicos.required_if' => 'Obrigatório. Selecione ao menos um serviço.',
     ];
 
     public function mount()
     {
-        $this->clientes = \Auth::user()->despachante->clientes;
-        $this->servicosDespachante = \Auth::user()->despachante->servicos()->orderBy('nome')->get();
-    }
-
-    public function updatedArquivos()
-    {
-        $this->validate([
-            'arquivos.*' => 'mimes:pdf|max:10240', // 10MB Max
-        ]);
+        if (\Auth::user()->isDespachante()) {
+            $this->clientes = \Auth::user()->despachante->clientes;
+            $this->servicosDespachante = \Auth::user()->despachante->servicos()->orderBy('nome')->get();
+        } else {
+            $this->clienteId = \Auth::user()->cliente->id;
+            $this->servicosDespachante = \Auth::user()->cliente->despachante->servicos()->orderBy('nome')->get();
+        }
     }
 
     public function setPrecoPlaca()
@@ -96,7 +93,10 @@ class ProcessoNovo extends Component
     {
         if ($this->clienteId == null || $this->clienteId == -1)
             return;
-        $this->cliente = \Auth::user()->despachante->clientes()->find($this->clienteId);
+        if (\Auth::user()->isDespachante())
+            $this->cliente = \Auth::user()->despachante->clientes()->find($this->clienteId);
+        else
+            $this->cliente = \Auth::user()->cliente;
         $this->setPrecoPlaca();
         $this->setPrecoHonorario();
         $this->precoSettado = true;
@@ -106,7 +106,10 @@ class ProcessoNovo extends Component
     {
         if ($this->servicoId == null || $this->servicoId == -1)
             return;
-        $servico = \Auth::user()->despachante->servicos()->find($this->servicoId)->toArray();
+        if (\Auth::user()->isDespachante())
+            $servico = \Auth::user()->despachante->servicos()->find($this->servicoId)->toArray();
+        else
+            $servico = \Auth::user()->cliente->despachante->servicos()->find($this->servicoId)->toArray();
         $serviceIds = array_map(function ($service) {
             return $service['id'];
         }, $this->servicos);
@@ -125,6 +128,9 @@ class ProcessoNovo extends Component
     public function store()
     {
         $this->validate();
+        if (\Auth::user()->isCliente() && empty($this->arquivos)) {
+            return $this->addError('arquivos.*', 'Obrigatório.');
+        }
         if (!$this->precoSettado) {
             $this->setPrecos();
         }
@@ -146,7 +152,7 @@ class ProcessoNovo extends Component
             'preco_placa' => $this->regexMoney($this->precoPlaca),
             'pedido_id' => $pedido->id,
         ]);
-        if (!empty($this->servicos)) {
+        if ($this->processoTipo === 'ss' && !empty($this->servicos)) {
             foreach ($this->servicos as $servico) {
                 PedidoServico::create([
                     'pedido_id' => $pedido->id,
@@ -155,16 +161,21 @@ class ProcessoNovo extends Component
                 ]);
             }
         }
-        // todo verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
+        //TODO: verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
         $this->pedido = $pedido;
         if (!empty($this->arquivos))
             $this->uploadFiles('processos');
 
+        if (\Auth::user()->isDespachante()) {
+            $url = route('despachante.processos.show', $pedido->numero_pedido);
+        } else {
+            $url = route('cliente.processos.show', $pedido->numero_pedido);
+        }
         $this->clearInputs();
         $this->emit('$refresh');
         $this->emit('success', [
             'message' => 'Processo criado com sucesso.',
-            'url' => route('despachante.processos.show', $pedido->numero_pedido),
+            'url' => $url,
         ]);
     }
 

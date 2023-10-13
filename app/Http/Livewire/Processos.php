@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\despachante;
+namespace App\Http\Livewire;
 
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,28 +13,22 @@ class Processos extends Component
 
     public $search;
     public $paginate = 10;
-    public $sortField = 'id';
+    public $sortField = 'numero_pedido';
     public $sortDirection = 'desc';
     public $iconDirection = 'up';
     public $clientes;
     public $cliente;
     public $status;
     public $tipo;
+    public $downloadDisponivel;
     public $comprador;
-    public $retorno;
     public $queryString = [
-        'cliente' =>
-            ['except' => ''],
-        'paginate' =>
-            ['except' => '10'],
-        'status' =>
-            ['except' => ''],
-        'tipo'
-        => ['except' => ''],
-        'comprador'
-        => ['except' => ''],
-        'retorno'
-        => ['except' => ''],
+        'cliente' => ['except' => ''],
+        'paginate' => ['except' => '10'],
+        'status' => ['except' => ''],
+        'tipo' => ['except' => ''],
+        'comprador' => ['except' => ''],
+        'downloadDisponivel' => ['except' => ''],
     ];
     protected $paginationTheme = 'bootstrap';
     protected $listeners = [
@@ -45,7 +39,8 @@ class Processos extends Component
 
     public function mount()
     {
-        $this->clientes = Auth::user()->despachante->clientes;
+        if (Auth::user()->isDespachante())
+            $this->clientes = Auth::user()->despachante->clientes;
     }
 
     public function sortBy($field)
@@ -57,6 +52,16 @@ class Processos extends Component
         $this->sortField = $field;
     }
 
+    public function show($id)
+    {
+        if (Auth::user()->isDespachante())
+            return redirect()->route('despachante.processos.show', $id);
+        elseif (Auth::user()->isCliente())
+            return redirect()->route('cliente.processos.show', $id);
+        else
+            abort(500);
+    }
+
     public function clearFilters()
     {
         $this->reset([
@@ -65,18 +70,14 @@ class Processos extends Component
             'status',
             'tipo',
             'comprador',
-            'retorno',
+            'downloadDisponivel',
         ]);
     }
 
     public function render()
     {
-
-        $pedidosQuery = Auth::user()->despachante->pedidosProcessos()->with('processo', 'cliente')
+        $pedidosQuery = Auth::user()->empresa()->pedidosProcessos()->with('processo', 'cliente')
             ->where('pedidos.status', '!=', 'ex')
-            ->when($this->cliente, function (Builder $query, $cliente) {
-                return $query->where('cliente_id', $cliente);
-            })
             ->when($this->status, function (Builder $query, $status) {
                 return $query->where('pedidos.status', $status);
             })
@@ -90,26 +91,39 @@ class Processos extends Component
                     $query->where('comprador_tipo', $comprador);
                 });
             })
-            ->when($this->retorno, function (Builder $query, $retorno) {
-                return $query->where('pedidos.retorno_pendencia', $retorno);
-            })
-            ->when($this->sortField, function (Builder $query, $sortField) {
-                return $query->join('processos', 'processos.pedido_id', '=', 'pedidos.id')
-                    ->orderBy($sortField, $this->sortDirection);
+            ->when($this->downloadDisponivel, function (Builder $query, $downloadDisponivel) {
+                return $query->whereHas('arquivos', function (Builder $query) use ($downloadDisponivel) {
+                    $query->where('folder', 'cod_crlv');
+                });
             });
+
+        # TODO: Verificar este problema de ordenação
+        if (Auth::user()->isCliente()) {
+            $pedidosQuery = $pedidosQuery->orderBy($this->sortField, $this->sortDirection);
+        } else {
+            $pedidosQuery = $pedidosQuery
+                ->when($this->cliente, function (Builder $query, $cliente) {
+                    return $query->where('cliente_id', $cliente);
+                })
+                ->when($this->sortField, function (Builder $query, $sortField) {
+                    return $query->join('processos', 'processos.pedido_id', '=', 'pedidos.id')
+                        ->orderBy($sortField, $this->sortDirection);
+                });
+        }
 
         $pedidos = $pedidosQuery
             ->where(function (Builder $query) {
                 $query->where('comprador_nome', 'like', '%' . $this->search . '%');
-                $query->orWhere('pedidos.id', 'like', '%' . $this->search . '%');
-                $query->orWhere('clientes.nome', 'like', '%' . $this->search . '%');
+                $query->orWhere('pedidos.numero_pedido', 'like', '%' . $this->search . '%');
+                if (Auth::user()->isDespachante())
+                    $query->orWhere('clientes.nome', 'like', '%' . $this->search . '%');
                 $query->orWhere('pedidos.placa', 'like', '%' . $this->search . '%');
             })
             ->paginate($this->paginate);
-
         $this->iconDirection = $this->sortDirection === 'asc' ? 'up' : 'down';
-        return view('livewire.despachante.processos', [
+
+        return view('livewire.processos', [
             'pedidos' => $pedidos
-        ])->layout('layouts.despachante');
+        ]);
     }
 }

@@ -18,7 +18,7 @@
                 </svg>
                 <h3>Tem certeza?</h3>
                 <div class="text-muted">Ao deletar só será possível recuperar em contato com o
-                    administrador do
+                    suporte do
                     Sistema.
                 </div>
             </div>

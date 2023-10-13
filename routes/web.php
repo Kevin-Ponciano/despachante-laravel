@@ -1,18 +1,15 @@
 <?php
 
+use App\Http\Livewire\Atpvs;
 use App\Http\Livewire\AtpvShow;
-use App\Http\Livewire\cliente\Atpvs as ClienteAtpvs;
-use App\Http\Livewire\cliente\Dashboard as ClienteDashboard;
-use App\Http\Livewire\cliente\Processos as ClienteProcessos;
-use App\Http\Livewire\despachante\Atpvs;
+use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\despachante\ClienteEditar;
 use App\Http\Livewire\despachante\Clientes;
-use App\Http\Livewire\despachante\Dashboard;
-use App\Http\Livewire\despachante\Processos;
 use App\Http\Livewire\despachante\RelatorioPedidos;
 use App\Http\Livewire\despachante\Servicos;
 use App\Http\Livewire\despachante\UsuarioEditar;
 use App\Http\Livewire\despachante\Usuarios;
+use App\Http\Livewire\Processos;
 use App\Http\Livewire\ProcessoShow;
 use Illuminate\Support\Facades\Route;
 
@@ -57,10 +54,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/relatorios/pedidos', RelatorioPedidos::class)->name('relatorios.pedidos');
     });
     Route::middleware(['cliente'])->prefix('cliente')->name('cliente.')->group(function () {
-        Route::get('/dashboard', ClienteDashboard::class)->name('dashboard');
-        Route::get('/processos', ClienteProcessos::class)->name('processos');
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        Route::get('/processos', Processos::class)->name('processos');
         Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');
-        Route::get('/transferencias', ClienteAtpvs::class)->name('atpvs');
+        Route::get('/transferencias', Atpvs::class)->name('atpvs');
         Route::get('/transferencias/{id}', AtpvShow::class)->name('atpvs.show');
     });
 });

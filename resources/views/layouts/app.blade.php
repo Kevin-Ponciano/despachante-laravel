@@ -41,9 +41,15 @@
 <body class="font-sans antialiased">
 <script src="{{asset('assets/js/theme.js')}}"></script>
 <div class="page pb-2">
-    <main>
-        {{ $slot }}
-    </main>
+    @if(Auth::user()->isDespachante())
+        <x-navbar-despachante/>
+    @elseif(Auth::user()->isCliente())
+        <x-navbar-cliente/>
+    @endif
+    <div class="page-wrapper">
+        {{$slot}}
+    </div>
+    <x-footer/>
     <x-modal-novo/>
 </div>
 

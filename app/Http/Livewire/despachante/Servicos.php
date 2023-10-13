@@ -82,7 +82,6 @@ class Servicos extends Component
 
     public function render()
     {
-        return view('livewire.despachante.servicos')
-            ->layout('layouts.despachante');
+        return view('livewire.despachante.servicos');
     }
 }

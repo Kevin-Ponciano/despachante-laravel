@@ -24,9 +24,9 @@
         @error('arquivos.*') <span x-show="!isUploading"
                                    class="invalid-feedback">{{ $message }}</span> @enderror
         <span x-show="isUploading" class="input-icon-addon">
-                                                    <div class="spinner-border spinner-border-sm text-muted"
-                                                         role="status"></div>
-                                                </span>
+            <div class="spinner-border spinner-border-sm text-muted"
+                 role="status"></div>
+        </span>
     </div>
     <div class="btn-list">
         <button type="submit" class="btn btn-primary" :disabled="isUploading">

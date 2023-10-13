@@ -2,11 +2,11 @@
     <div wire:loading wire:target="downloadAllFiles, downloadFile">
         <x-loading-page/>
     </div>
-    <!-- TODO: Imposibilitar edição das informações do Pedido -->
+    <!-- TODO: Imposibilitar edição das informações do Pedido quando fechado/excluido -->
 
     <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->status()"
                   :status="$status" :responsavel="$pedido->usuarioResponsavel"
-                  :concluido-por="$pedido->usuarioConcluinte"/>
+                  :concluido-por="$pedido->usuarioConcluinte" :concluido-em="$pedido->concluido_em()"/>
     <div class="mt-2" x-data="{ isEditing: @entangle('isEditing'), status: @entangle('status'), inputRef: null }">
         <div class="container">
             <div class="card">
@@ -37,7 +37,7 @@
                               id="tabs-processo-info" role="tabpanel">
                             @csrf
                             <div class="tab-content">
-                                <x-processo>
+                                <x-processo :servicos="$servicos" :tipo-processo="$processoTipo">
                                     <x-slot:cliente>
                                         <label class="form-label text-muted">Cliente Logista</label>
                                         <p class="fw-bold h3">{{$cliente}}</p>
@@ -133,7 +133,7 @@
                                                        :checked="processoTipo === 'rv'"
                                                        :disabled="!isEditing"
                                                        x-on:click="$wire.set('processoTipo','rv')">
-                                                <span class="form-check-label">RENAV</span>
+                                                <span class="form-check-label">RENAVE</span>
                                             </label>
                                         </div>
                                     </x-slot:processo_tipo>
@@ -143,13 +143,15 @@
                                                   wire:model.defer="observacao"></textarea>
                                     </x-slot:observacao>
                                 </x-processo>
-                                <a class="btn btn-primary" x-show="!isEditing && status !== 'co' && status !== 'ex'"
-                                   @click="isEditing = true; $nextTick(() => $refs.inputRef.focus())">
-                                    Editar
-                                </a>
-                                <button class="btn btn-success" x-show="isEditing">
-                                    Salvar
-                                </button>
+                                @if(Auth::user()->isDespachante())
+                                    <a class="btn btn-primary" x-show="!isEditing && status !== 'co' && status !== 'ex'"
+                                       @click="isEditing = true; $nextTick(() => $refs.inputRef.focus())">
+                                        Editar
+                                    </a>
+                                    <button class="btn btn-success" x-show="isEditing">
+                                        Salvar
+                                    </button>
+                                @endif
                             </div>
                         </form>
                         @if(Auth::user()->isDespachante())
@@ -206,9 +208,9 @@
                                                 <div class="mb-3">
                                                     <label class="form-label">Valor {{$servico['nome']}}</label>
                                                     <div class="input-icon w-66">
-                                                    <span class="input-icon-addon">
-                                                        <i class="ti ti-currency-real"></i>
-                                                    </span>
+                                                        <span class="input-icon-addon">
+                                                            <i class="ti ti-currency-real"></i>
+                                                        </span>
                                                         <input x-data x-mask:dynamic="$money($input, ',','.')"
                                                                type="text" class="form-control px-5"
                                                                wire:model.defer="servicos.{{ $index }}.preco"
@@ -241,10 +243,12 @@
                                          class="h3 mb-0">
                                 <x-slot:title>
                                     Documentos Do Pedido
-                                    <x-helper>
-                                        <p>Documentos Enviados pelo Cliente</p>
-                                        <p>Durante a solicitação do serviço.</p>
-                                    </x-helper>
+                                    @if(Auth::user()->isDespachante())
+                                        <x-helper>
+                                            <p>Documentos Enviados pelo Cliente</p>
+                                            <p>Durante a solicitação do serviço.</p>
+                                        </x-helper>
+                                    @endif
                                 </x-slot:title>
                                 <x-slot:body>
                                     <div class="row row-deck row-cards mb-2">
@@ -253,27 +257,25 @@
                                                     :link="$arquivoPedido['link']"
                                                     :timestamp="$arquivoPedido['timestamp']"
                                                     :path="$arquivoPedido['path']"/>
-
                                         @empty
                                             <div>
                                                 <div class="text-center text-muted">
-                                                    Nenhum documento enviado pelo cliente.
+                                                    Nenhum documento enviado.
                                                 </div>
                                             </div>
-
                                         @endforelse
                                     </div>
-                                    @if($status === 'pe')
+                                    @if((Auth::user()->isCliente() && $status === 'pe') || Auth::user()->isDespachante())
                                         <div class="d-flex justify-content-between">
                                             <div>
                                                 <x-input-upload-files uploadMethod="uploadFiles" folder="processos"
-                                                                      label="Enviar Documentos para baixa"/>
+                                                                      label="Enviar Documentos (somente PDF's)"/>
                                             </div>
                                         </div>
                                     @endif
                                 </x-slot:body>
                             </x-accordion>
-                            <!-- TODO Adicionar opcoes para baixar todos os arquivos em um zip -->
+                            <!-- TODO: quando nao houver doc. ocultar o botao download zip -->
                             <div class="row mt-2">
                                 <div class="col-5">
                                     <fieldset class="form-fieldset">
@@ -292,24 +294,30 @@
                                             @empty
                                                 <div>
                                                     <div class="text-center text-muted">
-                                                        Nenhum Documento Enviado.
+                                                        @if(Auth::user()->isDespachante())
+                                                            Nenhum documento enviado.
+                                                        @else
+                                                            Nenhum documento disponível para download.
+                                                        @endif
                                                     </div>
                                                 </div>
                                             @endforelse
                                         </div>
-                                        <form wire:submit.prevent="uploadCodCrlv">
-                                            <div>
-                                                <x-input-upload label="Código Segurança" prop-name="arquivoCodSeg"
-                                                                upload-method="uploadCodCrlv"/>
-                                            </div>
-                                            <div>
-                                                <x-input-upload label="CRLV" prop-name="arquivoCrlv"
-                                                                upload-method="uploadCodCrlv"/>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">
-                                                Enviar
-                                            </button>
-                                        </form>
+                                        @if(Auth::user()->isDespachante())
+                                            <form wire:submit.prevent="uploadCodCrlv">
+                                                <div>
+                                                    <x-input-upload label="Código Segurança" prop-name="arquivoCodSeg"
+                                                                    upload-method="uploadCodCrlv"/>
+                                                </div>
+                                                <div>
+                                                    <x-input-upload label="CRLV" prop-name="arquivoCrlv"
+                                                                    upload-method="uploadCodCrlv"/>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">
+                                                    Enviar
+                                                </button>
+                                            </form>
+                                        @endif
                                     </fieldset>
                                 </div>
                                 <div class="col">
@@ -323,4 +331,9 @@
         </div>
     </div>
     <x-delete-file-confirm/>
+    @if(Auth::user()->isCliente())
+        <x-modal-sucesso id="modal-sucesso-documento" title="Documentos Enviados com Sucesso"
+                         description="Os documentos foram enviados com sucesso. Eles serão analisados e se estiverem corretos daremos continuidade ao processo."
+                         url="{{route('cliente.dashboard')}}"/>
+    @endif
 </div>

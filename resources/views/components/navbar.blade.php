@@ -249,7 +249,8 @@
     </div>
     <script>
         $(document).ready(function () {
-            let url = window.location
+            let url = new URL(window.location.href)
+            url = url.origin + url.pathname
             let item = $('li.nav-item a[href="' + url + '"]')
 
             if (item.attr('class') === 'dropdown-item') {
