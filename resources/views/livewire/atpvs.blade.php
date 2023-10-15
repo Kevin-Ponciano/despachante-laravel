@@ -79,12 +79,12 @@
                 @if($status === 'ea')
                     <th>responsável</th>
                 @endif
-                <th class="cursor-pointer" @if(Auth::user()->isDespachante()) wire:click="sortBy('codigo_crv')" @endif>
+                <th @if(Auth::user()->isDespachante()) class="cursor-pointer" wire:click="sortBy('codigo_crv')" @endif>
                     Tipo
                     <i class="ti ti-arrow-big-{{$sortField === 'codigo_crv' ? $iconDirection : null}}-filled"></i></th>
                 @if($tipo === 'rv')
-                    <th class="cursor-pointer"
-                        @if(Auth::user()->isDespachante()) wire:click="sortBy('movimentacao')" @endif>
+                    <th @if(Auth::user()->isDespachante()) class="cursor-pointer"
+                        wire:click="sortBy('movimentacao')" @endif>
                         Movimentação
                         <i class="ti ti-arrow-big-{{$sortField === 'movimentacao' ? $iconDirection : null}}-filled"></i>
                     </th>

@@ -97,7 +97,6 @@ class Processos extends Component
                 });
             });
 
-        # TODO: Verificar este problema de ordenação
         if (Auth::user()->isCliente()) {
             $pedidosQuery = $pedidosQuery->orderBy($this->sortField, $this->sortDirection);
         } else {

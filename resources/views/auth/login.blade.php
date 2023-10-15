@@ -5,8 +5,8 @@
                 class="col-12 col-lg-6 col-xl-4 border-top-wide border-primary d-flex flex-column justify-content-center">
                 <div class="container container-tight my-5 px-lg-5">
                     <div class="text-center mb-4">
-                        <a class="navbar-brand navbar-brand-autodark"><img src="{{asset('assets/img/logo3.png')}}"
-                                                                           height="36" alt="SALED logo">
+                        <a class="navbar-brand navbar-brand-autodark">
+                            <img src="{{asset('assets/img/logo3.png')}}" height="36" alt="SALED logo">
                             ALED
                         </a>
                         <p>Sistema Despachante</p>
@@ -23,7 +23,7 @@
                         <div class="mb-3">
                             <label class="form-label">Nome de Usuário</label>
                             <input name="name" value="{{old('name')}}" class="form-control" required autofocus
-                                   autocomplete="name"/>
+                                   autocomplete="name" placeholder="Digite o nome de usuário">
                         </div>
                         <div class="mb-2">
                             <label class="form-label">
@@ -31,7 +31,7 @@
                             </label>
                             <div class="input-group input-group-flat">
                                 <input type="password" name="password" class="form-control"
-                                       required autocomplete="current-password">
+                                       required autocomplete="current-password" placeholder="Digite a senha">
                             </div>
                             @if (Route::has('password.request'))
                                 <span class="form-label-description">
@@ -46,7 +46,18 @@
                             </label>
                         </div>
                         <div class="form-footer">
-                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-login"
+                                     width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"
+                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path
+                                        d="M15 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                                    <path d="M21 12h-13l3 -3"></path>
+                                    <path d="M11 15l-3 -3"></path>
+                                </svg>
+                                Entrar
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -1,5 +1,6 @@
-<x-navbar :nome="Auth::user()->nomeEmpresa()" :dashboard-route="route('cliente.dashboard')"
-          :nome-usuario="Auth::user()->name" :funcao="Auth::user()->getFuncao()" pedido-route="processos">
+<x-navbar :dashboard-route="route('cliente.dashboard')"
+          :nome-usuario="Auth::user()->name" :funcao="Auth::user()->getFuncao()"
+          :route-perfil="route('cliente.perfil')">
     <x-slot:navItens>
         <li class="nav-item">
             <a href="#" class="nav-link" data-bs-toggle="modal"

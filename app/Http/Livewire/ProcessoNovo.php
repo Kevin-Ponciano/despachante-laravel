@@ -7,6 +7,7 @@ use App\Models\PedidoServico;
 use App\Models\Processo;
 use App\Traits\FunctionsTrait;
 use App\Traits\HandinFilesTrait;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ProcessoNovo extends Component
@@ -161,10 +162,18 @@ class ProcessoNovo extends Component
                 ]);
             }
         }
+
         //TODO: verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
         $this->pedido = $pedido;
         if (!empty($this->arquivos))
             $this->uploadFiles('processos');
+
+        $pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Processo criado',
+            'descricao' => 'O Processo foi criado por <b>' . Auth::user()->name . '</b>.',
+            'tipo' => 'np',
+        ]);
 
         if (\Auth::user()->isDespachante()) {
             $url = route('despachante.processos.show', $pedido->numero_pedido);

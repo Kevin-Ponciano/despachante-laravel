@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\PedidoServico;
 use App\Traits\FunctionsTrait;
 use App\Traits\HandinFilesTrait;
+use Arr;
 use Auth;
 use Livewire\Component;
 
@@ -96,6 +97,13 @@ class ProcessoShow extends Component
                 'servico_id' => $servico['id'],
                 'preco' => $this->regexMoney($servico['preco']),
             ]);
+            $this->pedido->timelines()->create([
+                'user_id' => Auth::user()->id,
+                'titulo' => 'Serviço adicionado',
+                'descricao' => 'O Serviço <b>' . $servico['nome'] . '</b> foi adicionado ao processo',
+                'tipo' => 'up',
+                'privado' => Auth::user()->isDespachante()
+            ]);
             $this->emit('savedPriceServico');
         }
     }
@@ -108,6 +116,13 @@ class ProcessoShow extends Component
             return $servico['id'] != $id;
         });
         PedidoServico::where('pedido_id', $this->pedido->id)->where('servico_id', $id)->delete();
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Serviço removido',
+            'descricao' => 'O Serviço <b>' . $this->servicosDespachante->find($id)->nome . '</b> foi removido do processo',
+            'tipo' => 'up',
+            'privado' => Auth::user()->isDespachante()
+        ]);
         $this->emit('savedPriceServico');
     }
 
@@ -122,6 +137,14 @@ class ProcessoShow extends Component
         PedidoServico::where('pedido_id', $this->pedido->id)->where('servico_id', $servico['id'])->update([
             'preco' => $servico['preco'],
         ]);
+
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Preço do serviço alterado',
+            'descricao' => 'O preço do serviço <b>' . $this->servicosDespachante->find($servico['id'])->nome . '</b> foi alterado para <b>R$ ' . $this->regexMoneyToView($servico['preco']) . '</b>',
+            'tipo' => 'up',
+            'privado' => Auth::user()->isDespachante()
+        ]);
         $this->emit('savedPriceServico');
     }
 
@@ -132,6 +155,15 @@ class ProcessoShow extends Component
         $this->pedido->processo->update([
             'preco_placa' => $this->regexMoney($this->precoPlaca),
         ]);
+
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Preço da placa alterado',
+            'descricao' => 'O preço da placa foi alterado para <b>R$ ' . $this->precoPlaca . '</b>',
+            'tipo' => 'up',
+            'privado' => Auth::user()->isDespachante()
+        ]);
+
         $this->emit('savedPrecoPlaca');
     }
 
@@ -142,6 +174,15 @@ class ProcessoShow extends Component
         $this->pedido->update([
             'preco_honorario' => $this->regexMoney($this->precoHonorario),
         ]);
+
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Preço do honorário alterado',
+            'descricao' => 'O preço do honorário foi alterado para <b>R$ ' . $this->precoHonorario . '</b>',
+            'tipo' => 'up',
+            'privado' => Auth::user()->isDespachante()
+        ]);
+
         $this->emit('savedPrecoHonorario');
     }
 
@@ -153,7 +194,7 @@ class ProcessoShow extends Component
         $this->pedido->update([
             'comprador_nome' => $this->compradorNome,
             'comprador_telefone' => $this->telefone,
-            'placa' => $this->placa,
+            'placa' => \Str::upper($this->placa),
             'veiculo' => $this->veiculo,
             'observacoes' => $this->observacoes,
         ]);
@@ -166,6 +207,17 @@ class ProcessoShow extends Component
         $this->emit('success', [
             'message' => 'Processo Salvo com sucesso',
         ]);
+
+        if ($this->fieldsChanged()) {
+            $this->pedido->timelines()->create([
+                'user_id' => \Auth::user()->id,
+                'titulo' => 'Processo atualizado',
+                'descricao' => "Os campos <b>|" . $this->fieldsChanged() . "|</b> foram atualizados.",
+                'tipo' => 'up',
+                'privado' => Auth::user()->isDespachante(),
+            ]);
+        }
+
     }
 
     public function render()
@@ -178,4 +230,28 @@ class ProcessoShow extends Component
 
         return view('livewire.processo-show');
     }
+
+    protected function fieldsChanged()
+    {
+        $updatedFields[] = $this->pedido->getChanges();
+        $updatedFields[] = $this->pedido->processo->getChanges();
+        $updatedFields = Arr::collapse($updatedFields);
+        $updatedFields = Arr::except($updatedFields, ['updated_at', 'criado_em', 'atualizado_em', 'concluido_em', 'deleted_at']);
+        $updatedFields = Arr::map($updatedFields, function ($item, $key) {
+            return match ($key) {
+                'comprador_nome' => 'Nome Comprador',
+                'comprador_telefone' => 'Telefone Comprador',
+                'placa' => 'Placa',
+                'veiculo' => 'Veículo',
+                'observacoes' => 'Observações',
+                'tipo' => 'Tipo de Processo',
+                'comprador_tipo' => 'Tipo de Comprador',
+                'qtd_placas' => 'Quantidade de Placas',
+                default => null,
+            };
+        });
+
+        return implode(', ', $updatedFields);
+    }
+
 }

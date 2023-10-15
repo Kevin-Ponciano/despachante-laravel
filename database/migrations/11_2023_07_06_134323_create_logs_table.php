@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,10 +12,12 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
-            $table->char('tipo', 2);
+            $table->foreignId('despachante_id')->nullable()->constrained('despachantes')->onUpdate('cascade');
+            $table->foreignId('cliente_id')->nullable()->constrained('clientes')->onUpdate('cascade');
             $table->foreignId('usuario_id')->nullable()->constrained('usuarios')->onUpdate('cascade');
             $table->foreignId('pedido_id')->nullable()->constrained('pedidos')->onUpdate('cascade');
+            $table->string('level');
+            $table->text('message');
             $table->timestamps();
         });
     }

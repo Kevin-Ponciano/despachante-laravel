@@ -5,7 +5,6 @@
       x-on:livewire-upload-error="error = true"
       x-on:livewire-upload-progress="input.removeClass('is-invalid');input.removeClass('is-valid')">
 
-    <!--TODO verificar um nome melhor para o input-->
     <label class="form-label">{{ $label}}
         <span class="ps-3 text-muted" x-show="isUploading">
              Validando...
@@ -32,9 +31,11 @@
         <button type="submit" class="btn btn-primary" :disabled="isUploading">
             Enviar
         </button>
-        <button type="button" class="btn btn-ghost-green" wire:click="downloadAllFiles('{{$folder}}')">
-            <i class="ti ti-download px-2"></i>
-            Download
-        </button>
+        @if(!empty($arquivos))
+            <button type="button" class="btn btn-ghost-green" wire:click="downloadAllFiles('{{$folder}}')">
+                <i class="ti ti-download px-2"></i>
+                Baixar todos
+            </button>
+        @endif
     </div>
 </form>

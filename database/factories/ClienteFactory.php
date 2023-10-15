@@ -15,7 +15,7 @@ class ClienteFactory extends Factory
         $faker = Faker::create('pt_BR');
         return [
             'nome' => $faker->company,
-            'status' => $faker->randomElement(['at', 'in']),
+            'status' => 'at',
             'preco_1_placa' => $faker->randomFloat(2, 100, 1000),
             'preco_2_placa' => $faker->randomFloat(2, 100, 1000),
             'preco_atpv' => $faker->randomFloat(2, 100, 1000),

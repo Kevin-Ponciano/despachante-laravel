@@ -85,7 +85,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@admin',
             'password' => Hash::make('123'),
-            'role' => 'dm',
+            'role' => 'da',
             'status' => 'at',
             'despachante_id' => Despachante::orderBy('id', 'desc')->first()->id,
         ]);

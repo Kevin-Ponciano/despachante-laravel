@@ -51,9 +51,17 @@ trait FunctionsTrait
 
         $this->status = 'ea';
         $this->pedido->update([
-            'status' => 'ea',
+            'status' => $this->status,
             'responsavel_por' => Auth::user()->id,
         ]);
+
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Pedido em Andamento',
+            'descricao' => '',
+            'tipo' => 'tp',
+        ]);
+
         $this->emit('$refresh');
         $this->emit('info', ['message' => 'Pedido em andamento']);
     }
@@ -62,8 +70,16 @@ trait FunctionsTrait
     {
         $this->status = 'ab';
         $this->pedido->update([
-            'status' => 'ab',
+            'status' => $this->status,
         ]);
+
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Pedido Reaberto',
+            'descricao' => '',
+            'tipo' => 'op',
+        ]);
+
         $this->emit('$refresh');
         $this->emit('success', ['message' => 'Pedido Reaberto']);
     }
@@ -76,10 +92,18 @@ trait FunctionsTrait
         $numero_pedido = $this->pedido->numero_pedido;
         $this->status = 'co';
         $this->pedido->update([
-            'status' => 'co',
+            'status' => $this->status,
             'concluido_por' => Auth::user()->id,
             'concluido_em' => now(),
         ]);
+
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Pedido Concluído',
+            'descricao' => '',
+            'tipo' => 'cp',
+        ]);
+
         session()->flash('success', "Pedido $numero_pedido Concluído");
         return redirect()->route('despachante.dashboard');
     }
@@ -92,8 +116,16 @@ trait FunctionsTrait
         $numero_pedido = $this->pedido->numero_pedido;
         $this->status = 'ex';
         $this->pedido->update([
-            'status' => 'ex',
+            'status' => $this->status,
         ]);
+
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Pedido Excluído',
+            'descricao' => '',
+            'tipo' => 'ep',
+        ]);
+
         $this->pedido->delete();
         session()->flash('error', "Pedido $numero_pedido Excluído");
         return redirect()->route('despachante.dashboard');

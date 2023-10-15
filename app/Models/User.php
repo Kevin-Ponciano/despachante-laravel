@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Storage;
 
 class User extends Authenticatable
 {
@@ -30,6 +31,7 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'profile_photo_path'
     ];
 
     /**
@@ -125,18 +127,7 @@ class User extends Authenticatable
             return 'undefined';
         }
     }
-
-
-    public function nomeEmpresa()
-    {
-        if ($this->isDespachante())
-            return $this->despachante->razao_social;
-        elseif ($this->isCliente())
-            return $this->cliente->nome;
-        else
-            return 'undefined';
-    }
-
+    
     public function getIdDespachante()
     {
         if ($this->isDespachante())
@@ -163,6 +154,15 @@ class User extends Authenticatable
             'at' => 'Ativo',
             'in' => 'Inativo',
         };
+    }
+
+    public function getProfilePhoto()
+    {
+        if ($this->profile_photo_path) {
+            return Storage::disk('local')->url($this->profile_photo_path);
+        } else {
+            return 'https://ui-avatars.com/api/?name=' . $this->name[0] . '&color=7F9CF5&background=EBF4FF';
+        }
     }
 
 

@@ -49,16 +49,27 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between gap-2">
-                        <a href="#" class="btn btn-ghost-warning">
-                            Redefinir Senha
-                        </a>
+                        @if(Auth::user()->id == $user->id)
+                            <a href="{{route('despachante.perfil')}}" class="btn btn-ghost-warning">
+                                Redefinir Senha
+                            </a>
+                        @else
+                            <form action="{{ route('despachante.reset-password') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="email" value="{{$email}}">
+                                <button type="submit" wire:click="resetPassword" class="btn btn-ghost-warning">
+                                    Redefinir Senha
+                                </button>
+                            </form>
+                        @endif
                         <div class="col-auto ms-auto d-print-none">
                             <div x-data="{ status: @entangle('status')}" class="btn-list">
                                 @if(Auth::user()->id != $user->id)
                                     <button x-show="status==='at'" class="btn btn-danger" wire:click="switchStatus">
                                         Inativar Usuário
                                     </button>
-                                    <button x-show="status==='in'" class="btn btn-ghost-danger" data-bs-toggle="modal"
+                                    <button x-show="status==='in'" class="btn btn-ghost-danger"
+                                            data-bs-toggle="modal"
                                             data-bs-target="#modal-delete">
                                         Excluir Usuário
                                     </button>

@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->char('cnpj', 18)->unique()->index();
             $table->char('celular', 15)->nullable();
             $table->char('telefone', 14)->nullable();
+            $table->char('status', 2)->default('at');
             $table->timestamps();
             $table->softDeletes();
         });

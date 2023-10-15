@@ -17,6 +17,8 @@ class Servicos extends Component
 
     public function mount()
     {
+        if (Auth::user()->role[1] === 'u')
+            abort(403, 'Você não tem permissão para acessar esta página.');
         $this->servicos = Auth::user()->despachante->servicos()->orderBy('nome')->get();
     }
 

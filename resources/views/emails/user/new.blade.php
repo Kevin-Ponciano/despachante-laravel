@@ -1,12 +1,16 @@
 @component('mail::message')
-# Introduction
+# Novo Usuário Criado
 
-The body of your message.
+Olá, Seja bem-vindo ao sistema <b>{{ config('app.name') }}</b>.<br>
 
-@component('mail::button', ['url' => ''])
-Button Text
+Sua conta foi criada com sucesso.<br>
+Abaixo estão suas credenciais de acesso:
+
+Nome de Usuário: <b>{{ $name }}</b><br>
+Senha: <b>{{ $password }}</b>
+
+@component('mail::button', ['url' => route('login')])
+    Acessar
 @endcomponent
-
-Thanks,<br>
-{{ config('app.name') }}
+<br>
 @endcomponent

@@ -77,7 +77,7 @@
                     <th>responsável</th>
                 @endif
 
-                <th class="cursor-pointer" @if(Auth::user()->isDespachante()) wire:click="sortBy('tipo')" @endif>
+                <th @if(Auth::user()->isDespachante()) class="cursor-pointer" wire:click="sortBy('tipo')" @endif>
                     Tipo Pedido
                     <i class="ti ti-arrow-big-{{$sortField === 'tipo' ? $iconDirection : null}}-filled"></i></th>
                 <th class="cursor-pointer text-center" wire:click="sortBy('status')">

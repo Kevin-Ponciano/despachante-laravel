@@ -15,6 +15,8 @@ class UsuarioEditar extends Component
 
     public function mount($id)
     {
+        if (Auth::user()->role[1] === 'u')
+            abort(403, 'Você não tem permissão para acessar esta página.');
         $this->user = Auth::user()->despachante->users()->findOrFail($id);
         $this->name = $this->user->name;
         $this->email = $this->user->email;
@@ -88,6 +90,11 @@ class UsuarioEditar extends Component
 
         session()->flash('success', "Usuário deletado com sucesso");
         return redirect()->route('despachante.usuarios');
+    }
+
+    public function resetPassword()
+    {
+        $this->emit('success', ['message' => 'Um e-mail será enviado para o usuário<br> para que ele possa redefinir sua senha']);
     }
 
     public function render()

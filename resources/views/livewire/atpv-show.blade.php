@@ -1,8 +1,4 @@
 <div>
-    <div wire:loading wire:target="downloadFile, downloadAllFiles">
-        <x-loading-page/>
-    </div>
-    <!-- TODO: Imposibilitar edição das informações do Pedido -->
     <x-page-title :title="$tipo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->status()"
                   :status="$status" :responsavel="$pedido->usuarioResponsavel"
                   :concluido-por="$pedido->usuarioConcluinte" :concluido-em="$pedido->concluido_em()"/>
@@ -33,13 +29,30 @@
                                 @endif
                             </a>
                         </li>
+                        <li class="nav-item ms-auto" role="presentation">
+                            <a data-bs-toggle="offcanvas" href="#offcanvas" class="nav-link"
+                               aria-controls="offcanvasEnd">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="icon icon-tabler icon-tabler-history-toggle" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M10 20.777a8.942 8.942 0 0 1 -2.48 -.969"></path>
+                                    <path d="M14 3.223a9.003 9.003 0 0 1 0 17.554"></path>
+                                    <path d="M4.579 17.093a8.961 8.961 0 0 1 -1.227 -2.592"></path>
+                                    <path d="M3.124 10.5c.16 -.95 .468 -1.85 .9 -2.675l.169 -.305"></path>
+                                    <path d="M6.907 4.579a8.954 8.954 0 0 1 3.093 -1.356"></path>
+                                    <path d="M12 8v4l3 3"></path>
+                                </svg>
+                                Atividades do Pedido
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
                         <div wire:ignore.self class="tab-pane active show" id="tabs-atpv-info" role="tabpanel">
-                            <form wire:submit.prevent="update">
-                                <!-- TODO: Verificar pq ao dar enter buga o submit -->
+                            <form id="update-form" wire:submit.prevent="update">
                                 @csrf
                                 <div class="tab-content"
                                      x-data="{ isEditing: @entangle('isEditing'), status: @entangle('status'),
@@ -176,7 +189,8 @@
                                         @if((Auth::user()->isCliente() && $status === 'pe') || Auth::user()->isDespachante())
                                             <div class="d-flex justify-content-between">
                                                 <div>
-                                                    <x-input-upload-files uploadMethod="uploadFiles"
+                                                    <x-input-upload-files :arquivos="$arquivosDoPedido"
+                                                                          uploadMethod="uploadFiles"
                                                                           folder="renave/despachante"
                                                                           label="Enviar Documentos (somente PDF's)"/>
                                                 </div>
@@ -216,7 +230,8 @@
                                             @if(Auth::user()->isDespachante())
                                                 <div class="d-flex justify-content-between">
                                                     <div>
-                                                        <x-input-upload-files uploadMethod="uploadFiles"
+                                                        <x-input-upload-files :arquivos="$arquivosRenave"
+                                                                              uploadMethod="uploadFiles"
                                                                               folder="renave/cliente"
                                                                               label="Enviar Documentos para baixa"/>
                                                     </div>
@@ -288,4 +303,7 @@
                          description="As informações foram alteradas com sucesso. Elas serão analisadas e se estiverem corretas daremos continuidade ao {{$tipo}}."
                          url="{{route('cliente.dashboard')}}"/>
     @endif
+    <x-offcanvas direction="end" title="Atividades do Pedido">
+        <x-timeline :timelines="$pedido->timelines()->orderByDesc('created_at')->get()"/>
+    </x-offcanvas>
 </div>

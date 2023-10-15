@@ -10,7 +10,9 @@
                     Resolvido
                     <i class="ti ti-check text-green"></i>
                 </th>
-                <th></th>
+                @if(Auth::user()->isDespachante())
+                    <th></th>
+                @endif
             </tr>
             </thead>
             <tbody class="px-1">
@@ -38,9 +40,9 @@
                     data-bs-original-title="OBS.: {{$pendencia->observacao}}">
                     <td class="text-break">{{$pendencia->nome}}</td>
                     <td class="text-center">
-                        {{--TODO: Centralizar o badge (testar my-auto)--}}
-                        <span
-                            class="badge @if($pendencia->status==='co') bg-success @else bg-warning @endif">{{$pendencia->status()}}</span>
+                        <span class="badge @if($pendencia->status==='co') bg-success @else bg-warning @endif">
+                            {{$pendencia->status()}}
+                        </span>
                     </td>
                     <td class="text-center text-nowrap">{{$pendencia->concluido_em()}}</td>
                     <td class="text-center">

@@ -8,6 +8,7 @@ use App\Http\Middleware\DespachanteMiddleware;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\StatusVerifyMiddleware;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\ValidateSignature;
@@ -88,6 +89,7 @@ class Kernel extends HttpKernel
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
         'despachante' => DespachanteMiddleware::class,
-        'cliente' => ClienteMiddleware::class
+        'cliente' => ClienteMiddleware::class,
+        'status' => StatusVerifyMiddleware::class
     ];
 }

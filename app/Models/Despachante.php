@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -53,18 +52,6 @@ class Despachante extends Model
         return $this->hasManyThrough(Pedido::class, Cliente::class);
     }
 
-    public function processos()
-    {
-        $processos = new Collection();
-        $pedidos = $this->pedidos;
-        foreach ($pedidos as $pedido) {
-            if ($pedido->processo) {
-                $processos[] = $pedido->processo;
-            }
-        }
-        return $processos;
-    }
-
     public function pedidosProcessos()
     {
         return $this->pedidos()->has('processo');
@@ -75,5 +62,9 @@ class Despachante extends Model
         return $this->pedidos()->has('atpv');
     }
 
+    public function nome()
+    {
+        return $this->nome_fantasia ?? $this->razao_social;
+    }
 
 }

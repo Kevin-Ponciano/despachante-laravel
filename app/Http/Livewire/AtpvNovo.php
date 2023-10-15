@@ -168,12 +168,19 @@ class AtpvNovo extends Component
             'pedido_id' => $pedido->id,
         ]);
 
-// todo verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
+
+        //TODO: verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
         $this->pedido = $pedido;
         if ($this->isRenave)
             if (!empty($this->arquivos))
                 $this->uploadFiles('renave/despachante');
 
+        $pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => $atpv->tipo() . ' criado',
+            'descricao' => 'O ' . $atpv->tipo() . ' foi criado por <b>' . Auth::user()->name . '</b>.',
+            'tipo' => 'np',
+        ]);
 
         $this->clearInputs();
         if (\Auth::user()->isDespachante()) {
@@ -181,6 +188,7 @@ class AtpvNovo extends Component
         } else {
             $url = route('cliente.atpvs.show', $pedido->numero_pedido);
         }
+
         $this->emit('$refresh');
         $this->emit('success', [
             'message' => $atpv->tipo() . " criado com sucesso.",

@@ -10,14 +10,13 @@
                     </a>
                 </h1>
                 <div class="fw-bolder text-capitalize text-center w-8">
-                    {{$nome}}
+                    {{Auth::user()->empresa()->nome()}}
                 </div>
                 <div class="navbar-nav flex-row order-md-last">
                     <div class="d-none d-md-flex">
                         <div class="nav-item w-auto">
                             <div class="input-icon">
                                 <span class="input-icon-addon">
-                                  <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                        viewBox="0 0 24 24"
                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -25,17 +24,13 @@
                                           d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path
                                           d="M21 21l-6 -6"></path></svg>
                                 </span>
-                                {{--                                    todo Criar uma rota que irá redirecionar para o pedido pesquisado--}}
-                                <form>
-                                    @csrf
-                                    <input type="text" class="form-control w-75" placeholder="Buscar Pedido">
-                                </form>
+                                <input type="text" class="form-control" placeholder="Buscar Pedido">
                                 <script>
                                     $(document).ready(function () {
                                         $('input').on('keypress', function (e) {
                                             if (e.which === 13) {
                                                 e.preventDefault();
-                                                window.location.href = "{{$pedidoRoute}}/" + $(this).val()
+                                                window.location.href = "/pedido/" + $(this).val()
                                             }
                                         })
                                     })
@@ -43,8 +38,8 @@
                             </div>
                         </div>
                         <a class="nav-link px-0 hide-theme-dark cursor-pointer" data-bs-toggle="tooltip"
-                           data-bs-placement="bottom" aria-label="Enable dark mode"
-                           data-bs-original-title="Enable dark mode">
+                           data-bs-placement="bottom" aria-label="Ativar modo escuro"
+                           data-bs-original-title="Ativar modo escuro">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                  stroke-linecap="round" stroke-linejoin="round">
@@ -54,8 +49,8 @@
                             </svg>
                         </a>
                         <a class="nav-link px-0 hide-theme-light cursor-pointer" data-bs-toggle="tooltip"
-                           data-bs-placement="bottom" aria-label="Enable light mode"
-                           data-bs-original-title="Enable light mode">
+                           data-bs-placement="bottom" aria-label="Ativar modo claro"
+                           data-bs-original-title="Ativar modo claro">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                  stroke-linecap="round" stroke-linejoin="round">
@@ -204,7 +199,7 @@
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                            aria-label="Open user menu">
                                 <span class="avatar avatar-sm"
-                                      style="background-image: url(https://rare-gallery.com/thumbs/1069186-face-drawing-illustration-anime-glasses-red-cartoon-Ilya-Kuvshinov-ART-color-girl-beauty-woman-sketch-organ.png)"></span>
+                                      style="background-image: url({{Auth::user()->getProfilePhoto()}})"></span>
                             <div class="d-none d-xl-block ps-2">
                                 <div>{{$nomeUsuario}}</div>
                                 <div class="mt-1 small text-muted">{{$funcao}}</div>
@@ -212,7 +207,9 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             {{--                            <a href="#" class="dropdown-item">Status</a>--}}
-                            {{--                            <a href="./profile.html" class="dropdown-item">Profile</a>--}}
+                            <a href="{{$routePerfil}}" class="dropdown-item">
+                                <i class="dropdown-item-icon icon ti ti-user"></i>
+                                Perfil</a>
                             {{--                            <a href="#" class="dropdown-item">Feedback</a>--}}
                             {{--                            <div class="dropdown-divider"></div>--}}
                             {{--                            <a href="./settings.html" class="dropdown-item">Settings</a>--}}

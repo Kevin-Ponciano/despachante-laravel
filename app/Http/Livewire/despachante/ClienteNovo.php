@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\despachante;
 
+use App\Mail\NewClient;
 use App\Traits\FunctionsTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Mail;
 
 class ClienteNovo extends Component
 {
@@ -47,7 +49,7 @@ class ClienteNovo extends Component
 
         $nomeUsuario = Str::lower(Str::replace(' ', '_', $this->nome));
         $year = date('Y');
-        $password = Hash::make("$nomeUsuario@$year");
+        $password = "$nomeUsuario@$year";
 
         $preco = [
             'placa1' => $this->regexMoney($this->preco['placa1'] ?? 0),
@@ -71,15 +73,16 @@ class ClienteNovo extends Component
             'preco_renave_saida' => $preco['renaveSaida'],
         ]);
 
-        $cliente->users()->create([
+        $user = $cliente->users()->create([
             'name' => $nomeUsuario,
             'email' => $this->email,
-            'password' => $password,
+            'password' => Hash::make($password),
             'role' => 'ca', // cliente-admin
             'status' => 'at',
         ]);
 
-        # TODO: send email to user
+        
+        Mail::to($this->email)->send(new NewClient($user, $password));
         $this->emit('tableRefresh');
         $this->emit('success', ['message' => 'Cliente cadastrado com sucesso']);
         $this->clearFields();

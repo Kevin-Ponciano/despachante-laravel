@@ -106,6 +106,11 @@ class Pedido extends Model
         return $this->hasMany(Arquivo::class);
     }
 
+    public function timelines()
+    {
+        return $this->hasMany(Timeline::class);
+    }
+
     public function servicos()
     {
         return $this->belongsToMany(Servico::class, 'pedido_servicos')

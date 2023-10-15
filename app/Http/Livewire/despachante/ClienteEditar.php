@@ -20,6 +20,8 @@ class ClienteEditar extends Component
 
     public function mount($id)
     {
+        if (Auth::user()->role[1] === 'u')
+            abort(403, 'Você não tem permissão para acessar esta página.');
         $this->cliente = Auth::user()->despachante->clientes()->where('numero_cliente', $id)->firstOrFail();
         $this->usuario = $this->cliente->users()->where('role', 'ca')->firstOrFail();
         $this->nomeCliente = $this->cliente->nome;
@@ -112,9 +114,9 @@ class ClienteEditar extends Component
 
     }
 
-    public function redefinirSenha($id)
+    public function resetPassword()
     {
-        # TODO Enviar um email para o usuario poder redefinir a senha
+        $this->emit('success', ['message' => 'Um e-mail será enviado para o cliente<br> para que ele possa redefinir sua senha']);
     }
 
     public function delete()

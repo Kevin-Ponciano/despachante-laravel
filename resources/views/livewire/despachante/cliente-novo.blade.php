@@ -1,25 +1,21 @@
 <div>
-    <div class="row">
-        <div class="col-4">
-            <div class="mb-3">
-                <label class="form-label">Nome do Cliente</label>
-                <input type="text" class="form-control @error('nome') is-invalid @enderror"
-                       wire:model.defer="nome">
-                @error('nome') <span
-                    class="invalid-feedback">{{ $message }}</span> @enderror
-            </div>
+    <div class="row mb-3">
+        <div class="col-5">
+            <label class="form-label">Nome do Cliente</label>
+            <input type="text" class="form-control @error('nome') is-invalid @enderror"
+                   wire:model.defer="nome">
+            @error('nome') <span
+                class="invalid-feedback">{{ $message }}</span> @enderror
         </div>
-        <div class="col-4">
-            <div class="mb-3">
-                <label class="form-label">E-mail</label>
-                <input type="text" class="form-control @error('email') is-invalid @enderror"
-                       wire:model.defer="email">
-                @error('email') <span
-                    class="invalid-feedback">{{ $message }}</span> @enderror
-            </div>
+        <div class="col-5">
+            <label class="form-label">E-mail</label>
+            <input type="text" class="form-control @error('email') is-invalid @enderror"
+                   wire:model.defer="email">
+            @error('email') <span
+                class="invalid-feedback">{{ $message }}</span> @enderror
         </div>
-        <div class="col mt-5">
-            <div class="ms-7 fw-bold font-monospace">Disponível<span
+        <div class="col mt-4">
+            <div class="fw-bold font-monospace">Disponível<span
                     class="badge bg-red text-red-fg ms-2">{{$qtd_clientes}}</span>
                 <x-helper>
                     <p>Representa o número de clientes que ainda podem ser cadastrados.</p>
@@ -28,6 +24,8 @@
                 </x-helper>
             </div>
         </div>
+        <span
+            class="text-muted">Ao cadastrar um novo cliente, será enviado um e-mail com as credenciais de acesso.</span>
     </div>
     <fieldset class="form-fieldset">
         <h4>Tabela de Preços <span class="page-subtitle">opcional</span></h4>

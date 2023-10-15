@@ -54,10 +54,12 @@
                                     wire:click="conclude">
                                 Concluir
                             </button>
-                            <button class="btn btn-danger" x-show="status!=='ex'" data-bs-toggle="modal"
-                                    data-bs-target="#modal-delete">
-                                Excluir
-                            </button>
+                            @if(Auth::user()->role[1] === 'a')
+                                <button class="btn btn-danger" x-show="status!=='ex'" data-bs-toggle="modal"
+                                        data-bs-target="#modal-delete">
+                                    Excluir
+                                </button>
+                            @endif
                         </div>
                     </div>
 

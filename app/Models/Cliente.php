@@ -79,6 +79,11 @@ class Cliente extends Model
         return $this->pedidos()->has('atpv');
     }
 
+    public function nome()
+    {
+        return $this->nome;
+    }
+
     public function status()
     {
         return match ($this->status) {
