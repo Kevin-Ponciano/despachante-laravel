@@ -9,7 +9,6 @@ use App\Http\Livewire\despachante\RelatorioPedidos;
 use App\Http\Livewire\despachante\Servicos;
 use App\Http\Livewire\despachante\UsuarioEditar;
 use App\Http\Livewire\despachante\Usuarios;
-use App\Http\Livewire\Log;
 use App\Http\Livewire\Perfil;
 use App\Http\Livewire\Processos;
 use App\Http\Livewire\ProcessoShow;
@@ -17,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('lading-page');
 })->name('welcome');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'status'])->group(function () {
