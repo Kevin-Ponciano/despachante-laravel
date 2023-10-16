@@ -47,9 +47,9 @@ class ClienteNovo extends Component
         }
         $this->validate();
 
-        $nomeUsuario = Str::lower(Str::replace(' ', '_', $this->nome));
+        $nomeUsuario = Str::lower($this->nome);
         $year = date('Y');
-        $password = "$nomeUsuario@$year";
+        $password = Str::replace(' ', '_', $nomeUsuario) . "@$year";
 
         $preco = [
             'placa1' => $this->regexMoney($this->preco['placa1'] ?? 0),
@@ -81,11 +81,10 @@ class ClienteNovo extends Component
             'status' => 'at',
         ]);
 
-        
-        Mail::to($this->email)->send(new NewClient($user, $password));
         $this->emit('tableRefresh');
         $this->emit('success', ['message' => 'Cliente cadastrado com sucesso']);
         $this->clearFields();
+        Mail::to($this->email)->send(new NewClient($user, $password));
     }
 
     public function clearFields()

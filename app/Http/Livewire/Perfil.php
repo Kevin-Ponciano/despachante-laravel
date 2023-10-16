@@ -60,10 +60,10 @@ class Perfil extends Component
     public function changeName()
     {
         $this->validate([
-            'name' => 'required|regex:/^[a-zA-Z0-9_]+$/|unique:users,name,' . $this->user->id
+            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,' . $this->user->id
         ], [
             'name.required' => 'Obrigatório.',
-            'name.regex' => 'O nome de usuário deve conter apenas letras, números e sublinhados.',
+            'name.regex' => 'O nome de usuário não pode conter caracteres especiais.',
             'name.unique' => 'Nome de usuário já cadastrado.',
         ]);
 
@@ -96,12 +96,12 @@ class Perfil extends Component
         $this->validate(
             [
                 'oldPassword' => 'current_password',
-                'newPassword' => 'required|min:6',
+                'newPassword' => 'required|min:8',
             ],
             [
                 'oldPassword.current_password' => 'Senha atual incorreta.',
                 'newPassword.required' => 'Obrigatório.',
-                'newPassword.min' => 'A nova senha deve ter no mínimo 6 caracteres.',
+                'newPassword.min' => 'A nova senha deve ter no mínimo 8 caracteres.',
             ]
         );
 

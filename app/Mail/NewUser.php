@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -12,7 +13,7 @@ class NewUser extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public $name, public string $password)
+    public function __construct(public User $user, public string $password)
     {
 
     }

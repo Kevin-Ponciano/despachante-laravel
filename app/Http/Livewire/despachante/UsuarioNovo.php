@@ -2,9 +2,12 @@
 
 namespace App\Http\Livewire\despachante;
 
+use App\Mail\NewUser;
 use App\Traits\FunctionsTrait;
-use Illuminate\Support\Facades\Auth;
+use Auth;
+use Hash;
 use Livewire\Component;
+use Mail;
 
 class UsuarioNovo extends Component
 {
@@ -17,20 +20,20 @@ class UsuarioNovo extends Component
     public $qtd_usuarios;
 
     protected $rules = [
-        'name' => 'required|regex:/^[a-zA-Z0-9_]+$/|unique:users,name',
+        'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name',
         'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:6',
+        'password' => 'required|min:8',
     ];
 
     protected $messages = [
         'name.required' => 'Obrigatório.',
-        'name.regex' => 'O nome de usuário deve conter apenas letras, números e sublinhados.',
+        'name.regex' => 'O nome de usuário não pode conter caracteres especiais.',
         'name.unique' => 'Nome de usuário já cadastrado.',
         'email.required' => 'Obrigatório.',
         'email.email' => 'E-mail inválido.',
         'email.unique' => 'E-mail já cadastrado.',
         'password.required' => 'Obrigatório.',
-        'password.min' => 'Mínimo de 6 caracteres.',
+        'password.min' => 'Mínimo de 8 caracteres.',
     ];
 
     public function mount()
@@ -48,19 +51,18 @@ class UsuarioNovo extends Component
         }
         $this->validate();
 
-        $this->password = bcrypt($this->password);
-
-        Auth::user()->despachante->users()->create([
+        $user = Auth::user()->despachante->users()->create([
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->role,
             'status' => 'at',
-            'password' => $this->password,
+            'password' => Hash::make($this->password),
         ]);
 
         $this->emit('tableRefresh');
         $this->emit('success', ['message' => 'Usuário cadastrado com sucesso']);
         $this->clearFields();
+        Mail::to($this->email)->send(new NewUser($user, $this->password));
     }
 
     public function clearFields()

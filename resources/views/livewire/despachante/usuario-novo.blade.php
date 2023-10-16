@@ -29,23 +29,20 @@
     </div>
     <div class="row">
         <div class="col">
-            <div class="mb-3">
-                <label class="form-label">Senha</label>
-                <input type="password" class="form-control @error('password') is-invalid @enderror"
-                       wire:model.defer="password">
-                @error('password') <span class="invalid-feedback">{{ $message }}</span> @enderror
-            </div>
+            <label class="form-label">Senha</label>
+            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                   wire:model.defer="password">
+            @error('password') <span class="invalid-feedback">{{ $message }}</span> @enderror
         </div>
         <div class="col">
-            <div class="mb-3">
-                <label class="form-label">Função</label>
-                <select class="form-select" name="role" wire:model.defer="role">
-                    <option value="du">Usuário</option>
-                    <option value="da">Administrador</option>
-                </select>
-            </div>
+            <label class="form-label">Função</label>
+            <select class="form-select" name="role" wire:model.defer="role">
+                <option value="du">Usuário</option>
+                <option value="da">Administrador</option>
+            </select>
         </div>
     </div>
+    <span class="text-muted">Ao cadastrar um novo usuário, será enviado um e-mail com as credenciais de acesso.</span>
 
     <div class="d-flex justify-content-between mx-1">
         <button class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal"

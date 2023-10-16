@@ -339,7 +339,8 @@ trait HandinFilesTrait
         if (!$pathFile)
             return null;
         $mime = Storage::mimeType($pathFile);
-        $url = Storage::url($pathFile, now()->addMinutes(5));# TODO: Tentar manter a url publica
+        # TODO: Criar um evento que ao clicar em visualizar o arquivo, verifica se o link ainda é válido, se não for, cria um novo link e atualiza no banco de dados
+        $url = Storage::temporaryUrl($pathFile, Carbon::now()->addDays(7));
 
         Arquivo::updateOrCreate(
             [

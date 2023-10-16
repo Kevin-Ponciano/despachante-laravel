@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('path')->unique();
             $table->string('folder');
             $table->string('mime_type');
-            $table->string('url');
+            $table->text('url');
             $table->timestamps();
         });
     }

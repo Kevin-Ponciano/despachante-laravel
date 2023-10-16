@@ -1,12 +1,13 @@
 @component('mail::message')
-# Novo Usuário Criado
+# Bem-vindo(a)!
 
-Olá, Seja bem-vindo ao sistema <b>{{ config('app.name') }}</b>.<br>
+Olá,<br>
+Seja bem-vindo ao sistema <b>{{ config('app.name') }}</b>.<br>
 
-Sua conta foi criada com sucesso.<br>
+Sua conta foi criada pela empresa <b>{{ $user->despachante->nome() }}</b>.<br>
 Abaixo estão suas credenciais de acesso:
 
-Nome de Usuário: <b>{{ $name }}</b><br>
+Nome de Usuário: <b>{{ $user->name }}</b><br>
 Senha: <b>{{ $password }}</b>
 
 @component('mail::button', ['url' => route('login')])
