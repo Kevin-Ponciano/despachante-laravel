@@ -340,7 +340,7 @@ trait HandinFilesTrait
             return null;
         $mime = Storage::mimeType($pathFile);
         # TODO: Criar um evento que ao clicar em visualizar o arquivo, verifica se o link ainda é válido, se não for, cria um novo link e atualiza no banco de dados
-        $url = Storage::temporaryUrl($pathFile, Carbon::now()->addDays(7));
+        $url = Storage::url($pathFile, Carbon::now()->addDays(7));
 
         Arquivo::updateOrCreate(
             [
