@@ -53,7 +53,7 @@ class Pendencias extends Component
             return;
         $pendencia = Pendencia::find($id);
         $pendencia->status = $pendencia->status == 'co' ? 'pe' : 'co';
-        $pendencia->concluido_em = $pendencia->status == 'co' ? now() : null;
+        $pendencia->concluded_at = $pendencia->status == 'co' ? now() : null;
         $pendencia->save();
         if ($pendencia->status == 'pe') {
             if ($pendencia->pedido->status != 'pe') {
@@ -102,7 +102,7 @@ class Pendencias extends Component
         foreach ($this->pendencias as $pendencia) {
             if ($pendencia->status !== 'co') {
                 $pendencia->status = 'co';
-                $pendencia->concluido_em = now();
+                $pendencia->concluded_at = now();
                 $pendencia->save();
             }
         }
@@ -248,7 +248,7 @@ class Pendencias extends Component
                 } else {
                     $matchingPendencia->update([
                         'status' => 'pe',
-                        'concluido_em' => null,
+                        'concluded_at' => null,
                     ]);
                 }
                 $count++;

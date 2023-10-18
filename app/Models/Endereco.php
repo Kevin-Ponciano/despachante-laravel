@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\AttributeModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Endereco extends Model
 {
     use HasFactory;
+    use softDeletes;
+    use AttributeModel;
+
     protected $fillable = [
         'logradouro',
         'numero',
@@ -25,6 +30,6 @@ class Endereco extends Model
 
     public function atpvs()
     {
-        return $this->hasMany(Atpv::class,'comprador_endereco_id');
+        return $this->hasMany(Atpv::class, 'comprador_endereco_id');
     }
 }

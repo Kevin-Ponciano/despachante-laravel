@@ -1,6 +1,6 @@
-<li class="step-item {{$timeline->tipo()['step-color']}}">
+<li class="step-item {{$timeline->getTipo()['step-color']}}">
     <div class="h4 m-0 text-capitalize">
-        <i class="icon {{$timeline->tipo()['icon']}}"></i>
+        <i class="icon {{$timeline->getTipo()['icon']}}"></i>
         {{$timeline->titulo}}
         @if($timeline->privado)
             <i class="text-danger ti ti-lock"></i>
@@ -15,10 +15,10 @@
             <div class="col">
                 <div class="mt-1 fw-bolder">{{$timeline->user->name}}</div>
                 <div class="text-wrap">{!!$timeline->descricao!!}</div>
-                <div class="text-secondary">{{$timeline->created_at}}</div>
+                <div class="text-secondary">{{$timeline->getCreatedAt()}}</div>
             </div>
             <div class="col-auto align-self-center">
-                <div class="badge {{$timeline->tipo()['bg']}}"></div>
+                <div class="badge {{$timeline->getTipo()['bg']}}"></div>
             </div>
         </div>
     </div>

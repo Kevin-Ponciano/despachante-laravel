@@ -46,7 +46,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     })->name('get-pedido');
 
 
-    Route::middleware(['despachante'])->prefix('despachante')->name('despachante.')->group(function () {
+    Route::middleware(['can:[DESPACHANTE] - Acessar Sistema'])->prefix('despachante')->name('despachante.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::get('/processos', Processos::class)->name('processos');
         Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');
@@ -69,7 +69,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('reset-password');
     });
 
-    Route::middleware(['cliente'])->prefix('cliente')->name('cliente.')->group(function () {
+    Route::middleware(['can:[CLIENTE] - Acessar Sistema'])->prefix('cliente')->name('cliente.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::get('/processos', Processos::class)->name('processos');
         Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');

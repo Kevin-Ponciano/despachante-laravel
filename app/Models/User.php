@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SoftDeleteScope;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -9,16 +11,26 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Storage;
 
 class User extends Authenticatable
 {
+    use CrudTrait;
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasRoles;
     use softDeletes;
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new SoftDeleteScope);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -96,22 +108,12 @@ class User extends Authenticatable
 
     public function isDespachante(): bool
     {
-        $role = $this->role[0];
-        if ($role === 'd') {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->hasPermissionTo('[DESPACHANTE] - Acessar Sistema');
     }
 
     public function isCliente(): bool
     {
-        $role = $this->role[0];
-        if ($role === 'c') {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->hasPermissionTo('[CLIENTE] - Acessar Sistema');
     }
 
     public function getFuncao()
@@ -127,7 +129,7 @@ class User extends Authenticatable
             return 'undefined';
         }
     }
-    
+
     public function getIdDespachante()
     {
         if ($this->isDespachante())
@@ -148,18 +150,19 @@ class User extends Authenticatable
             abort(500, 'Erro ao obter a empresa.');
     }
 
-    public function status()
+    public function getStatus()
     {
         return match ($this->status) {
             'at' => 'Ativo',
             'in' => 'Inativo',
+            'ex' => 'Excluído',
         };
     }
 
     public function getProfilePhoto()
     {
         if ($this->profile_photo_path) {
-            return Storage::disk('local')->url($this->profile_photo_path);
+            return Storage::disk('public')->url($this->profile_photo_path);
         } else {
             return 'https://ui-avatars.com/api/?name=' . $this->name[0] . '&color=7F9CF5&background=EBF4FF';
         }

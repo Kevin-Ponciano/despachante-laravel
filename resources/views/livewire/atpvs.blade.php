@@ -114,9 +114,10 @@
                     @if($tipo === 'rv')
                         <td>{{$pedido->atpv->movimentacao()}}</td>
                     @endif
-                    <td class="text-center"><span class="badge {{$pedido->status()[1]}}">{{$pedido->status()[0]}}</span>
+                    <td class="text-center"><span
+                            class="badge {{$pedido->getStatus()[1]}}">{{$pedido->getStatus()[0]}}</span>
                     </td>
-                    <td>{{$pedido->atualizado_em()}}</td>
+                    <td>{{$pedido->getUpdatedAt()}}</td>
                 </tr>
             @empty
                 <tr>

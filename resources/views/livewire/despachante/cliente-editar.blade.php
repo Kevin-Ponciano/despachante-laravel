@@ -176,5 +176,6 @@
             </div>
         </div>
     </div>
+    {{--TODO: Adicionar mais detalhe na mensagem de exclusão--}}
     <x-delete-confirmation/>
 </div>

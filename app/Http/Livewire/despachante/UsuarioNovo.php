@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\despachante;
 
 use App\Mail\NewUser;
-use App\Traits\FunctionsTrait;
+use App\Traits\FunctionsHelpers;
 use Auth;
 use Hash;
 use Livewire\Component;
@@ -11,7 +11,7 @@ use Mail;
 
 class UsuarioNovo extends Component
 {
-    use FunctionsTrait;
+    use FunctionsHelpers;
 
     public $name;
     public $email;

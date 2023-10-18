@@ -21,16 +21,16 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
+        RolesAndPermissionsSeeder::run();
         $faker = Factory::create('pt_BR');
-
         Despachante::factory(3)->create()->each(function ($despachante) use ($faker) {
             $despachante->endereco_id = Endereco::factory()->create()->id;
             $despachante->plano_id = Plano::factory()->create()->id;
             $despachante->save();
 
-            User::factory(2)->create([
+            User::factory()->create([
                 'despachante_id' => $despachante->id,
-            ]);
+            ])->assignRole('Usuario Despachante');
 
             Cliente::factory(3)->create([
                 'despachante_id' => $despachante->id,
@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
                     'despachante_id' => null,
                     'cliente_id' => $cliente->id,
                 ]);
+                $user->assignRole('Cliente');
 
                 Pedido::factory(5)->create([
                     'criado_por' => $user->id,
@@ -81,20 +82,19 @@ class DatabaseSeeder extends Seeder
 
         });
 
-        User::create([
-            'name' => 'admin',
-            'email' => 'admin@admin',
-            'password' => Hash::make('123'),
-            'role' => 'da',
-            'status' => 'at',
-            'despachante_id' => Despachante::orderBy('id', 'desc')->first()->id,
-        ]);
-        User::factory()->create([
+        User::find(9)->assignRole('Admin')
+            ->update([
+                'name' => 'admin',
+                'email' => 'admin@admin',
+                'password' => Hash::make('123'),
+                'role' => 'da',
+                'status' => 'at',
+            ]);
+
+        User::find(12)->update([
             'name' => 'cliente',
-            'password' => Hash::make('123'),
-            'role' => 'ca',
             'status' => 'at',
-            'cliente_id' => 7,
+            'cliente_id' => 9,
         ]);
     }
 }

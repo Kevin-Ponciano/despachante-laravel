@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\despachante;
 
-use App\Traits\FunctionsTrait;
+use App\Traits\FunctionsHelpers;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ClienteEditar extends Component
 {
-    use FunctionsTrait;
+    use FunctionsHelpers;
 
     public $cliente;
     public $nomeCliente;
@@ -20,10 +20,8 @@ class ClienteEditar extends Component
 
     public function mount($id)
     {
-        if (Auth::user()->role[1] === 'u')
-            abort(403, 'Você não tem permissão para acessar esta página.');
         $this->cliente = Auth::user()->despachante->clientes()->where('numero_cliente', $id)->firstOrFail();
-        $this->usuario = $this->cliente->users()->where('role', 'ca')->firstOrFail();
+        $this->usuario = $this->cliente->user;
         $this->nomeCliente = $this->cliente->nome;
         $this->nomeUsuario = $this->usuario->name;
         $this->emailUsuario = $this->usuario->email;
@@ -108,8 +106,8 @@ class ClienteEditar extends Component
             $this->emit('success', ['message' => 'Cliente ativado com sucesso']);
             $this->status = 'at';
         } else {
-            session()->flash('error', "Cliente inativado com sucesso");
-            redirect()->route('despachante.clientes');
+            $this->emit('success', ['message' => 'Cliente inativado com sucesso']);
+            $this->status = 'in';
         }
 
     }
@@ -121,7 +119,7 @@ class ClienteEditar extends Component
 
     public function delete()
     {
-        $this->cliente->delete();
+        $this->cliente->update(['status' => 'ex']);
 
         session()->flash('success', "Cliente deletado com sucesso");
         return redirect()->route('despachante.clientes');

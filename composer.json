@@ -9,6 +9,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-zip": "*",
+        "backpack/crud": "^6.2",
+        "backpack/logmanager": "^5.0",
+        "backpack/permissionmanager": "^7.1",
+        "backpack/theme-tabler": "^1.1",
         "guzzlehttp/guzzle": "^7.7",
         "laravel/framework": "^10.0",
         "laravel/jetstream": "^3.0",
@@ -17,9 +22,10 @@
         "laravellegends/pt-br-validator": "10.0",
         "league/flysystem-aws-s3-v3": "3.0",
         "livewire/livewire": "^2.11",
-        "ext-zip": "*"
+        "spatie/laravel-permission": "^5.11"
     },
     "require-dev": {
+        "backpack/generators": "^4.0",
         "barryvdh/laravel-debugbar": "^3.8",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
@@ -55,6 +61,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "post-install-cmd": [
+            "php artisan storage:link --quiet"
         ]
     },
     "extra": {

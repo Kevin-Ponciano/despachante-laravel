@@ -15,8 +15,7 @@ class UsuarioEditar extends Component
 
     public function mount($id)
     {
-        if (Auth::user()->role[1] === 'u')
-            abort(403, 'Você não tem permissão para acessar esta página.');
+        #TODO: usar o CAN na view
         $this->user = Auth::user()->despachante->users()->findOrFail($id);
         $this->name = $this->user->name;
         $this->email = $this->user->email;
@@ -78,15 +77,15 @@ class UsuarioEditar extends Component
             $this->emit('success', ['message' => 'Usuário ativado com sucesso']);
             $this->status = 'at';
         } else {
-            session()->flash('error', "Usuário inativado com sucesso");
-            redirect()->route('despachante.usuarios');
+            $this->emit('error', 'Usuário desativado com sucesso');
+            $this->status = 'in';
         }
 
     }
 
     public function delete()
     {
-        $this->user->delete();
+        $this->user->update(['status' => 'ex']);
 
         session()->flash('success', "Usuário deletado com sucesso");
         return redirect()->route('despachante.usuarios');
