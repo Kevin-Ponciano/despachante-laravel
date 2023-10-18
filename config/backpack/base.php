@@ -14,7 +14,7 @@ return [
     | By default the registration is open only on localhost.
     */
 
-    'registration_open' => env('BACKPACK_REGISTRATION_OPEN', env('APP_ENV') === 'local'),
+    'registration_open' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
 
     // Set this to false if you would like to skip adding the password recovery routes
     // (you then need to manually define the routes in your web.php)
-    'setup_password_recovery_routes' => true,
+    'setup_password_recovery_routes' => false,
 
     // Set this to true if you would like to enable email verification for your user model.
     // Make sure your user model implements the MustVerifyEmail contract and your database
@@ -64,7 +64,7 @@ return [
 
     // When email verification is enabled, automatically add the Verified middleware to Backpack routes?
     // Set false if you want to use your own Verified middleware in `middleware_class`.
-    'setup_email_verification_middleware' => true,
+    'setup_email_verification_middleware' => false,
 
     // How many times in any given time period should the user be allowed to
     // request a new verification email?
@@ -144,7 +144,7 @@ return [
     // Other options:
     // - null (generic image with their first letter)
     // - example_method_name (specify the method on the User model that returns the URL)
-    'avatar_type' => 'gravatar',
+    'avatar_type' => 'getProfilePhoto',
 
     // Gravatar fallback options are 'identicon', 'monsterid', 'wavatar', 'retro', 'robohash', 'blank'
     // 'blank' will keep the generic image with the user first letter

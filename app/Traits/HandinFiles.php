@@ -10,7 +10,7 @@ use Livewire\WithFileUploads;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 
-trait HandinFilesTrait
+trait HandinFiles
 {
     use WithFileUploads;
 
@@ -246,7 +246,7 @@ trait HandinFilesTrait
             $link = $file->url;
             $path = $file->path;
             $mime = $file->mime_type;
-            $data = Carbon::createFromFormat('Y-m-d H:i:s', $file->updated_at)->format('d/m/Y H:i');
+            $data = $file->updated_at;
 
             $files[] = [
                 'name' => $name,

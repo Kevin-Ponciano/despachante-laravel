@@ -41,7 +41,7 @@ class Perfil extends Component
         if (!$this->photo)
             return;
         $this->user->update([
-            'profile_photo_path' => $this->photo->storeAs('profile-photos', $this->user->id . '.jpg', 'public'),
+            'profile_photo_path' => $this->photo->store('profile-photos', 'public'),
         ]);
 
         $this->emit('savedPhoto');

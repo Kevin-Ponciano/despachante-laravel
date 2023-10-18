@@ -41,10 +41,10 @@
                     <td class="text-break">{{$pendencia->nome}}</td>
                     <td class="text-center">
                         <span class="badge @if($pendencia->status==='co') bg-success @else bg-warning @endif">
-                            {{$pendencia->status()}}
+                            {{$pendencia->getStatus()}}
                         </span>
                     </td>
-                    <td class="text-center text-nowrap">{{$pendencia->concluido_em()}}</td>
+                    <td class="text-center text-nowrap">{{$pendencia->getConcludedAt()}}</td>
                     <td class="text-center">
                         <input type="checkbox" class="form-check-input-success"
                                @if(!Auth::user()->isDespachante()) disabled @endif

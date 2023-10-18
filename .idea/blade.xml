@@ -5,6 +5,10 @@
       <data directive="@append" />
       <data directive="@auth" injection="true" prefix="&lt;?php&#10;if(auth()-&gt;guard(" suffix=")-&gt;check()): ?&gt;" />
       <data directive="@aware" injection="true" prefix="&lt;?php $attributes = $attributes-&gt;exceptProps(" suffix="); ?&gt;" />
+      <data directive="@basset" injection="true" prefix="&lt;?php _bladeDirective(" suffix="); ?&gt;" />
+      <data directive="@bassetArchive" injection="true" prefix="&lt;?php _bladeDirective(" suffix="); ?&gt;" />
+      <data directive="@bassetBlock" injection="true" prefix="&lt;?php _bladeDirective(" suffix="); ?&gt;" />
+      <data directive="@bassetDirectory" injection="true" prefix="&lt;?php _bladeDirective(" suffix="); ?&gt;" />
       <data directive="@break" injection="true" prefix="&lt;?php&#10;if(" suffix=") break; ?&gt;" />
       <data directive="@can" injection="true" prefix="&lt;?php&#10;if (app(\Illuminate\Contracts\Auth\Access\Gate::class)-&gt;check(" suffix=")): ?&gt;" />
       <data directive="@canany" injection="true" prefix="&lt;?php&#10;if (app(\Illuminate\Contracts\Auth\Access\Gate::class)-&gt;any(" suffix=")): ?&gt;" />
@@ -31,6 +35,8 @@
       <data directive="@elseif" injection="true" prefix="&lt;?php&#10;elseif(" suffix="): ?&gt;" />
       <data directive="@elserole" injection="true" prefix="&lt;?php elseif(\Spatie\Permission\PermissionServiceProvider::bladeMethodWrapper('hasRole', {" suffix="})): ?&gt;" />
       <data directive="@empty" injection="true" prefix="&lt;?php&#10;if(empty(" suffix=")): ?&gt;" />
+      <data directive="@endBassetBlock" />
+      <data directive="@endLoadOnce" />
       <data directive="@endauth" />
       <data directive="@endcan" />
       <data directive="@endcanany" />
@@ -96,6 +102,9 @@
       <data directive="@livewire" injection="true" prefix="&lt;?php \Livewire\Livewire::mount(" suffix="); ?&gt;" />
       <data directive="@livewireScripts" />
       <data directive="@livewireStyles" />
+      <data directive="@loadOnce" injection="true" prefix="&lt;?php _bladeDirective(" suffix="); ?&gt;" />
+      <data directive="@loadScriptOnce" injection="true" prefix="&lt;?php _bladeDirective(" suffix="); ?&gt;" />
+      <data directive="@loadStyleOnce" injection="true" prefix="&lt;?php _bladeDirective(" suffix="); ?&gt;" />
       <data directive="@method" injection="true" prefix="&lt;?php&#10;echo method_field(" suffix="); ?&gt;" />
       <data directive="@once" />
       <data directive="@overwrite" />

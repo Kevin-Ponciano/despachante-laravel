@@ -2,14 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SoftDeleteScope;
+use App\Traits\AttributeModel;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Despachante extends Model
 {
+    use CrudTrait;
     use HasFactory;
+    use softDeletes;
+    use AttributeModel;
 
     protected $fillable = [
         'razao_social',
@@ -20,6 +27,18 @@ class Despachante extends Model
         'endereco_id',
         'plano_id',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new SoftDeleteScope);
+
+        static::deleted(function ($model) {
+            $model->clientes()->each(function ($item) {
+                $item->delete();
+            });
+        });
+    }
 
 
     public function endereco(): BelongsTo
@@ -47,14 +66,14 @@ class Despachante extends Model
         return $this->hasMany(User::class);
     }
 
-    public function pedidos()
-    {
-        return $this->hasManyThrough(Pedido::class, Cliente::class);
-    }
-
     public function pedidosProcessos()
     {
         return $this->pedidos()->has('processo');
+    }
+
+    public function pedidos()
+    {
+        return $this->hasManyThrough(Pedido::class, Cliente::class);
     }
 
     public function pedidosAtpvs()
@@ -62,7 +81,7 @@ class Despachante extends Model
         return $this->pedidos()->has('atpv');
     }
 
-    public function nome()
+    public function getNome()
     {
         return $this->nome_fantasia ?? $this->razao_social;
     }

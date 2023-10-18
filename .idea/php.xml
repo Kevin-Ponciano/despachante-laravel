@@ -154,6 +154,8 @@
       <path value="$PROJECT_DIR$/vendor/creativeorange/gravatar" />
       <path value="$PROJECT_DIR$/vendor/backpack/generators" />
       <path value="$PROJECT_DIR$/vendor/backpack/theme-tabler" />
+      <path value="$PROJECT_DIR$/vendor/backpack/permissionmanager" />
+      <path value="$PROJECT_DIR$/vendor/backpack/logmanager" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />

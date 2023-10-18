@@ -1,7 +1,7 @@
 <div>
-    <x-page-title :title="$tipo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->status()"
+    <x-page-title :title="$tipo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->getStatus()"
                   :status="$status" :responsavel="$pedido->usuarioResponsavel"
-                  :concluido-por="$pedido->usuarioConcluinte" :concluido-em="$pedido->concluido_em()"/>
+                  :concluido-por="$pedido->usuarioConcluinte" :concluido-em="$pedido->getConcludedAt()"/>
     <div class="mt-2">
         <div class="container">
             <div class="card">

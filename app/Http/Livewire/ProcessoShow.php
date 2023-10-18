@@ -3,16 +3,16 @@
 namespace App\Http\Livewire;
 
 use App\Models\PedidoServico;
-use App\Traits\FunctionsTrait;
-use App\Traits\HandinFilesTrait;
+use App\Traits\FunctionsHelpers;
+use App\Traits\HandinFiles;
 use Arr;
 use Auth;
 use Livewire\Component;
 
 class ProcessoShow extends Component
 {
-    use FunctionsTrait;
-    use HandinFilesTrait;
+    use FunctionsHelpers;
+    use HandinFiles;
 
     public $pedido;
     public $cliente;

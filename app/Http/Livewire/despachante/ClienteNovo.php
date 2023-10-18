@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\despachante;
 
 use App\Mail\NewClient;
-use App\Traits\FunctionsTrait;
+use App\Traits\FunctionsHelpers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -12,7 +12,7 @@ use Mail;
 
 class ClienteNovo extends Component
 {
-    use FunctionsTrait;
+    use FunctionsHelpers;
 
     public $nome;
     public $email;

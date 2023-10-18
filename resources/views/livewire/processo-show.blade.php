@@ -1,7 +1,7 @@
 <div>
-    <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->status()"
+    <x-page-title title="Processo" :subtitle="'Pedido: '.$pedido->numero_pedido" :status-display="$pedido->getStatus()"
                   :status="$status" :responsavel="$pedido->usuarioResponsavel"
-                  :concluido-por="$pedido->usuarioConcluinte" :concluido-em="$pedido->concluido_em()"/>
+                  :concluido-por="$pedido->usuarioConcluinte" :concluido-em="$pedido->getConcludedAt()"/>
     <div class="mt-2" x-data="{ isEditing: @entangle('isEditing'), status: @entangle('status'), inputRef: null }">
         <div class="container">
             <div class="card">

@@ -3,9 +3,48 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CheckIfAdmin
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        if (backpack_auth()->guest()) {
+            return $this->respondToUnauthorizedRequest($request);
+        }
+
+        if (!$this->checkIfUserIsAdmin(backpack_user())) {
+            return $this->respondToUnauthorizedRequest($request);
+        }
+
+        return $next($request);
+    }
+
+    /**
+     * Answer to unauthorized access request.
+     *
+     * @param Request $request
+     * @return Response|RedirectResponse
+     */
+    private function respondToUnauthorizedRequest($request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response(trans('backpack::base.unauthorized'), 401);
+        } else {
+            return redirect()->guest(backpack_url('login'));
+        }
+    }
+
     /**
      * Checked that the logged in user is an administrator.
      *
@@ -22,47 +61,11 @@ class CheckIfAdmin
      * does not have a '/home' route, use something you've built for your users
      * (again - users, not admins).
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable|null  $user
+     * @param Authenticatable|null $user
      * @return bool
      */
     private function checkIfUserIsAdmin($user)
     {
-        // return ($user->is_admin == 1);
-        return true;
-    }
-
-    /**
-     * Answer to unauthorized access request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
-     */
-    private function respondToUnauthorizedRequest($request)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
-            return response(trans('backpack::base.unauthorized'), 401);
-        } else {
-            return redirect()->guest(backpack_url('login'));
-        }
-    }
-
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
-    {
-        if (backpack_auth()->guest()) {
-            return $this->respondToUnauthorizedRequest($request);
-        }
-
-        if (! $this->checkIfUserIsAdmin(backpack_user())) {
-            return $this->respondToUnauthorizedRequest($request);
-        }
-
-        return $next($request);
+        return ($user->hasPermissionTo('[ADMIN] - Acessar Admin'));
     }
 }

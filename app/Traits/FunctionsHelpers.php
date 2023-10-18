@@ -6,7 +6,7 @@ use App\Http\Livewire\Pendencias;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-trait FunctionsTrait
+trait FunctionsHelpers
 {
     public function regexMoney($number)
     {
@@ -126,8 +126,7 @@ trait FunctionsTrait
             'tipo' => 'ep',
         ]);
 
-        $this->pedido->delete();
-        session()->flash('error', "Pedido $numero_pedido Excluído");
+        session()->flash('error', "Pedido $numero_pedido Excluído Com Sucesso");
         return redirect()->route('despachante.dashboard');
     }
 

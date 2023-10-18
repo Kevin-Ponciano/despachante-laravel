@@ -10,7 +10,7 @@
                     </a>
                 </h1>
                 <div class="fw-bolder text-capitalize text-center w-8">
-                    {{Auth::user()->empresa()->nome()}}
+                    {{Auth::user()->empresa()->getNome()}}
                 </div>
                 <div class="navbar-nav flex-row order-md-last">
                     <div class="d-none d-md-flex">

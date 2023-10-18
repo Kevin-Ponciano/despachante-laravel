@@ -5,15 +5,15 @@ namespace App\Http\Livewire;
 use App\Models\Atpv;
 use App\Models\Endereco;
 use App\Models\Pedido;
-use App\Traits\FunctionsTrait;
-use App\Traits\HandinFilesTrait;
+use App\Traits\FunctionsHelpers;
+use App\Traits\HandinFiles;
 use Auth;
 use Livewire\Component;
 
 class AtpvNovo extends Component
 {
-    use HandinFilesTrait;
-    use FunctionsTrait;
+    use HandinFiles;
+    use FunctionsHelpers;
 
     public $clientes;
     public $clienteId;
@@ -177,8 +177,8 @@ class AtpvNovo extends Component
 
         $pedido->timelines()->create([
             'user_id' => Auth::user()->id,
-            'titulo' => $atpv->tipo() . ' criado',
-            'descricao' => 'O ' . $atpv->tipo() . ' foi criado por <b>' . Auth::user()->name . '</b>.',
+            'titulo' => $atpv->getTipo() . ' criado',
+            'descricao' => 'O ' . $atpv->getTipo() . ' foi criado por <b>' . Auth::user()->name . '</b>.',
             'tipo' => 'np',
         ]);
 
@@ -191,7 +191,7 @@ class AtpvNovo extends Component
 
         $this->emit('$refresh');
         $this->emit('success', [
-            'message' => $atpv->tipo() . " criado com sucesso.",
+            'message' => $atpv->getTipo() . " criado com sucesso.",
             'url' => $url,
         ]);
     }

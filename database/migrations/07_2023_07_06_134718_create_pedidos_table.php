@@ -25,10 +25,9 @@ return new class extends Migration {
             $table->boolean('solicitado_cancelamento')->default(false);
             $table->text('observacoes')->nullable();
 
-            $table->dateTime('criado_em');
-            $table->dateTime('atualizado_em')->nullable();
-            $table->dateTime('concluido_em')->nullable();
-            $table->dateTime('visualizado_em')->nullable();
+            $table->dateTime('viewed_at')->nullable();
+            $table->timestamps();
+            $table->dateTime('concluded_at')->nullable();
             $table->softDeletes();
 
             $table->foreignId('criado_por')->constrained('usuarios')->onUpdate('cascade');

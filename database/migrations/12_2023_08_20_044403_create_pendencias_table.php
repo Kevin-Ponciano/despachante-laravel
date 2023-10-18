@@ -15,9 +15,8 @@ return new class extends Migration {
             $table->char('status', 2);
             $table->string('input')->nullable();
             $table->string('observacao')->nullable();
-            $table->dateTime('criado_em');
-            $table->dateTime('atualizado_em')->nullable();
-            $table->dateTime('concluido_em')->nullable();
+            $table->timestamps();
+            $table->dateTime('concluded_at')->nullable();
             $table->softDeletes();
         });
     }
