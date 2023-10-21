@@ -11,14 +11,14 @@
                             {{$subtitle ?? ''}}
                         </div>
                     </div>
-                    @if(Auth::user()->isDespachante())
+                    @can('[ADMIN] - Acessar Admin')
                         @if($status??false)
                             <div class="mt-5">
                                 <span class="page-subtitle">Responsável: </span>
                                 {{$responsavel->name ?? ''}}
                             </div>
                         @endif
-                    @endif
+                    @endcan
                 </div>
             </div>
             @if($status ?? false)
@@ -38,7 +38,7 @@
                         @endif
                     </div>
                 </div>
-                @if(Auth::user()->isDespachante())
+                @can('[ADMIN] - Acessar Admin')
                     <div class="mt-2">
                         <div x-data="{status : @entangle('status') }" class="btn-list">
                             <button class="btn btn-primary" x-show="status==='ab' || status==='pe' || status==='rp'"
@@ -54,15 +54,14 @@
                                     wire:click="conclude">
                                 Concluir
                             </button>
-                            @if(Auth::user()->role[1] === 'a')
+                            @can('[DESPACHANTE] - Excluir Pedidos')
                                 <button class="btn btn-danger" x-show="status!=='ex'" data-bs-toggle="modal"
                                         data-bs-target="#modal-delete">
                                     Excluir
                                 </button>
-                            @endif
+                            @endcan
                         </div>
                     </div>
-
                     <x-delete-confirmation/>
                     <x-modal-aviso>
                         <div class="text-center">
@@ -70,9 +69,10 @@
                             <div>Para prosseguir o pedido é necessário resolver as pendências.</div>
                         </div>
                     </x-modal-aviso>
-                @else
+                @endcan
+                @cannot('[ADMIN] - Acessar Admin')
                     <div></div>
-                @endif
+                @endcannot
             @endif
         </div>
     </div>

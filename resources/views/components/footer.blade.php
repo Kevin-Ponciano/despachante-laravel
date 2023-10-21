@@ -3,11 +3,18 @@
         <div class="row text-center align-items-center flex-row-reverse">
             <div class="col-lg-auto ms-lg-auto">
                 <ul class="list-inline list-inline-dots mb-0">
-                    <li class="list-inline-item"><a href="" target="_blank" class="link-secondary"
-                                                    rel="noopener">Suporte</a></li>
+                    <li class="list-inline-item">
+                        <a href="mailto:kevin.ponciano@outlook.com" class="link-secondary" rel="noopener">
+                            <i class="ti ti-mail"></i>
+                            Suporte
+                        </a>
+                    </li>
                     {{--                    <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a></li>--}}
-                    {{--                    <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank"--}}
-                    {{--                                                    class="link-secondary" rel="noopener">Source code</a></li>--}}
+                    <li class="list-inline-item"><a href="https://github.com/Kevin-Ponciano" target="_blank"
+                                                    class="link-secondary" rel="noopener">
+                            <i class="ti ti-brand-github"></i>
+                        </a>
+                    </li>
                     {{--                    <li class="list-inline-item">--}}
                     {{--                        <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary"--}}
                     {{--                           rel="noopener">--}}
@@ -28,7 +35,7 @@
                 <ul class="list-inline list-inline-dots mb-0">
                     <li class="list-inline-item">
                         Copyright © {{date('Y')}}
-                        <a href="." class="link-secondary">{{ config('app.name')}}</a>.
+                        <a href="https://github.com/Kevin-Ponciano" class="link-secondary">{{ config('app.name')}}</a>.
                         All rights reserved.
                     </li>
                     <li class="list-inline-item">

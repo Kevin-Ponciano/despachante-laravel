@@ -5,15 +5,15 @@ namespace App\Http\Livewire;
 use App\Models\Pedido;
 use App\Models\PedidoServico;
 use App\Models\Processo;
-use App\Traits\FunctionsTrait;
-use App\Traits\HandinFilesTrait;
+use App\Traits\FunctionsHelpers;
+use App\Traits\HandinFiles;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ProcessoNovo extends Component
 {
-    use HandinFilesTrait;
-    use FunctionsTrait;
+    use HandinFiles;
+    use FunctionsHelpers;
 
     public $clientes;
     public $clienteId;

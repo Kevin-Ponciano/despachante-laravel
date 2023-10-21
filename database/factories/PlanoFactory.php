@@ -17,9 +17,9 @@ class PlanoFactory extends Factory
             'nome' => $faker->word,
             'preco' => $faker->randomFloat(2, 100, 1000),
             'descricao' => $faker->text,
-            'qtd_clientes' => 3,
-            'qtd_usuarios_clientes' => 3,
-            'qtd_usuarios' => 3,
+            'qtd_clientes' => $this->faker->numberBetween(1, 100),
+            'qtd_usuarios' => $this->faker->numberBetween(1, 100),
+            'qtd_processos_mes' => $this->faker->numberBetween(1, 1000000),
         ];
     }
 }

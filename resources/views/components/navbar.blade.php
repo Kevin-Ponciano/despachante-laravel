@@ -3,14 +3,14 @@
         <div class="navbar">
             <div class="container-xl">
                 <h1 class="navbar-brand d-none-navbar-horizontal pe-0 pe-md-3">
-                    <a class="card-link" href="{{route('welcome')}}">
+                    <a class="card-link" href="{{route('dashboard')}}">
                         <img src="{{asset('assets/img/logo3.png')}}" alt="Saled"
                              class="navbar-brand-image">
-                        .A.L.E.D
+                        .G.P.D
                     </a>
                 </h1>
                 <div class="fw-bolder text-capitalize text-center w-8">
-                    {{Auth::user()->empresa()->nome()}}
+                    {{$despachanteNome}}
                 </div>
                 <div class="navbar-nav flex-row order-md-last">
                     <div class="d-none d-md-flex">
@@ -201,8 +201,8 @@
                                 <span class="avatar avatar-sm"
                                       style="background-image: url({{Auth::user()->getProfilePhoto()}})"></span>
                             <div class="d-none d-xl-block ps-2">
-                                <div>{{$nomeUsuario}}</div>
-                                <div class="mt-1 small text-muted">{{$funcao}}</div>
+                                <div>{{Auth::user()->name}}</div>
+                                <div class="mt-1 small text-muted">{{$subName}}</div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

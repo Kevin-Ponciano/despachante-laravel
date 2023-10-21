@@ -15,8 +15,6 @@ class UsuarioEditar extends Component
 
     public function mount($id)
     {
-        if (Auth::user()->role[1] === 'u')
-            abort(403, 'Você não tem permissão para acessar esta página.');
         $this->user = Auth::user()->despachante->users()->findOrFail($id);
         $this->name = $this->user->name;
         $this->email = $this->user->email;
@@ -28,11 +26,11 @@ class UsuarioEditar extends Component
     public function changeName()
     {
         $this->validate([
-            'name' => 'required|regex:/^[a-zA-Z0-9_]+$/|unique:users,name,' . $this->id,
+            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,' . $this->id,
         ], [
             'name.required' => 'Obrigatório.',
             'name.unique' => 'Nome de usuário já cadastrado.',
-            'name.regex' => 'O nome de usuário deve conter apenas letras, números e sublinhados.',
+            'name.regex' => 'O nome de usuário não pode conter caracteres especiais.'
         ]);
         $this->user->update([
             'name' => $this->name,
@@ -57,6 +55,7 @@ class UsuarioEditar extends Component
 
     public function changeRole()
     {
+        #TODO: Implementar permissoes parecidos com o do BACKPACK
         $usersAdmin = Auth::user()->despachante->users()->where('role', 'da')->get();
         if ($usersAdmin->count() == 1 && $this->role != 'da') {
             $this->addError('role', 'Deve haver pelo menos um administrador.');
@@ -78,8 +77,8 @@ class UsuarioEditar extends Component
             $this->emit('success', ['message' => 'Usuário ativado com sucesso']);
             $this->status = 'at';
         } else {
-            session()->flash('error', "Usuário inativado com sucesso");
-            redirect()->route('despachante.usuarios');
+            $this->emit('error', 'Usuário desativado com sucesso');
+            $this->status = 'in';
         }
 
     }

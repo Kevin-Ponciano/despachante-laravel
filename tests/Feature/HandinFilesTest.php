@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Traits\HandinFilesTrait;
+use App\Traits\HandinFiles;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class HandinFilesTest extends TestCase
 {
-    use HandinFilesTrait;
+    use HandinFiles;
 
     public function test_upload_files()
     {

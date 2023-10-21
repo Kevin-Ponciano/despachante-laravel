@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SoftDeleteScope;
+use App\Traits\AttributeModel;
 use Auth;
-use Carbon\Carbon;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pedido extends Model
 {
+    use CrudTrait;
     use HasFactory;
     use softDeletes;
-
-    const CREATED_AT = 'criado_em';
-    const UPDATED_AT = 'atualizado_em';
+    use AttributeModel;
 
     protected $fillable = [
         'comprador_nome',
@@ -28,42 +29,40 @@ class Pedido extends Model
         'criado_por',
         'responsavel_por',
         'concluido_por',
-        'concluido_em',
+        'viewed_at',
+        'concluded_at',
         'cliente_id',
     ];
 
     protected static function boot()
     {
         parent::boot();
+        static::addGlobalScope(new SoftDeleteScope);
 
-        static::creating(function ($pedido) {
-            $numero_pedido = $pedido->cliente->despachante->pedidos()->max('numero_pedido') + 1;
-            $pedido->numero_pedido = $numero_pedido;
+        static::creating(function ($model) {
+            $numero_pedido = $model->cliente->despachante->pedidos()->count() + 1;
+            $model->numero_pedido = $numero_pedido;
+        });
+
+        static::deleted(function ($model) {
+            $model->atpv->delete();
+            $model->processo->delete();
         });
     }
 
-    public function criado_em()
+    public function atpv()
     {
-        if (!$this->criado_em)
-            return null;
-        $criado_em = Carbon::createFromFormat('Y-m-d H:i:s', $this->criado_em);
-        return $criado_em->format('d/m/Y') . ' - ' . $criado_em->format('H:i');
+        return $this->hasOne(Atpv::class);
     }
 
-    public function atualizado_em()
+    public function processo()
     {
-        if (!$this->atualizado_em)
-            return null;
-        $atualizado_em = Carbon::createFromFormat('Y-m-d H:i:s', $this->atualizado_em);
-        return $atualizado_em->format('d/m/Y') . ' - ' . $atualizado_em->format('H:i');
+        return $this->hasOne(Processo::class);
     }
 
-    public function concluido_em()
+    public function getViewedAtAttribute($value): ?string
     {
-        if (!$this->concluido_em)
-            return null;
-        $concluido_em = Carbon::createFromFormat('Y-m-d H:i:s', $this->concluido_em);
-        return $concluido_em->format('d/m/Y') . ' - ' . $concluido_em->format('H:i');
+        return $this->dataTimeToBr($value);
     }
 
     public function usuarioCriador()
@@ -84,16 +83,6 @@ class Pedido extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
-    }
-
-    public function atpv()
-    {
-        return $this->hasOne(Atpv::class);
-    }
-
-    public function processo()
-    {
-        return $this->hasOne(Processo::class);
     }
 
     public function pendencias()
@@ -117,7 +106,7 @@ class Pedido extends Model
             ->withPivot('preco');
     }
 
-    public function status()
+    public function getStatus()
     {
         switch ($this->status) {
             case 'ab':

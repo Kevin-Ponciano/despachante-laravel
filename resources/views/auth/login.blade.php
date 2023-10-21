@@ -18,7 +18,7 @@
                         @enderror
                     </h2>
 
-                    <form action="{{route('login')}}" method="POST">
+                    <form id="login-form" action="{{route('login')}}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Nome de Usuário</label>
@@ -60,13 +60,37 @@
                             </button>
                         </div>
                     </form>
+                    <h3>Usuarios Testes</h3>
+                    <div class="d-flex justify-content-start gap-2">
+                        <div>
+                            <a id="a" class="btn btn-secondary">
+                                Despachante
+                            </a>
+                        </div>
+                        <div>
+                            <a id="b" class="btn btn-secondary">
+                                Cliente
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
-                <!-- Photo -->
                 <div class="bg-cover h-100 min-vh-100"
                      style="background-image: url({{asset('assets/img/mecanico.jpeg')}})"></div>
             </div>
         </div>
     </div>
+    <script>
+        $('#a').click(function () {
+            $('input[name="name"]').val('despachante');
+            $('input[name="password"]').val('123');
+            $('#login-form').submit();
+        });
+        $('#b').click(function () {
+            $('input[name="name"]').val('cliente');
+            $('input[name="password"]').val('123');
+            $('#login-form').submit();
+        });
+    </script>
 </x-guest-layout>

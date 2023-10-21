@@ -66,7 +66,7 @@ class Atpvs extends Component
         elseif (Auth::user()->isCliente())
             return redirect()->route('cliente.atpvs.show', $id);
         else
-            abort(500);
+            return null;
     }
 
     public function clearFilters()
@@ -84,7 +84,6 @@ class Atpvs extends Component
     public function render()
     {
         $pedidosQuery = Auth::user()->empresa()->pedidosAtpvs()->with('atpv', 'cliente')
-            ->where('pedidos.status', '!=', 'ex')
             ->when($this->status, function (Builder $query, $status) {
                 return $query->where('pedidos.status', $status);
             })
