@@ -4,7 +4,7 @@
 Olá <b>{{ $user->cliente->nome }}</b>,<br>
 Seja bem-vindo ao sistema <b>{{ config('app.name') }}</b>.<br>
 
-Sua conta foi criada pela empresa <b>{{ $user->cliente->despachante->nome() }}</b>.<br>
+Sua conta foi criada pela empresa <b>{{ $user->cliente->despachante->getNome() }}</b>.<br>
 Abaixo estão suas credenciais de acesso:
 
 Nome de Usuário: <b>{{ $user->name }}</b><br>

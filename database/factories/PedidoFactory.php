@@ -20,10 +20,8 @@ class PedidoFactory extends Factory
             'veiculo' => $faker->word,
             'preco_honorario' => $faker->randomFloat(2, 100, 1000),
             'status' => $faker->randomElement(['ab', 'rp', 'ea', 'pe', 'co']),
-            'solicitado_cancelamento' => 0,
             'criado_por' => 1,
             'responsavel_por' => null,
-            'concluido_por' => $faker->randomElement([null, 1]),
             'cliente_id' => 1,
         ];
     }

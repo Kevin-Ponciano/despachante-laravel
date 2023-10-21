@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\AttributeModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Timeline extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes;
+    use HasFactory;
+    use AttributeModel;
 
     protected $fillable = [
         'user_id',
@@ -30,9 +33,9 @@ class Timeline extends Model
         return $this->belongsTo(Pedido::class);
     }
 
-    public function getCreatedAtAttribute($value)
+    public function getCreatedAt()
     {
-        $carbon = new Carbon($value);
+        $carbon = new Carbon($this->created_at);
         $now = Carbon::now();
 
         if ($carbon->isToday()) {
@@ -44,7 +47,7 @@ class Timeline extends Model
         }
     }
 
-    public function tipo()
+    public function getTipo()
     {
         switch ($this->tipo) {
             case 'np':
@@ -72,6 +75,8 @@ class Timeline extends Model
                 return ['step-color' => 'steps-blue', 'icon' => 'text-primary ti ti-download', 'bg' => 'bg-primary'];
             case 'ef':
                 return ['step-color' => 'steps-red', 'icon' => 'text-danger ti ti-trash', 'bg' => 'bg-danger'];
+            default:
+                return ['step-color' => 'steps-yellow', 'icon' => 'text-yellow ti ti-info', 'bg' => 'bg-yellow'];
         }
     }
 }

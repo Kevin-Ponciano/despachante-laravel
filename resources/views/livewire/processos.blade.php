@@ -2,7 +2,7 @@
     <x-page-title title="Processos"/>
     <x-livewire-table :data="$pedidos">
         <x-slot:filters>
-            @if(Auth::user()->isDespachante())
+            @can('[ADMIN] - Acessar Admin')
                 <div class="text-muted">
                     Clientes:
                     <div class="me-2 d-inline-block" wire:ignore>
@@ -14,7 +14,7 @@
                         </select>
                     </div>
                 </div>
-            @endif
+            @endcan
             <div class="text-muted">
                 Status:
                 <div class="me-2 d-inline-block">
@@ -101,10 +101,11 @@
                     @if($status === 'ea')
                         <td>{{$pedido->usuarioResponsavel->name??'-'}}</td>
                     @endif
-                    <td>{{$pedido->processo->tipo()}}</td>
-                    <td class="text-center"><span class="badge {{$pedido->status()[1]}}">{{$pedido->status()[0]}}</span>
+                    <td>{{$pedido->processo->getTipo()}}</td>
+                    <td class="text-center"><span
+                            class="badge {{$pedido->getStatus()[1]}}">{{$pedido->getStatus()[0]}}</span>
                     </td>
-                    <td>{{$pedido->atualizado_em()}}</td>
+                    <td>{{$pedido->getUpdatedAt()}}</td>
                 </tr>
             @empty
                 <tr>

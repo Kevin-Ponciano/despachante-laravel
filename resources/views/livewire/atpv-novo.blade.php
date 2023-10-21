@@ -2,7 +2,7 @@
     @csrf
     <div class="p-3">
         <div class="d-flex justify-content-between">
-            @if(Auth::user()->isDespachante())
+            @can('[ADMIN] - Acessar Admin')
                 <div class="col-auto">
                     <div class="mb-3">
                         <label class="form-label">Cliente Logista</label>
@@ -22,7 +22,7 @@
                         @error('clienteId')<span class="invalid-feedback"> {{ $message }}</span> @enderror
                     </div>
                 </div>
-            @endif
+            @endcan
             @if($isRenave)
                 <div class="col-auto mb-3">
                     <label class="form-label">Movimentação Renave</label>

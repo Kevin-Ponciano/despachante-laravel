@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('nome');
             $table->decimal('preco', 12)->default(0);
-            $table->string('descricao', 500)->nullable();
-            $table->string('qtd_clientes');
-            $table->string('qtd_usuarios_clientes');
-            $table->string('qtd_usuarios');
+            $table->text('descricao')->nullable();
+            $table->smallInteger('qtd_clientes')->unsigned();
+            $table->smallInteger('qtd_usuarios')->unsigned();
+            $table->integer('qtd_processos_mes')->unsigned();
             $table->timestamps();
             $table->softDeletes();
         });

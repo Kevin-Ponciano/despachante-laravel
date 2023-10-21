@@ -19,8 +19,7 @@
                     class="badge bg-red text-red-fg ms-2">{{$qtd_clientes}}</span>
                 <x-helper>
                     <p>Representa o número de clientes que ainda podem ser cadastrados.</p>
-                    <p>Para aumentar o número de clientes disponíveis, entre em contato com o suporte
-                        <br> ou deleta os clientes inativos.</p>
+                    <p>Para aumentar o número de clientes disponíveis, entre em contato com o suporte.</p>
                 </x-helper>
             </div>
         </div>

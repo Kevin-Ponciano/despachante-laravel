@@ -10,7 +10,7 @@ use Livewire\WithFileUploads;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 
-trait HandinFilesTrait
+trait HandinFiles
 {
     use WithFileUploads;
 
@@ -246,7 +246,7 @@ trait HandinFilesTrait
             $link = $file->url;
             $path = $file->path;
             $mime = $file->mime_type;
-            $data = Carbon::createFromFormat('Y-m-d H:i:s', $file->updated_at)->format('d/m/Y H:i');
+            $data = $file->updated_at;
 
             $files[] = [
                 'name' => $name,
@@ -340,7 +340,7 @@ trait HandinFilesTrait
             return null;
         $mime = Storage::mimeType($pathFile);
         # TODO: Criar um evento que ao clicar em visualizar o arquivo, verifica se o link ainda é válido, se não for, cria um novo link e atualiza no banco de dados
-        $url = Storage::temporaryUrl($pathFile, Carbon::now()->addDays(7));
+        $url = Storage::url($pathFile, Carbon::now()->addDays(7));
 
         Arquivo::updateOrCreate(
             [

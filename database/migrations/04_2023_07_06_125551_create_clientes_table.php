@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('numero_cliente');
+            $table->unsignedBigInteger('numero_cliente')->index();
             $table->string('nome');
             $table->char('status', 2);
             $table->decimal('preco_1_placa', 12)->default(0);

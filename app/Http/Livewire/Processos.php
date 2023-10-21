@@ -59,7 +59,7 @@ class Processos extends Component
         elseif (Auth::user()->isCliente())
             return redirect()->route('cliente.processos.show', $id);
         else
-            abort(500);
+            return null;
     }
 
     public function clearFilters()
@@ -77,7 +77,6 @@ class Processos extends Component
     public function render()
     {
         $pedidosQuery = Auth::user()->empresa()->pedidosProcessos()->with('processo', 'cliente')
-            ->where('pedidos.status', '!=', 'ex')
             ->when($this->status, function (Builder $query, $status) {
                 return $query->where('pedidos.status', $status);
             })

@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use App\Traits\FunctionsTrait;
-use App\Traits\HandinFilesTrait;
+use App\Traits\FunctionsHelpers;
+use App\Traits\HandinFiles;
 use Arr;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -11,8 +11,8 @@ use Str;
 
 class AtpvShow extends Component
 {
-    use FunctionsTrait;
-    use HandinFilesTrait;
+    use FunctionsHelpers;
+    use HandinFiles;
 
     public $pedido;
     public $cliente;
@@ -108,12 +108,12 @@ class AtpvShow extends Component
     {
         $this->pedido = Auth::user()->empresa()->pedidosAtpvs()->where('numero_pedido', $id)->firstOrFail();
         $this->cliente = $this->pedido->cliente->nome;
-        $this->tipo = $this->pedido->atpv->tipo();
+        $this->tipo = $this->pedido->atpv->getTipo();
         switch ($this->tipo) {
             case 'RENAVE':
                 $this->isRenave = true;
                 $this->veiculo['codigoCrv'] = $this->pedido->atpv->codigo_crv;
-                $this->movimentacao = $this->pedido->atpv->movimentacao();
+                $this->movimentacao = $this->pedido->atpv->getMovimentacao();
                 break;
             case 'ATPV':
                 $this->isRenave = false;
