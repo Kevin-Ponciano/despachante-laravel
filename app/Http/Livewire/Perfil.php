@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire;
 
+use Auth;
+use Hash;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Storage;
 
 class Perfil extends Component
 {
@@ -15,21 +18,20 @@ class Perfil extends Component
     public $oldPassword;
     public $newPassword;
     public $photo;
-
-    public function mount()
-    {
-        $this->user = \Auth::user();
-        $this->name = $this->user->name;
-        $this->email = $this->user->email;
-    }
-
     protected $rulesMsgPhoto = [[
         'photo' => 'image|max:10240',
     ], [
         'photo.image' => 'Formato inválido (Somente JPG).',
         'photo.max' => 'Tamanho máximo de 5MB.',
     ]];
+    protected $listeners = ['$refresh'];
 
+    public function mount()
+    {
+        $this->user = Auth::user();
+        $this->name = $this->user->name;
+        $this->email = $this->user->email;
+    }
 
     public function updatedPhoto()
     {
@@ -40,20 +42,29 @@ class Perfil extends Component
     {
         if (!$this->photo)
             return;
+        $this->delete();
         $this->user->update([
             'profile_photo_path' => $this->photo->store('profile-photos', 'public'),
         ]);
-
+        $this->emit('$refresh');
         $this->emit('savedPhoto');
+    }
+
+    public function delete()
+    {
+        $path = $this->user->profile_photo_path;
+        if ($path && Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
     }
 
     public function deletePhoto()
     {
-        \Storage::disk('public')->delete($this->user->profile_photo_path);
+        $this->delete();
         $this->user->update([
             'profile_photo_path' => null,
         ]);
-
+        $this->emit('$refresh');
         $this->emit('deletedPhoto');
     }
 
@@ -106,7 +117,7 @@ class Perfil extends Component
         );
 
         $this->user->update([
-            'password' => \Hash::make($this->newPassword),
+            'password' => Hash::make($this->newPassword),
         ]);
 
         $this->emit('savedPassword');

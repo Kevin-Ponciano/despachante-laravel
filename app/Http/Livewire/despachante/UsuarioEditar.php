@@ -15,7 +15,6 @@ class UsuarioEditar extends Component
 
     public function mount($id)
     {
-        #TODO: usar o CAN na view
         $this->user = Auth::user()->despachante->users()->findOrFail($id);
         $this->name = $this->user->name;
         $this->email = $this->user->email;
@@ -27,11 +26,11 @@ class UsuarioEditar extends Component
     public function changeName()
     {
         $this->validate([
-            'name' => 'required|regex:/^[a-zA-Z0-9_]+$/|unique:users,name,' . $this->id,
+            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,' . $this->id,
         ], [
             'name.required' => 'Obrigatório.',
             'name.unique' => 'Nome de usuário já cadastrado.',
-            'name.regex' => 'O nome de usuário deve conter apenas letras, números e sublinhados.',
+            'name.regex' => 'O nome de usuário não pode conter caracteres especiais.'
         ]);
         $this->user->update([
             'name' => $this->name,
@@ -56,6 +55,7 @@ class UsuarioEditar extends Component
 
     public function changeRole()
     {
+        #TODO: Implementar permissoes parecidos com o do BACKPACK
         $usersAdmin = Auth::user()->despachante->users()->where('role', 'da')->get();
         if ($usersAdmin->count() == 1 && $this->role != 'da') {
             $this->addError('role', 'Deve haver pelo menos um administrador.');
@@ -85,7 +85,7 @@ class UsuarioEditar extends Component
 
     public function delete()
     {
-        $this->user->update(['status' => 'ex']);
+        $this->user->delete();
 
         session()->flash('success', "Usuário deletado com sucesso");
         return redirect()->route('despachante.usuarios');

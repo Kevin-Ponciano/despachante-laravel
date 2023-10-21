@@ -2,7 +2,7 @@
     <x-page-title class-container="container-fluid" title="Transferências"/>
     <x-livewire-table :data="$pedidos">
         <x-slot:filters>
-            @if(Auth::user()->isDespachante())
+            @can('[ADMIN] - Acessar Admin')
                 <div class="">
                     Clientes:
                     <div class="me-2 d-inline-block" wire:ignore>
@@ -14,7 +14,7 @@
                         </select>
                     </div>
                 </div>
-            @endif
+            @endcan
             <div class="">
                 Status:
                 <div class="me-2 d-inline-block text-muted">
@@ -110,9 +110,9 @@
                     @if($status === 'ea')
                         <td>{{$pedido->usuarioResponsavel->name??'-'}}</td>
                     @endif
-                    <td>{{$pedido->atpv->tipo()}}</td>
+                    <td>{{$pedido->atpv->getTipo()}}</td>
                     @if($tipo === 'rv')
-                        <td>{{$pedido->atpv->movimentacao()}}</td>
+                        <td>{{$pedido->atpv->getMovimentacao()}}</td>
                     @endif
                     <td class="text-center"><span
                             class="badge {{$pedido->getStatus()[1]}}">{{$pedido->getStatus()[0]}}</span>

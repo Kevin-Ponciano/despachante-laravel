@@ -43,6 +43,10 @@ class Cliente extends Model
             $model->pedidos()->each(function ($item) {
                 $item->delete();
             });
+
+            $model->user()->each(function ($item) {
+                $item->delete();
+            });
         });
     }
 

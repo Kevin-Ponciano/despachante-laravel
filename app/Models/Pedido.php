@@ -39,10 +39,11 @@ class Pedido extends Model
         parent::boot();
         static::addGlobalScope(new SoftDeleteScope);
 
-        static::creating(function ($pedido) {
-            $numero_pedido = $pedido->cliente->despachante->pedidos()->max('numero_pedido') + 1;
-            $pedido->numero_pedido = $numero_pedido;
+        static::creating(function ($model) {
+            $numero_pedido = $model->cliente->despachante->pedidos()->count() + 1;
+            $model->numero_pedido = $numero_pedido;
         });
+
         static::deleted(function ($model) {
             $model->atpv->delete();
             $model->processo->delete();

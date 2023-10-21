@@ -14,13 +14,12 @@ class PedidoServico extends Model
     use softDeletes;
     use AttributeModel;
 
+    protected $touches = ['pedido'];
     protected $fillable = [
         'pedido_id',
         'servico_id',
         'preco',
     ];
-
-    protected $touches = ['pedido'];
 
     public function servico(): BelongsTo
     {

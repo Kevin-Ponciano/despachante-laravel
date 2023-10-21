@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('numero_pedido');
+            $table->unsignedBigInteger('numero_pedido')->index();
             $table->foreignId('cliente_id')->constrained('clientes')->onUpdate('cascade');
 
             $table->string('comprador_nome');

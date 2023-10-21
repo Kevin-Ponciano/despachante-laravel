@@ -38,7 +38,7 @@ class UsuarioNovo extends Component
 
     public function mount()
     {
-        $qtd_usuariosTotal = Auth::user()->despachante->plano->qtd_usuarios;
+        $qtd_usuariosTotal = Auth::user()->despachante->plano[0]->pivot->qtd_usuarios;
         $qtd_usuariosCadastrados = Auth::user()->despachante->users()->count();
         $this->qtd_usuarios = $qtd_usuariosTotal - $qtd_usuariosCadastrados;
     }

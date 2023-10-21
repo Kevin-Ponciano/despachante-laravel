@@ -10,6 +10,7 @@ class SoftDeleteScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
+        if (\Route::current()?->getPrefix() == 'admin') return;
         $builder->where($model->getTable() . '.status', '!=', 'ex');
     }
 }

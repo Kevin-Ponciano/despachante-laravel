@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Jetstream\DeleteUser;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
@@ -23,7 +25,9 @@ class UserCrudController extends CrudController
     use UpdateOperation {
         update as traitUpdate;
     }
-    use DeleteOperation;
+    use DeleteOperation {
+        destroy as traitDestroy;
+    }
 
     public function setup()
     {
@@ -195,7 +199,7 @@ class UserCrudController extends CrudController
                         'attribute' => 'name', // foreign key attribute that is shown to user
                         'model' => config('permission.models.role'), // foreign key model
                         'pivot' => true, // on create&update, do you need to add/delete pivot table entries?]
-                        'number_columns' => 3, //can be 1,2,3,4,6
+                        'number_columns' => 2, //can be 1,2,3,4,6
                     ],
                     'secondary' => [
                         'label' => mb_ucfirst(trans('backpack::permissionmanager.permission_plural')),
@@ -205,7 +209,8 @@ class UserCrudController extends CrudController
                         'attribute' => 'name', // foreign key attribute that is shown to user
                         'model' => config('permission.models.permission'), // foreign key model
                         'pivot' => true, // on create&update, do you need to add/delete pivot table entries?]
-                        'number_columns' => 3, //can be 1,2,3,4,6
+                        'number_columns' => 2, //can be 1,2,3,4,6
+
                     ],
                 ],
             ],
@@ -264,5 +269,12 @@ class UserCrudController extends CrudController
         $this->crud->unsetValidation(); // validation has already been run
 
         return $this->traitUpdate();
+    }
+
+    public function destroy($id)
+    {
+        $this->crud->hasAccessOrFail('delete');
+        app(DeleteUser::class)->delete(User::find($id), true);
+        return CRUD::delete($id);
     }
 }

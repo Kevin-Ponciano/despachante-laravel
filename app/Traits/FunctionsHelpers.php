@@ -94,7 +94,7 @@ trait FunctionsHelpers
         $this->pedido->update([
             'status' => $this->status,
             'concluido_por' => Auth::user()->id,
-            'concluido_em' => now(),
+            'concluded_at' => now(),
         ]);
 
         $this->pedido->timelines()->create([

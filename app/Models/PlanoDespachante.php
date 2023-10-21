@@ -2,28 +2,32 @@
 
 namespace App\Models;
 
-use App\Traits\AttributeModel;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Plano extends Model
+class PlanoDespachante extends Model
 {
     use CrudTrait;
     use HasFactory;
-    use AttributeModel;
+    use softDeletes;
 
     protected $fillable = [
-        'nome',
-        'preco',
-        'descricao',
+        'plano_id',
+        'despachante_id',
         'qtd_clientes',
         'qtd_usuarios',
         'qtd_processos_mes',
     ];
 
-    public function despachantes()
+    public function plano()
     {
-        return $this->belongsToMany(Despachante::class, 'plano_despachantes')->withPivot('preco', 'qtd_clientes', 'qtd_usuarios', 'qtd_processos_mes');
+        return $this->belongsTo(Plano::class);
+    }
+
+    public function despachante()
+    {
+        return $this->belongsTo(Despachante::class);
     }
 }

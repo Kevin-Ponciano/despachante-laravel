@@ -13,23 +13,37 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        ## CLIENTE
-        Permission::create(['name' => '[CLIENTE] - Acessar Sistema']);
-        Role::create(['name' => 'Cliente'])->givePermissionTo('[CLIENTE] - Acessar Sistema');
-
-        ## DESPACHANTE
-        Permission::create(['name' => '[DESPACHANTE] - Acessar Sistema']);
-
-        Role::create(['name' => 'Usuario Despachante'])->givePermissionTo('[DESPACHANTE] - Acessar Sistema');
-        Role::create(['name' => 'Administrador Despachante'])->givePermissionTo('[DESPACHANTE] - Acessar Sistema');
-
         ## ADMIN
         Permission::create(['name' => '[ADMIN] - Acessar Admin']);
         Permission::create(['name' => '[ADMIN] - Excluir Pedidos']);
-
         Role::create(['name' => 'Admin'])->givePermissionTo([
             '[ADMIN] - Acessar Admin',
             '[ADMIN] - Excluir Pedidos'
         ]);
+
+        ## DESPACHANTE
+        Permission::create(['name' => '[DESPACHANTE] - Acessar Sistema']);
+        Permission::create(['name' => '[DESPACHANTE] - Excluir Pedidos']);
+        Permission::create(['name' => '[DESPACHANTE] - Gerenciar Clientes']);
+        Permission::create(['name' => '[DESPACHANTE] - Gerenciar Usuários']);
+        Permission::create(['name' => '[DESPACHANTE] - Gerenciar Serviços']);
+
+        Role::create(['name' => 'Despachante-User'])->givePermissionTo('[DESPACHANTE] - Acessar Sistema');
+
+        Role::create(['name' => 'Despachante-Admin'])->givePermissionTo([
+            '[DESPACHANTE] - Acessar Sistema',
+            '[DESPACHANTE] - Excluir Pedidos',
+            '[DESPACHANTE] - Gerenciar Clientes',
+            '[DESPACHANTE] - Gerenciar Usuários',
+            '[DESPACHANTE] - Gerenciar Serviços',
+        ]);
+
+        ## MÓDULOS DESPACHANTE
+        //Role::create(['name'=> '[Módulo] - Relatório de Pedidos']);
+        //Role::create(['name'=> '[Módulo] - Financeiro']);
+
+        ## CLIENTE
+        Permission::create(['name' => '[CLIENTE] - Acessar Sistema']);
+        Role::create(['name' => 'Cliente'])->givePermissionTo('[CLIENTE] - Acessar Sistema');
     }
 }

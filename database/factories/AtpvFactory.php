@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Atpv;
-use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -14,14 +13,13 @@ class AtpvFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('pt_BR');
-        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $faker->dateTime->format('Y-m-d H:i:s'));
         return [
             'renavam' => $faker->numerify('###########'),
             'numero_crv' => $faker->numerify('############'),
             'codigo_crv' => $faker->randomElement([null, $faker->numerify('############')]),
             'movimentacao' => $faker->randomElement([null, 'in', 'out']),
             'hodometro' => $this->faker->randomFloat(2, 0, 1000),
-            'data_hodometro' => $datetime->format('Y-m-d H:i'),
+            'data_hodometro' => $faker->dateTime->format('Y-m-d H:i:s'),
             'vendedor_email' => $faker->email,
             'vendedor_telefone' => $faker->cellphoneNumber,
             'vendedor_cpf_cnpj' => '08.204.239/0001-95',

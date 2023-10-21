@@ -15,6 +15,7 @@ class PedidoServicoFactory extends Factory
             'pedido_id' => 1,
             'servico_id' => 1,
             'preco' => $this->faker->randomFloat(2, 1, 1000),
+
         ];
     }
 }

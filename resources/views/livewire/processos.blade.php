@@ -2,7 +2,7 @@
     <x-page-title title="Processos"/>
     <x-livewire-table :data="$pedidos">
         <x-slot:filters>
-            @if(Auth::user()->isDespachante())
+            @can('[ADMIN] - Acessar Admin')
                 <div class="text-muted">
                     Clientes:
                     <div class="me-2 d-inline-block" wire:ignore>
@@ -14,7 +14,7 @@
                         </select>
                     </div>
                 </div>
-            @endif
+            @endcan
             <div class="text-muted">
                 Status:
                 <div class="me-2 d-inline-block">

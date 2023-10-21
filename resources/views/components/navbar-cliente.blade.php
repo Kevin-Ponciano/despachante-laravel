@@ -1,6 +1,5 @@
-<x-navbar :dashboard-route="route('cliente.dashboard')"
-          :nome-usuario="Auth::user()->name" :funcao="Auth::user()->getFuncao()"
-          :route-perfil="route('cliente.perfil')">
+<x-navbar :dashboard-route="route('cliente.dashboard')" :route-perfil="route('cliente.perfil')"
+          :sub-name="Auth::user()->cliente->nome" :despachante-nome="Auth::user()->cliente->despachante->getNome()">
     <x-slot:navItens>
         <li class="nav-item">
             <a href="#" class="nav-link" data-bs-toggle="modal"

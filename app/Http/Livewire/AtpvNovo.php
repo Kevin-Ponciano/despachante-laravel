@@ -196,8 +196,7 @@ class AtpvNovo extends Component
         ]);
     }
 
-    public
-    function clearInputs()
+    public function clearInputs()
     {
         $this->veiculo = null;
         $this->vendedor = null;
@@ -208,8 +207,7 @@ class AtpvNovo extends Component
         $this->resetErrorBag();
     }
 
-    public
-    function render()
+    public function render()
     {
         return view('livewire.atpv-novo');
     }

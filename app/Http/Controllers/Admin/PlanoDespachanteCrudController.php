@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\DespachanteRequest;
+use App\Http\Requests\PlanoDespachanteRequest;
 use App\Models\Despachante;
+use App\Models\PlanoDespachante;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
@@ -14,11 +15,11 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class DespachanteCrudController
+ * Class PlanoDespachanteCrudController
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class DespachanteCrudController extends CrudController
+class PlanoDespachanteCrudController extends CrudController
 {
     use ListOperation;
     use CreateOperation;
@@ -33,9 +34,9 @@ class DespachanteCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(Despachante::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/despachante');
-        CRUD::setEntityNameStrings('despachante', 'despachantes');
+        CRUD::setModel(PlanoDespachante::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/plano-despachante');
+        CRUD::setEntityNameStrings('plano despachante', 'plano despachantes');
     }
 
     /**
@@ -46,7 +47,12 @@ class DespachanteCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb();
+        CRUD::setFromDb(); // set columns from db columns.
+
+        /**
+         * Columns can be defined using the fluent syntax:
+         * - CRUD::column('price')->type('number');
+         */
     }
 
     /**
@@ -68,19 +74,21 @@ class DespachanteCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(DespachanteRequest::class);
+        CRUD::setValidation(PlanoDespachanteRequest::class);
         CRUD::setFromDb(); // set fields from db columns.
+//        CRUD::addField([
+//            'label' => "Despachante",
+//            'type' => 'select',
+//            'name' => 'despachante_id',
+//            'entity' => 'despachante',
+//            'attribute' => 'razao_social',
+//        ]);
         CRUD::addField([
-            'name' => 'plano',
-            'type' => 'select_multiple',
-            'label' => 'Plano',
-            'entity' => 'plano', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
+            'label' => 'Despachante',
+            'name' => 'despachante_id',
+            'type' => 'select_from_array',
+            'options' => Despachante::whereDoesntHave('plano')->pluck('razao_social', 'id')->toArray(),
         ]);
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
     }
 }

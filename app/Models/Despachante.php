@@ -8,6 +8,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,8 +25,9 @@ class Despachante extends Model
         'cnpj',
         'celular',
         'telefone',
+        'email',
+        'status',
         'endereco_id',
-        'plano_id',
     ];
 
     public static function boot()
@@ -33,6 +35,7 @@ class Despachante extends Model
         parent::boot();
         static::addGlobalScope(new SoftDeleteScope);
 
+        #TODO: Criar um created para criar um plano para o despachante ao criar um despachante, pegando os dados do plano padrão
         static::deleted(function ($model) {
             $model->clientes()->each(function ($item) {
                 $item->delete();
@@ -40,25 +43,24 @@ class Despachante extends Model
         });
     }
 
+    public function clientes(): HasMany
+    {
+        return $this->hasMany(Cliente::class);
+    }
 
     public function endereco(): BelongsTo
     {
         return $this->belongsTo(Endereco::class);
     }
 
-    public function plano(): BelongsTo
+    public function plano(): BelongsToMany
     {
-        return $this->belongsTo(Plano::class);
+        return $this->belongsToMany(Plano::class, 'plano_despachantes')->withPivot('preco', 'qtd_clientes', 'qtd_usuarios', 'qtd_processos_mes');
     }
 
     public function servicos(): HasMany
     {
         return $this->hasMany(Servico::class);
-    }
-
-    public function clientes(): HasMany
-    {
-        return $this->hasMany(Cliente::class);
     }
 
     public function users(): HasMany
@@ -85,5 +87,4 @@ class Despachante extends Model
     {
         return $this->nome_fantasia ?? $this->razao_social;
     }
-
 }

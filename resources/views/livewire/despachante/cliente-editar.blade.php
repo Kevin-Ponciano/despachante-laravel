@@ -25,10 +25,10 @@
                                 <button x-show="status==='at'" class="btn btn-danger" wire:click="switchStatus">
                                     Inativar Cliente
                                 </button>
-                                <button x-show="status==='in'" class="btn btn-ghost-danger" data-bs-toggle="modal"
-                                        data-bs-target="#modal-delete">
-                                    Excluir Cliente
-                                </button>
+                                {{--                                <button x-show="status==='in'" class="btn btn-ghost-danger" data-bs-toggle="modal"--}}
+                                {{--                                        data-bs-target="#modal-delete">--}}
+                                {{--                                    Excluir Cliente--}}
+                                {{--                                </button>--}}
                                 <button x-show="status==='in'" class="btn btn-success" wire:click="switchStatus">
                                     Ativar Cliente
                                 </button>
@@ -177,5 +177,5 @@
         </div>
     </div>
     {{--TODO: Adicionar mais detalhe na mensagem de exclusão--}}
-    <x-delete-confirmation/>
+    {{--    <x-delete-confirmation/>--}}
 </div>

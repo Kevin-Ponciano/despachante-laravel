@@ -17,7 +17,6 @@ class Servicos extends Component
 
     public function mount()
     {
-        #TODO: usar o CAN na view
         $this->servicos = Auth::user()->despachante->servicos()->orderBy('nome')->get();
     }
 

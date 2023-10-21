@@ -24,9 +24,7 @@ class PedidoCrudController extends CrudController
     use CreateOperation;
     use UpdateOperation;
     use ShowOperation;
-    use DeleteOperation {
-        destroy as traitDestroy;
-    }
+    use DeleteOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -39,14 +37,6 @@ class PedidoCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/pedido');
         CRUD::setEntityNameStrings('pedido', 'pedidos');
     }
-
-    public function destroy($id)
-    {
-        CRUD::hasAccessOrFail('delete');
-        Pedido::findOrFail($id)->update(['status' => 'ex']);
-        return CRUD::delete($id);
-    }
-
 
     /**
      * Define what happens when the List operation is loaded.

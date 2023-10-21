@@ -34,7 +34,7 @@ class ClienteNovo extends Component
 
     public function mount()
     {
-        $qtd_clientesTotal = Auth::user()->despachante->plano->qtd_clientes;
+        $qtd_clientesTotal = Auth::user()->despachante->plano[0]->pivot->qtd_clientes;
         $qtd_clientesCadastrados = Auth::user()->despachante->clientes()->count();
         $this->qtd_clientes = $qtd_clientesTotal - $qtd_clientesCadastrados;
     }
@@ -73,7 +73,7 @@ class ClienteNovo extends Component
             'preco_renave_saida' => $preco['renaveSaida'],
         ]);
 
-        $user = $cliente->users()->create([
+        $user = $cliente->user()->create([
             'name' => $nomeUsuario,
             'email' => $this->email,
             'password' => Hash::make($password),
@@ -83,8 +83,8 @@ class ClienteNovo extends Component
 
         $this->emit('tableRefresh');
         $this->emit('success', ['message' => 'Cliente cadastrado com sucesso']);
-        $this->clearFields();
         Mail::to($this->email)->send(new NewClient($user, $password));
+        $this->clearFields();
     }
 
     public function clearFields()
