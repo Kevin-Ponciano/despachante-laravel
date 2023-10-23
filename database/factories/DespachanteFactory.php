@@ -20,7 +20,6 @@ class DespachanteFactory extends Factory
             'telefone' => $faker->numerify('(##) ####-####'),
             'celular' => $faker->cellphoneNumber,
             'email' => $faker->unique()->safeEmail,
-            'endereco_id' => $faker->unique()->numberBetween(1, 10000),
         ];
     }
 }

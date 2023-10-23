@@ -30,9 +30,9 @@ return new class extends Migration {
             $table->dateTime('concluded_at')->nullable();
             $table->softDeletes();
 
-            $table->foreignId('criado_por')->constrained('usuarios')->onUpdate('cascade');
-            $table->foreignId('responsavel_por')->nullable()->constrained('usuarios')->onUpdate('cascade');
-            $table->foreignId('concluido_por')->nullable()->constrained('usuarios')->onUpdate('cascade');
+            $table->foreignId('criado_por')->constrained('users')->onUpdate('cascade');
+            $table->foreignId('responsavel_por')->nullable()->constrained('users')->onUpdate('cascade');
+            $table->foreignId('concluido_por')->nullable()->constrained('users')->onUpdate('cascade');
         });
     }
 

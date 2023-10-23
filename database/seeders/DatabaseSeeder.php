@@ -119,7 +119,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'at',
             ]);
 
-        User::find(3)->assignRole('Cliente')
+        User::find(3)->assignRole('Cliente')->removeRole('Despachante-Admin')
             ->update([
                 'name' => 'cliente',
                 'email' => 'cliente@cliente',

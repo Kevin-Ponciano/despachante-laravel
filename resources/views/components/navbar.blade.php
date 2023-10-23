@@ -1,7 +1,7 @@
 <header class="navbar-expand-md">
     <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar">
-            <div class="container-xl">
+            <div class="container-fluid">
                 <h1 class="navbar-brand d-none-navbar-horizontal pe-0 pe-md-3">
                     <a class="card-link" href="{{route('dashboard')}}">
                         <img src="{{asset('assets/img/logo3.png')}}" alt="Saled"

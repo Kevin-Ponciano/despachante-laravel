@@ -7,9 +7,9 @@
                     <div class="text-center mb-4">
                         <a class="navbar-brand navbar-brand-autodark">
                             <img src="{{asset('assets/img/logo3.png')}}" height="36" alt="SALED logo">
-                            ALED
+                            GPD
                         </a>
-                        <p>Sistema Despachante</p>
+                        <p>Sistema de Gerenciamento de Processos Despachante</p>
                     </div>
                     <h2 class="h3 text-center mb-3">
                         Faça login na sua conta
