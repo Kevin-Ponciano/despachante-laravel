@@ -16,9 +16,11 @@ class RolesAndPermissionsSeeder extends Seeder
         ## ADMIN
         Permission::create(['name' => '[ADMIN] - Acessar Admin']);
         Permission::create(['name' => '[ADMIN] - Excluir Pedidos']);
+        Permission::create(['name' => '[ADMIN] - Acessar Telescope']);
         Role::create(['name' => 'Admin'])->givePermissionTo([
             '[ADMIN] - Acessar Admin',
-            '[ADMIN] - Excluir Pedidos'
+            '[ADMIN] - Excluir Pedidos',
+            '[ADMIN] - Acessar Telescope',
         ]);
 
         ## DESPACHANTE

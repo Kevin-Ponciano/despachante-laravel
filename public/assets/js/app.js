@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $('#loading-page').hide();
+
     $(window).on('deleteFile', function (e, data) {
         $('#file-name-delete').text(data.nome);
         $('#modal-delete-file').modal('show');

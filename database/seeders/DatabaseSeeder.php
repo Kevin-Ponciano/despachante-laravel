@@ -24,15 +24,16 @@ class DatabaseSeeder extends Seeder
         $qtdDespachantes = 3;
         $qtdUsuariosPorDespachante = 3;
         $qtdClientesPorDespachante = 3;
-        $qtdServicosPorDespachante = 3;
-        $qtdPedidosPorCliente = 15;
+        $qtdServicosPorDespachante = 10;
+        $qtdPedidosPorCliente = 100;
         $qtdPendenciasPorPedido = 0;
 
         RolesAndPermissionsSeeder::run();
         $faker = Factory::create('pt_BR');
-        Despachante::factory($qtdDespachantes)->create()->each(function ($despachante) use ($qtdPedidosPorCliente, $qtdPendenciasPorPedido, $qtdClientesPorDespachante, $qtdUsuariosPorDespachante, $faker) {
-            $despachante->endereco_id = Endereco::factory()->create()->id;
-            $despachante->save();
+        Endereco::factory($qtdDespachantes)->create()->each(function ($endereco) use ($qtdPedidosPorCliente, $qtdPendenciasPorPedido, $qtdClientesPorDespachante, $qtdUsuariosPorDespachante, $faker) {
+            $despachante = Despachante::factory()->create([
+                'endereco_id' => $endereco->id,
+            ]);
             Servico::factory(3)->create([
                 'despachante_id' => $despachante->id,
             ]);
@@ -70,12 +71,6 @@ class DatabaseSeeder extends Seeder
                         'comprador_endereco_id' => Endereco::factory()->create()->id,
                         'pedido_id' => $pedido->id,
                     ]);
-//                    PedidoServico::create([
-//                        'pedido_id' => $pedido->id,
-//                        'servico_id' => Servico::factory()->create([
-//                            'despachante_id' => $pedido->cliente->despachante->id,
-//                        ])->id,
-//                    ]);
                     Pendencia::factory($qtdPendenciasPorPedido)->create([
                         'pedido_id' => $pedido->id,
                     ]);
@@ -86,13 +81,6 @@ class DatabaseSeeder extends Seeder
                 ])->each(function ($pedido) use ($qtdPendenciasPorPedido, $faker) {
                     Processo::factory()->create([
                         'pedido_id' => $pedido->id,
-                    ]);
-                    PedidoServico::create([
-                        'pedido_id' => $pedido->id,
-                        'servico_id' => Servico::factory()->create([
-                            'despachante_id' => $pedido->cliente->despachante->id,
-                        ])->id,
-                        'preco' => $faker->randomFloat(2, 1, 10000),
                     ]);
                     Pendencia::factory($qtdPendenciasPorPedido)->create([
                         'pedido_id' => $pedido->id,

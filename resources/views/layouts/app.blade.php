@@ -40,6 +40,7 @@
 </head>
 <body class="font-sans antialiased">
 <script src="{{asset('assets/js/theme.js')}}"></script>
+<x-loading-page/>
 <div class="page pb-2">
     @if(Auth::user()->isDespachante())
         <x-navbar-despachante/>

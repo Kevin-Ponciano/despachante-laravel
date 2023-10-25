@@ -51,7 +51,7 @@ class Pendencias extends Component
     {
         if ($this->hasConludeOrExcluded())
             return;
-        $pendencia = Pendencia::find($id);
+        $pendencia = Pendencia::find($id)->load('pedido', 'pedido.timelines');
         $pendencia->status = $pendencia->status == 'co' ? 'pe' : 'co';
         $pendencia->concluded_at = $pendencia->status == 'co' ? now() : null;
         $pendencia->save();

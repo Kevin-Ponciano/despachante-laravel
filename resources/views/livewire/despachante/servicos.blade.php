@@ -87,3 +87,4 @@
         </div>
         <x-delete-confirmation/>
     </div>
+</div>

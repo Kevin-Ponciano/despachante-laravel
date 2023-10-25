@@ -106,7 +106,7 @@ class AtpvShow extends Component
 
     public function mount($id)
     {
-        $this->pedido = Auth::user()->empresa()->pedidosAtpvs()->where('numero_pedido', $id)->firstOrFail();
+        $this->pedido = Auth::user()->empresa()->pedidosAtpvs()->with('atpv', 'atpv.compradorEndereco','timelines','timelines.user')->where('numero_pedido', $id)->firstOrFail();
         $this->cliente = $this->pedido->cliente->nome;
         $this->tipo = $this->pedido->atpv->getTipo();
         switch ($this->tipo) {
@@ -149,7 +149,7 @@ class AtpvShow extends Component
             $this->servicoSC['preco'] = $this->regexMoneyToView($this->servicoSC['pivot']['preco']);
 
         if (Auth::user()->isDespachante())
-            $this->despachanteId = Auth::user()->despachante->id;
+            $this->despachanteId = Auth::user()->despachante_id;
         if (Auth::user()->isCliente()) {
             $this->inputPendenciasCliente = Arr::collapse(
                 Arr::map(

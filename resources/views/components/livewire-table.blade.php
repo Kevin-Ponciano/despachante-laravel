@@ -36,7 +36,16 @@
                 <thead>
                 {{$thead}}
                 </thead>
-                <tbody wire:loading.class="opacity-50" class="table-tbody">
+                <tbody class="table-tbody">
+                <div class="d-none" wire:loading.class.remove="d-none">
+                    <div class="bg-body-tertiary bg-opacity-75 h-50 position-fixed pt-8 w-100 z-1">
+                        <div class="container container-slim py-4">
+                            <div class="text-center">
+                                <div class="loader"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {{$tbody}}
                 </tbody>
             </table>

@@ -1,5 +1,6 @@
 <div>
-    <x-page-title title="Processos"/>
+
+    <x-page-title title="Processos" class-container="container-fluid"/>
     <x-livewire-table :data="$pedidos">
         <x-slot:filters>
             @can('[ADMIN] - Acessar Admin')

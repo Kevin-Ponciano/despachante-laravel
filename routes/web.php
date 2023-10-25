@@ -12,13 +12,13 @@ use App\Http\Livewire\despachante\Usuarios;
 use App\Http\Livewire\Perfil;
 use App\Http\Livewire\Processos;
 use App\Http\Livewire\ProcessoShow;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 Route::get('/', function () {
     return view('lading-page');
 })->name('welcome');
-Route::redirect('/', '/login');
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'status'])->group(function () {
 
     Route::get('/dashboard', function () {
@@ -27,7 +27,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         elseif (auth()->user()->isCliente())
             return redirect()->route('cliente.dashboard');
         else
-            abort(500);
+            abort(403,'Usuário sem associação');
     })->name('dashboard');
 
     Route::get('/pedido/{id}', function ($id) {

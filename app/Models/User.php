@@ -98,19 +98,14 @@ class User extends Authenticatable
         return $this->hasMany(Pedido::class, 'concluido_por');
     }
 
-    public function logs()
-    {
-        return $this->hasMany(Log::class, 'usuario_id');
-    }
-
     public function isDespachante(): bool
     {
-        return $this->hasPermissionTo('[DESPACHANTE] - Acessar Sistema');
+        return $this->despachante_id != null && $this->hasPermissionTo('[DESPACHANTE] - Acessar Sistema');
     }
 
     public function isCliente(): bool
     {
-        return $this->hasPermissionTo('[CLIENTE] - Acessar Sistema');
+        return $this->cliente_id != null && $this->hasPermissionTo('[CLIENTE] - Acessar Sistema');
     }
 
     public function getFuncao()
@@ -130,9 +125,9 @@ class User extends Authenticatable
     public function getIdDespachante()
     {
         if ($this->isDespachante())
-            return $this->despachante->id;
+            return $this->despachante_id;
         elseif ($this->isCliente())
-            return $this->cliente->despachante->id;
+            return $this->cliente->despachante_id;
         else
             abort(500, 'Erro ao obter ID do despachante.');
     }

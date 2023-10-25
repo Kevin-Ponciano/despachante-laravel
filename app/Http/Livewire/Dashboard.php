@@ -17,15 +17,19 @@ class Dashboard extends Component
 
     public function render()
     {
-        $qtdProcessosAbertos = $this->empresa->pedidosProcessos()->where('pedidos.status', 'ab')->count();
-        $qtdProcessosRetornados = $this->empresa->pedidosProcessos()->where('pedidos.status', 'rp')->count();
-        $qtdProcessosEmAndamento = $this->empresa->pedidosProcessos()->where('pedidos.status', 'ea')->count();
-        $qtdProcessosPendentes = $this->empresa->pedidosProcessos()->where('pedidos.status', 'pe')->count();
-        $qtdAtpvsAbertos = $this->empresa->pedidosAtpvs()->where('pedidos.status', 'ab')->count();
-        $qtdAtpvsRetornados = $this->empresa->pedidosAtpvs()->where('pedidos.status', 'rp')->count();
-        $qtdAtpvsEmAndamento = $this->empresa->pedidosAtpvs()->where('pedidos.status', 'ea')->count();
-        $qtdAtpvsPendentes = $this->empresa->pedidosAtpvs()->where('pedidos.status', 'pe')->count();
-        $qtdAtpvsSolicitadoCancelamento = $this->empresa->pedidosAtpvs()->where('pedidos.status', 'sc')->count();
+        $pedidosProcessos = $this->empresa->pedidosProcessos()->whereIn('pedidos.status', ['ab', 'rp', 'ea', 'pe'])->get();
+        $pedidosAtpvs = $this->empresa->pedidosAtpvs()->whereIn('pedidos.status', ['ab', 'rp', 'ea', 'pe', 'sc'])->get();
+
+        $qtdProcessosAbertos = $pedidosProcessos->where('status', 'ab')->count();
+        $qtdProcessosRetornados = $pedidosProcessos->where('status', 'rp')->count();
+        $qtdProcessosEmAndamento = $pedidosProcessos->where('status', 'ea')->count();
+        $qtdProcessosPendentes = $pedidosProcessos->where('status', 'pe')->count();
+
+        $qtdAtpvsAbertos = $pedidosAtpvs->where('status', 'ab')->count();
+        $qtdAtpvsRetornados = $pedidosAtpvs->where('status', 'rp')->count();
+        $qtdAtpvsEmAndamento = $pedidosAtpvs->where('status', 'ea')->count();
+        $qtdAtpvsPendentes = $pedidosAtpvs->where('status', 'pe')->count();
+        $qtdAtpvsSolicitadoCancelamento = $pedidosAtpvs->where('status', 'sc')->count();
 
 
         $qtdProcessosDisponivelDownload = 0;
@@ -44,7 +48,6 @@ class Dashboard extends Component
                 }
             }
         }
-
 
         return view('livewire.dashboard', compact(
             'qtdProcessosAbertos',
