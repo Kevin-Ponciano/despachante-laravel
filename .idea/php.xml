@@ -156,6 +156,7 @@
       <path value="$PROJECT_DIR$/vendor/backpack/theme-tabler" />
       <path value="$PROJECT_DIR$/vendor/backpack/permissionmanager" />
       <path value="$PROJECT_DIR$/vendor/backpack/logmanager" />
+      <path value="$PROJECT_DIR$/vendor/laravel/telescope" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
