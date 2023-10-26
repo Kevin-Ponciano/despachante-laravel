@@ -86,7 +86,7 @@ trait HandinFiles
             return;
         }
 
-        $despachanteId = Auth::user()->getIdDespachante();
+        $despachanteId = Auth::user()->getUuidDespachante();
         $clienteId = $this->pedido->cliente->numero_cliente;
         $pedidoId = $this->pedido->numero_pedido;
 
@@ -163,7 +163,7 @@ trait HandinFiles
             return;
         }
 
-        $despachanteId = Auth::user()->getIdDespachante();
+        $despachanteId = Auth::user()->getUuidDespachante();
         $clienteId = $this->pedido->cliente->numero_cliente;
         $pedidoId = $this->pedido->numero_pedido;
         $placa = $this->pedido->placa;
@@ -206,7 +206,7 @@ trait HandinFiles
     {
         $this->validate($this->rulesMsgArquivoAtpv[0], $this->rulesMsgArquivoAtpv[1]);
 
-        $despachanteId = Auth::user()->getIdDespachante();
+        $despachanteId = Auth::user()->getUuidDespachante();
         $clienteId = $this->pedido->cliente->numero_cliente;
         $pedidoId = $this->pedido->numero_pedido;
         $placa = $this->pedido->placa;

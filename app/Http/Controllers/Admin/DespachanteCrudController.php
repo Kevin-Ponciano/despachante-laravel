@@ -77,10 +77,6 @@ class DespachanteCrudController extends CrudController
             'entity' => 'plano', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
         ]);
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        #TODO: Criar um created para criar um plano para o despachante ao criar um despachante, pegando os dados do plano padrão
     }
 }

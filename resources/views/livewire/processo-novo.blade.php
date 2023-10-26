@@ -34,8 +34,8 @@
                                         class="form-control"
                                         wire:model.defer="clienteId">
                                     <option value="-1">Selecione o Cliente</option>
-                                    @foreach($clientes as $cliente)
-                                        <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
+                                    @foreach($clientes as $id => $cliente)
+                                        <option value="{{$cliente['id']}}">{{$cliente['nome']}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -55,6 +55,11 @@
                                wire:model.defer="telefone">
                         @error('telefone') <span class="invalid-feedback">{{ $message }}</span> @enderror
                     </x-slot:telefone>
+                    <x-slot:responsavel>
+                        <label class="form-label">Nome do Responsável <span class="text-muted">opcional</span></label>
+                        <input type="text" class="form-control"
+                               wire:model.defer="responsavelNome">
+                    </x-slot:responsavel>
                     <x-slot:placa>
                         <label class="form-label">Placa</label>
                         <input type="text" class="form-control text-uppercase @error('placa') is-invalid @enderror"

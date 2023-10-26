@@ -17,6 +17,7 @@ class ProcessoShow extends Component
     public $pedido;
     public $cliente;
     public $compradorNome;
+    public $responsavelNome;
     public $telefone;
     public $placa;
     public $veiculo;
@@ -65,6 +66,7 @@ class ProcessoShow extends Component
         $this->cliente = $this->pedido->cliente->nome;
         $this->compradorNome = $this->pedido->comprador_nome;
         $this->telefone = $this->pedido->comprador_telefone;
+        $this->responsavelNome = $this->pedido->responsavel_nome;
         $this->placa = $this->pedido->placa;
         $this->veiculo = $this->pedido->veiculo;
         $this->qtdPlaca = $this->pedido->processo->qtd_placas;
@@ -194,6 +196,7 @@ class ProcessoShow extends Component
         $this->pedido->update([
             'comprador_nome' => $this->compradorNome,
             'comprador_telefone' => $this->telefone,
+            'responsavel_nome' => $this->responsavelNome,
             'placa' => \Str::upper($this->placa),
             'veiculo' => $this->veiculo,
             'observacoes' => $this->observacoes,

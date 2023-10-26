@@ -76,6 +76,3 @@ Livewire.on('error', (data) => {
 Livewire.on('warning', (data) => {
     warning(data);
 })
-
-// TODO: refatorar deixando apenas uma função
-

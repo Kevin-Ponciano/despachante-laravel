@@ -20,6 +20,7 @@ class ProcessoNovo extends Component
     public $cliente;
     public $compradorNome;
     public $telefone;
+    public $responsavelNome;
     public $placa;
     public $veiculo;
     public $qtdPlacas = 0;
@@ -60,7 +61,7 @@ class ProcessoNovo extends Component
     public function mount()
     {
         if (\Auth::user()->isDespachante()) {
-            $this->clientes = \Auth::user()->despachante->clientes;
+            $this->clientes = \Auth::user()->despachante->clientes->toArray();
             $this->servicosDespachante = \Auth::user()->despachante->servicos()->orderBy('nome')->get();
         } else {
             $this->clienteId = \Auth::user()->cliente->id;
@@ -138,6 +139,7 @@ class ProcessoNovo extends Component
         $pedido = Pedido::create([
             'comprador_nome' => $this->compradorNome,
             'comprador_telefone' => $this->telefone,
+            'responsavel_nome' => $this->responsavelNome,
             'placa' => $this->placa,
             'veiculo' => $this->veiculo,
             'preco_honorario' => $this->regexMoney($this->precoHonorario),
@@ -193,6 +195,7 @@ class ProcessoNovo extends Component
         $this->resetValidation();
         $this->compradorNome = null;
         $this->telefone = null;
+        $this->responsavelNome = null;
         $this->placa = null;
         $this->veiculo = null;
         $this->qtdPlacas = 0;

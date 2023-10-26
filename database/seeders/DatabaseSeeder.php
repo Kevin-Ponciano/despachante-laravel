@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         $qtdUsuariosPorDespachante = 3;
         $qtdClientesPorDespachante = 3;
         $qtdServicosPorDespachante = 10;
-        $qtdPedidosPorCliente = 100;
+        $qtdPedidosPorCliente = 10;
         $qtdPendenciasPorPedido = 0;
 
         RolesAndPermissionsSeeder::run();

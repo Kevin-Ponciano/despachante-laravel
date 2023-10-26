@@ -7,6 +7,7 @@ use App\Traits\HandinFiles;
 use Arr;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Log;
 use Str;
 
 class AtpvShow extends Component
@@ -106,7 +107,7 @@ class AtpvShow extends Component
 
     public function mount($id)
     {
-        $this->pedido = Auth::user()->empresa()->pedidosAtpvs()->with('atpv', 'atpv.compradorEndereco','timelines','timelines.user')->where('numero_pedido', $id)->firstOrFail();
+        $this->pedido = Auth::user()->empresa()->pedidosAtpvs()->with('atpv', 'atpv.compradorEndereco', 'timelines', 'timelines.user')->where('numero_pedido', $id)->firstOrFail();
         $this->cliente = $this->pedido->cliente->nome;
         $this->tipo = $this->pedido->atpv->getTipo();
         switch ($this->tipo) {
@@ -324,9 +325,69 @@ class AtpvShow extends Component
 
     public function storeInputPendencias()
     {
-        //Todo: Pensar em outra alternativa para nao usar eventos
-        $this->emit('storeInputPendencias', $this->inputPendencias);
-        $this->inputPendencias = [];
+        if ($this->hasConludeOrExcluded())
+            return;
+        $count = 0;
+        $inputPendencias = array_reverse($this->inputPendencias);
+        foreach ($inputPendencias as $key => $inputPendencia) {
+            if ($inputPendencia) {
+                $matchingPendencia = $this->pedido->pendencias->firstWhere('input', $key);
+                $nome = match ($key) {
+                    'placa' => 'A Placa do veículo está incorreta.',
+                    'renavam' => 'O Renavam do veículo está incorreto.',
+                    'numero_crv' => 'O Número do CRV do veículo está incorreto.',
+                    'codigo_seguranca_crv' => 'O Código de Segurança do CRV do veículo está incorreto.',
+                    'hodometro' => 'O Hodômetro do veículo está incorreto.',
+                    'data_hora_medicao' => 'A Data/Hora de medição do Hodômetro do veículo está incorreta.',
+                    'preco_venda' => 'O Preço de Venda do veículo está incorreto.',
+                    'veiculo' => 'O Veículo está incorreto.',
+                    'email_do_vendedor' => 'O E-mail do Vendedor está incorreto.',
+                    'telefone_do_vendedor' => 'O Telefone do Vendedor está incorreto.',
+                    'cpf_cnpj_do_vendedor' => 'O CPF/CNPJ do Vendedor está incorreto.',
+                    'nome_do_comprador' => 'O Nome do Comprador está incorreto.',
+                    'email_do_comprador' => 'O E-mail do Comprador está incorreto.',
+                    'telefone_do_comprador' => 'O Telefone do Comprador está incorreto.',
+                    'cpf_cnpj_do_comprador' => 'O CPF/CNPJ do Comprador está incorreto.',
+                    'cep' => 'O CEP do Endereço está incorreto.',
+                    'logradouro' => 'O Logradouro do Endereço está incorreto.',
+                    'numero' => 'O Número do Endereço está incorreto.',
+                    'bairro' => 'O Bairro do Endereço está incorreto.',
+                    'cidade' => 'A Cidade do Endereço está incorreta.',
+                    'uf' => 'A UF do Endereço está incorreta.',
+                    default => Log::error('Pendencia não encontrada.'),
+                };
+
+                if (!$matchingPendencia) {
+                    $this->pedido->pendencias()->create([
+                        'nome' => $nome,
+                        'input' => $key,
+                        'observacao' => "Esta informação está incorreta, por favor corrigir.",
+                        'tipo' => 'cp',
+                        'status' => 'pe',
+                    ]);
+                } else {
+                    $matchingPendencia->update([
+                        'status' => 'pe',
+                        'concluded_at' => null,
+                    ]);
+                }
+                $count++;
+            }
+        }
+        if ($count > 0) {
+            $this->pedido->update(['status' => 'pe']);
+            $this->emit('success', ['message' => 'Pendências criadas com sucesso!']);
+            $this->pedido->timelines()->updateOrCreate([
+                'descricao' => 'Informado que alguns dados do pedido estão incorretos.',
+                'created_at' => now(),
+                'user_id' => Auth::user()->id,
+                'titulo' => 'Pedido pendente',
+                'tipo' => 'pp',
+            ]);
+            $this->emit('$refresh');
+        } else {
+            $this->emit('warning', 'Nenhuma pendência selecionada.');
+        }
     }
 
     public function render()

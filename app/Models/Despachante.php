@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Str;
 
 class Despachante extends Model
 {
@@ -26,6 +27,7 @@ class Despachante extends Model
         'celular',
         'telefone',
         'email',
+        'site',
         'status',
         'endereco_id',
     ];
@@ -34,8 +36,10 @@ class Despachante extends Model
     {
         parent::boot();
         static::addGlobalScope(new SoftDeleteScope);
+        static::creating(function ($model) {
+            $model->uuid = Str::uuid();
+        });
 
-        #TODO: Criar um created para criar um plano para o despachante ao criar um despachante, pegando os dados do plano padrão
         static::deleted(function ($model) {
             $model->clientes()->each(function ($item) {
                 $item->delete();

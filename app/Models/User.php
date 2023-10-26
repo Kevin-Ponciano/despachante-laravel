@@ -122,14 +122,15 @@ class User extends Authenticatable
         }
     }
 
-    public function getIdDespachante()
+    public function getUuidDespachante()
     {
         if ($this->isDespachante())
-            return $this->despachante_id;
+            return $this->despachante->uuid;
         elseif ($this->isCliente())
-            return $this->cliente->despachante_id;
+            return $this->cliente->despachante->uuid;
         else
-            abort(500, 'Erro ao obter ID do despachante.');
+            \Log::error('Erro ao obter uuid do despachante.');
+            abort(500, 'Erro ao obter uuid do despachante.');
     }
 
     public function empresa()
@@ -139,6 +140,7 @@ class User extends Authenticatable
         elseif ($this->isCliente())
             return $this->cliente;
         else
+            \Log::error('Erro ao obter a empresa.');
             abort(500, 'Erro ao obter a empresa.');
     }
 

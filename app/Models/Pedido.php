@@ -20,6 +20,7 @@ class Pedido extends Model
     protected $fillable = [
         'comprador_nome',
         'comprador_telefone',
+        'responsavel_nome',
         'placa',
         'veiculo',
         'preco_honorario',

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DashboardRouteController;
+use App\Http\Controllers\SearchPedidoController;
 use App\Http\Livewire\Atpvs;
 use App\Http\Livewire\AtpvShow;
 use App\Http\Livewire\Dashboard;
@@ -12,7 +14,6 @@ use App\Http\Livewire\despachante\Usuarios;
 use App\Http\Livewire\Perfil;
 use App\Http\Livewire\Processos;
 use App\Http\Livewire\ProcessoShow;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
@@ -21,30 +22,8 @@ Route::get('/', function () {
 })->name('welcome');
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'status'])->group(function () {
 
-    Route::get('/dashboard', function () {
-        if (auth()->user()->isDespachante())
-            return redirect()->route('despachante.dashboard');
-        elseif (auth()->user()->isCliente())
-            return redirect()->route('cliente.dashboard');
-        else
-            abort(403,'Usuário sem associação');
-    })->name('dashboard');
-
-    Route::get('/pedido/{id}', function ($id) {
-        $pedido = Auth::user()->empresa()->pedidos()->with('processo', 'atpv')->where('numero_pedido', $id)->firstOrFail();
-        $route = null;
-        if ($pedido->processo) {
-            $route = Auth::user()->isDespachante() ? 'despachante.processos.show' : (Auth::user()->isCliente() ? 'cliente.processos.show' : null);
-        } elseif ($pedido->atpv) {
-            $route = Auth::user()->isDespachante() ? 'despachante.atpvs.show' : (Auth::user()->isCliente() ? 'cliente.atpvs.show' : null);
-        }
-        if ($route) {
-            return redirect()->route($route, $pedido->numero_pedido);
-        } else {
-            abort(500);
-        }
-    })->name('get-pedido');
-
+    Route::get('/dashboard', [DashboardRouteController::class, 'index'])->name('dashboard');
+    Route::get('/pedido/{id}', [SearchPedidoController::class, 'index'])->name('get-pedido');
 
     Route::middleware(['can:[DESPACHANTE] - Acessar Sistema'])->prefix('despachante')->name('despachante.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');

@@ -72,6 +72,13 @@
                                         @error('telefone') <span
                                             class="invalid-feedback">{{ $message }}</span> @enderror
                                     </x-slot:telefone>
+                                    <x-slot:responsavel>
+                                        <label class="form-label">Nome do Responsável</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               wire:model.defer="responsavelNome"
+                                               :readonly="!isEditing">
+                                    </x-slot:responsavel>
                                     <x-slot:placa>
                                         <label class="form-label">Placa</label>
                                         <input type="text"

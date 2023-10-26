@@ -19,10 +19,8 @@ class Pendencias extends Component
     public $createPendencia = false;
     public $isModal = false;
 
-    // TODO: Verificar uma forma do evento ser chamado apenas uma vez
     protected $listeners = [
         '$refresh',
-        'storeInputPendencias'
     ];
 
     public static function hasPendingStatic($pedidoId)
@@ -200,77 +198,6 @@ class Pendencias extends Component
         ]);
 
         $this->emit('$refresh');
-    }
-
-    public function storeInputPendencias($inputPendencias)
-    {
-        if ($this->hasConludeOrExcluded())
-            return;
-        $count = 0;
-        $inputPendencias = array_reverse($inputPendencias);
-        foreach ($inputPendencias as $key => $inputPendencia) {
-            if ($inputPendencia) {
-                $matchingPendencia = Auth::user()->empresa()->pedidos()->find($this->pedidoId)->pendencias->firstWhere('input', $key);
-                $nome = match ($key) {
-                    'placa' => 'A Placa do veículo está incorreta.',
-                    'renavam' => 'O Renavam do veículo está incorreto.',
-                    'numero_crv' => 'O Número do CRV do veículo está incorreto.',
-                    'codigo_seguranca_crv' => 'O Código de Segurança do CRV do veículo está incorreto.',
-                    'hodometro' => 'O Hodômetro do veículo está incorreto.',
-                    'data_hora_medicao' => 'A Data/Hora de medição do Hodômetro do veículo está incorreta.',
-                    'preco_venda' => 'O Preço de Venda do veículo está incorreto.',
-                    'veiculo' => 'O Veículo está incorreto.',
-                    'email_do_vendedor' => 'O E-mail do Vendedor está incorreto.',
-                    'telefone_do_vendedor' => 'O Telefone do Vendedor está incorreto.',
-                    'cpf_cnpj_do_vendedor' => 'O CPF/CNPJ do Vendedor está incorreto.',
-                    'nome_do_comprador' => 'O Nome do Comprador está incorreto.',
-                    'email_do_comprador' => 'O E-mail do Comprador está incorreto.',
-                    'telefone_do_comprador' => 'O Telefone do Comprador está incorreto.',
-                    'cpf_cnpj_do_comprador' => 'O CPF/CNPJ do Comprador está incorreto.',
-                    'cep' => 'O CEP do Endereço está incorreto.',
-                    'logradouro' => 'O Logradouro do Endereço está incorreto.',
-                    'numero' => 'O Número do Endereço está incorreto.',
-                    'bairro' => 'O Bairro do Endereço está incorreto.',
-                    'cidade' => 'A Cidade do Endereço está incorreta.',
-                    'uf' => 'A UF do Endereço está incorreta.',
-                    default => throw new Exception('Unexpected value in Pendencias'),
-                };
-
-                if (!$matchingPendencia) {
-                    Pendencia::create([
-                        'pedido_id' => $this->pedidoId,
-                        'nome' => $nome,
-                        'input' => $key,
-                        'observacao' => "Esta informação está incorreta, por favor corrigir.",
-                        'tipo' => 'cp',
-                        'status' => 'pe',
-                    ]);
-                } else {
-                    $matchingPendencia->update([
-                        'status' => 'pe',
-                        'concluded_at' => null,
-                    ]);
-                }
-                $count++;
-            }
-        }
-        if ($count > 0) {
-            $pedido = Auth::user()->empresa()->pedidos()->find($this->pedidoId);
-            $pedido->update(['status' => 'pe']);
-            $this->emit('success', ['message' => 'Pendências criadas com sucesso!']);
-
-            $pedido->timelines()->updateOrCreate([
-                'descricao' => 'Informado que alguns dados do pedido estão incorretos.',
-                'created_at' => now(),
-                'user_id' => Auth::user()->id,
-                'titulo' => 'Pedido pendente',
-                'tipo' => 'pp',
-            ]);
-
-            $this->emit('$refresh');
-        } else {
-            $this->emit('warning', 'Nenhuma pendência selecionada.');
-        }
     }
 
     public function render()
