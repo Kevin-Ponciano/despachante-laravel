@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.2",
         "ext-zip": "*",
+        "backpack/backupmanager": "^5.0",
         "backpack/crud": "^6.2",
         "backpack/logmanager": "^5.0",
         "backpack/permissionmanager": "^7.1",

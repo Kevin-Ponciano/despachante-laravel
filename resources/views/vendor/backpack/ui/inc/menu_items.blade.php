@@ -15,5 +15,6 @@
 <x-backpack::menu-item title="Pedidos" icon="la la-file-invoice" :link="backpack_url('pedido')"/>
 <x-backpack::menu-item title="Planos" icon="la la-wallet" :link="backpack_url('plano')"/>
 <x-backpack::menu-item title="Plano Do Despachante" icon="la la-question" :link="backpack_url('plano-despachante')"/>
+<x-backpack::menu-item title='Backups' icon='la la-hdd-o' :link="backpack_url('backup')" />
 <x-backpack::menu-item title='Logs' icon='la la-terminal' :link="backpack_url('log')"/>
 <x-backpack::menu-item title="Trocar Sistema" icon='la la-sync' :link="route('login')"/>
