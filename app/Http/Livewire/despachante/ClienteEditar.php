@@ -10,6 +10,7 @@ class ClienteEditar extends Component
 {
     use FunctionsHelpers;
 
+    public $clienteCollection;
     public $cliente;
     public $nomeCliente;
     public $usuario;
@@ -20,7 +21,7 @@ class ClienteEditar extends Component
 
     public function mount($id)
     {
-        $this->cliente = Auth::user()->despachante->clientes()->where('numero_cliente', $id)->firstOrFail();
+        $this->cliente = Auth::user()->despachante->clientes()->where('numero_cliente', $id)->with('user')->firstOrFail();
         $this->usuario = $this->cliente->user;
         $this->nomeCliente = $this->cliente->nome;
         $this->nomeUsuario = $this->usuario->name;
