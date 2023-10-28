@@ -62,7 +62,7 @@ class UsuarioNovo extends Component
         $this->emit('tableRefresh');
         $this->emit('success', ['message' => 'Usuário cadastrado com sucesso']);
         $this->clearFields();
-        Mail::to($this->email)->send(new NewUser($user, $this->password));
+        Mail::to($this->email)->queue(new NewUser($user, $this->password));
     }
 
     public function clearFields()

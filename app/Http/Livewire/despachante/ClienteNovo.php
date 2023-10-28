@@ -83,7 +83,7 @@ class ClienteNovo extends Component
 
         $this->emit('tableRefresh');
         $this->emit('success', ['message' => 'Cliente cadastrado com sucesso']);
-        Mail::to($this->email)->send(new NewClient($user, $password));
+        Mail::to($this->email)->queue(new NewClient($user, $password));
         $this->clearFields();
     }
 
