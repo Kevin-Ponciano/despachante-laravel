@@ -51,18 +51,23 @@ class UsuarioNovo extends Component
         }
         $this->validate();
 
-        $user = Auth::user()->despachante->users()->create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'role' => $this->role,
-            'status' => 'at',
-            'password' => Hash::make($this->password),
-        ]);
+        try {
+            $user = Auth::user()->despachante->users()->create([
+                'name' => $this->name,
+                'email' => $this->email,
+                'role' => $this->role,
+                'status' => 'at',
+                'password' => Hash::make($this->password),
+            ]);
 
-        $this->emit('tableRefresh');
-        $this->emit('success', ['message' => 'Usuário cadastrado com sucesso']);
-        $this->clearFields();
-        Mail::to($this->email)->queue(new NewUser($user, $this->password));
+            $this->emit('tableRefresh');
+            $this->emit('success', ['message' => 'Usuário cadastrado com sucesso']);
+            Mail::to($this->email)->queue(new NewUser($user, $this->password));
+            $this->clearFields();
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            $this->emit('error', 'Erro ao cadastrar usuário');
+        }
     }
 
     public function clearFields()

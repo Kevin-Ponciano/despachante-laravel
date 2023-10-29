@@ -2,9 +2,12 @@
 
 namespace App\Http\Livewire\despachante;
 
+use App\Jobs\sendPasswordResetNotificationJob;
 use App\Traits\FunctionsHelpers;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Log;
+use Throwable;
 
 class ClienteEditar extends Component
 {
@@ -48,11 +51,15 @@ class ClienteEditar extends Component
             'nomeCliente.unique' => 'Cliente já cadastrado.',
         ]);
 
-        $this->cliente->update([
-            'nome' => $this->nomeCliente,
-        ]);
-
-        $this->emit('savedName');
+        try {
+            $this->cliente->user->update([
+                'name' => $this->nomeCliente,
+            ]);
+            $this->emit('savedName');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar nome do usuário');
+        }
     }
 
     public function updatePreco()
@@ -66,18 +73,22 @@ class ClienteEditar extends Component
             'renaveEntrada' => $this->regexMoney($this->preco['renaveEntrada'] ?? 0),
             'renaveSaida' => $this->regexMoney($this->preco['renaveSaida'] ?? 0),
         ];
+        try {
+            $this->cliente->update([
+                'preco_1_placa' => $preco['placa1'],
+                'preco_2_placa' => $preco['placa2'],
+                'preco_atpv' => $preco['loja'],
+                'preco_loja' => $preco['terceiro'],
+                'preco_terceiro' => $preco['atpv'],
+                'preco_renave_entrada' => $preco['renaveEntrada'],
+                'preco_renave_saida' => $preco['renaveSaida'],
+            ]);
 
-        $this->cliente->update([
-            'preco_1_placa' => $preco['placa1'],
-            'preco_2_placa' => $preco['placa2'],
-            'preco_atpv' => $preco['loja'],
-            'preco_loja' => $preco['terceiro'],
-            'preco_terceiro' => $preco['atpv'],
-            'preco_renave_entrada' => $preco['renaveEntrada'],
-            'preco_renave_saida' => $preco['renaveSaida'],
-        ]);
-
-        $this->emit('savedPreco');
+            $this->emit('savedPreco');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar preço');
+        }
     }
 
     public function updateUsuarioCliente()
@@ -90,40 +101,63 @@ class ClienteEditar extends Component
             'nomeUsuario.unique' => 'Nome de usuário já cadastrado.',
         ]);
 
-        $this->usuario->update([
-            'name' => $this->nomeUsuario,
-        ]);
+        try {
 
-        $this->emit('savedUserClienteName');
+            $this->usuario->update([
+                'name' => $this->nomeUsuario,
+            ]);
+
+            $this->emit('savedUserClienteName');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar nome do usuário');
+        }
     }
 
     public function switchStatus()
     {
-        $this->cliente->update([
-            'status' => $this->cliente->status == 'at' ? 'in' : 'at',
-        ]);
+        try {
+            $this->cliente->update([
+                'status' => $this->cliente->status == 'at' ? 'in' : 'at',
+            ]);
 
-        if ($this->cliente->status == 'at') {
-            $this->emit('success', ['message' => 'Cliente ativado com sucesso']);
-            $this->status = 'at';
-        } else {
-            $this->emit('success', ['message' => 'Cliente inativado com sucesso']);
-            $this->status = 'in';
+            if ($this->cliente->status == 'at') {
+                $this->emit('success', ['message' => 'Cliente ativado com sucesso']);
+                $this->status = 'at';
+            } else {
+                $this->emit('success', ['message' => 'Cliente inativado com sucesso']);
+                $this->status = 'in';
+            }
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar status do cliente');
         }
 
     }
 
     public function resetPassword()
     {
-        $this->emit('success', ['message' => 'Um e-mail será enviado para o cliente<br> para que ele possa redefinir sua senha']);
+        try {
+            //TODO: corrigir, https://laracasts.com/series/laravel-authentication-options
+            sendPasswordResetNotificationJob::dispatch($this->usuario);
+            $this->emit('success', ['message' => 'Um e-mail será enviado para o cliente<br> para que ele possa redefinir sua senha']);
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao enviar e-mail de redefinição de senha');
+        }
     }
 
     public function delete()
     {
-        $this->cliente->update(['status' => 'ex']);
+        try {
+            $this->cliente->update(['status' => 'ex']);
 
-        session()->flash('success', "Cliente deletado com sucesso");
-        return redirect()->route('despachante.clientes');
+            session()->flash('success', "Cliente deletado com sucesso");
+            return redirect()->route('despachante.clientes');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao deletar cliente');
+        }
     }
 
     public function render()

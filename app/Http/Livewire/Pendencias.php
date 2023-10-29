@@ -3,11 +3,12 @@
 namespace App\Http\Livewire;
 
 use App\Models\Pendencia;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Log;
+use Throwable;
 
 class Pendencias extends Component
 {
@@ -47,39 +48,44 @@ class Pendencias extends Component
 
     public function resolverPendencia($id)
     {
-        if ($this->hasConludeOrExcluded())
-            return;
-        $pendencia = Pendencia::find($id)->load('pedido', 'pedido.timelines');
-        $pendencia->status = $pendencia->status == 'co' ? 'pe' : 'co';
-        $pendencia->concluded_at = $pendencia->status == 'co' ? now() : null;
-        $pendencia->save();
-        if ($pendencia->status == 'pe') {
-            if ($pendencia->pedido->status != 'pe') {
-                $pendencia->pedido()->update(['status' => 'pe']);
+        try {
+            if ($this->hasConludeOrExcluded())
+                return;
+            $pendencia = Pendencia::find($id)->load('pedido', 'pedido.timelines');
+            $pendencia->status = $pendencia->status == 'co' ? 'pe' : 'co';
+            $pendencia->concluded_at = $pendencia->status == 'co' ? now() : null;
+            $pendencia->save();
+            if ($pendencia->status == 'pe') {
+                if ($pendencia->pedido->status != 'pe') {
+                    $pendencia->pedido()->update(['status' => 'pe']);
+                    $pendencia->pedido->timelines()->create([
+                        'user_id' => Auth::user()->id,
+                        'titulo' => 'Pedido pendente',
+                        'descricao' => '',
+                        'tipo' => 'pp',
+                    ]);
+                    $this->emit('warning', 'Pedido com pendências!');
+                }
                 $pendencia->pedido->timelines()->create([
                     'user_id' => Auth::user()->id,
-                    'titulo' => 'Pedido pendente',
-                    'descricao' => '',
+                    'titulo' => 'Pendência não resolvida',
+                    'descricao' => "O pedido contínua com a pendência: <br><b>$pendencia->nome</b>.",
                     'tipo' => 'pp',
                 ]);
-                $this->emit('warning', 'Pedido com pendências!');
-            }
-            $pendencia->pedido->timelines()->create([
-                'user_id' => Auth::user()->id,
-                'titulo' => 'Pendência não resolvida',
-                'descricao' => "O pedido contínua com a pendência: <br><b>$pendencia->nome</b>.",
-                'tipo' => 'pp',
-            ]);
 
-        } elseif ($pendencia->status == 'co') {
-            $pendencia->pedido->timelines()->create([
-                'user_id' => Auth::user()->id,
-                'titulo' => 'Pendência resolvida',
-                'descricao' => "A pendência foi resolvida: <br><b>$pendencia->nome</b>.",
-                'tipo' => 'pr',
-            ]);
+            } elseif ($pendencia->status == 'co') {
+                $pendencia->pedido->timelines()->create([
+                    'user_id' => Auth::user()->id,
+                    'titulo' => 'Pendência resolvida',
+                    'descricao' => "A pendência foi resolvida: <br><b>$pendencia->nome</b>.",
+                    'tipo' => 'pr',
+                ]);
+            }
+            $this->emit('$refresh');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao resolver pendência!');
         }
-        $this->emit('$refresh');
     }
 
     public function hasConludeOrExcluded()
@@ -95,26 +101,31 @@ class Pendencias extends Component
 
     public function resolverTodas()
     {
-        if ($this->hasConludeOrExcluded())
-            return;
-        foreach ($this->pendencias as $pendencia) {
-            if ($pendencia->status !== 'co') {
-                $pendencia->status = 'co';
-                $pendencia->concluded_at = now();
-                $pendencia->save();
+        try {
+            if ($this->hasConludeOrExcluded())
+                return;
+            foreach ($this->pendencias as $pendencia) {
+                if ($pendencia->status !== 'co') {
+                    $pendencia->status = 'co';
+                    $pendencia->concluded_at = now();
+                    $pendencia->save();
+                }
             }
+
+            $this->setPedidoAberto();
+
+            Auth::user()->empresa()->pedidos()->find($this->pedidoId)
+                ->timelines()->create([
+                    'user_id' => Auth::user()->id,
+                    'titulo' => 'Pendências resolvidas',
+                    'descricao' => "Todas as pendências foram resolvidas.",
+                    'tipo' => 'pr',
+                ]);
+            $this->emit('$refresh');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao resolver pendências!');
         }
-
-        $this->setPedidoAberto();
-
-        Auth::user()->empresa()->pedidos()->find($this->pedidoId)
-            ->timelines()->create([
-                'user_id' => Auth::user()->id,
-                'titulo' => 'Pendências resolvidas',
-                'descricao' => "Todas as pendências foram resolvidas.",
-                'tipo' => 'pr',
-            ]);
-        $this->emit('$refresh');
     }
 
     public function setPedidoAberto()
@@ -136,43 +147,48 @@ class Pendencias extends Component
 
     public function store()
     {
-        if ($this->hasConludeOrExcluded())
-            return;
-        if ($this->name == null) {
-            $this->createPendencia = false;
-            $this->clearFields();
-            return;
-        }
-        $pendencia = Pendencia::create([
-            'pedido_id' => $this->pedidoId,
-            'nome' => $this->name,
-            'tipo' => $this->tipo ?? 'dc',
-            'observacao' => $this->observacao,
-            'status' => 'pe',
-        ]);
-        if ($pendencia->pedido->status != 'pe') {
-            $pendencia->pedido()->update([
+        try {
+            if ($this->hasConludeOrExcluded())
+                return;
+            if ($this->name == null) {
+                $this->createPendencia = false;
+                $this->clearFields();
+                return;
+            }
+            $pendencia = Pendencia::create([
+                'pedido_id' => $this->pedidoId,
+                'nome' => $this->name,
+                'tipo' => $this->tipo ?? 'dc',
+                'observacao' => $this->observacao,
                 'status' => 'pe',
             ]);
+            if ($pendencia->pedido->status != 'pe') {
+                $pendencia->pedido()->update([
+                    'status' => 'pe',
+                ]);
+                $pendencia->pedido->timelines()->create([
+                    'user_id' => Auth::user()->id,
+                    'titulo' => 'Pedido pendente',
+                    'descricao' => '',
+                    'tipo' => 'pp',
+                ]);
+            }
+
             $pendencia->pedido->timelines()->create([
                 'user_id' => Auth::user()->id,
-                'titulo' => 'Pedido pendente',
-                'descricao' => '',
+                'titulo' => 'Pendência criada',
+                'descricao' => "A seguinte pendência foi criada: <br><b>$pendencia->nome</b>.",
                 'tipo' => 'pp',
             ]);
+
+            $this->createPendencia = false;
+            $this->emit('$refresh');
+            $this->clearFields();
+            $this->emit('warning', 'Pendência criada com sucesso!');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao criar pendência!');
         }
-
-        $pendencia->pedido->timelines()->create([
-            'user_id' => Auth::user()->id,
-            'titulo' => 'Pendência criada',
-            'descricao' => "A seguinte pendência foi criada: <br><b>$pendencia->nome</b>.",
-            'tipo' => 'pp',
-        ]);
-
-        $this->createPendencia = false;
-        $this->emit('$refresh');
-        $this->clearFields();
-        $this->emit('warning', 'Pendência criada com sucesso!');
     }
 
     public function clearFields()
@@ -184,20 +200,25 @@ class Pendencias extends Component
 
     public function deletePendencia($id)
     {
-        if ($this->hasConludeOrExcluded())
-            return;
-        $pendencia = Pendencia::find($id);
-        $pendencia->delete();
+        try {
+            if ($this->hasConludeOrExcluded())
+                return;
+            $pendencia = Pendencia::find($id);
+            $pendencia->delete();
 
-        $pendencia->pedido->timelines()->create([
-            'user_id' => Auth::user()->id,
-            'titulo' => 'Pendência excluída',
-            'descricao' => "A seguinte pendência foi excluída: <br><b>$pendencia->nome</b>.",
-            'tipo' => 'ep',
-            'privado' => Auth::user()->isDespachante(),
-        ]);
+            $pendencia->pedido->timelines()->create([
+                'user_id' => Auth::user()->id,
+                'titulo' => 'Pendência excluída',
+                'descricao' => "A seguinte pendência foi excluída: <br><b>$pendencia->nome</b>.",
+                'tipo' => 'ep',
+                'privado' => Auth::user()->isDespachante(),
+            ]);
 
-        $this->emit('$refresh');
+            $this->emit('$refresh');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao excluir pendência!');
+        }
     }
 
     public function render()

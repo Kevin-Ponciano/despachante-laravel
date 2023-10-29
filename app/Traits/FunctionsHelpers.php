@@ -140,4 +140,18 @@ trait FunctionsHelpers
         }
     }
 
+    public function wasViewed()
+    {
+        $this->pedido->timelines()->create([
+            'user_id' => Auth::user()->id,
+            'titulo' => 'Pedido Visualizado',
+            'descricao' => 'O Pedido foi visualizado pelo usuário ' . Auth::user()->name,
+            'tipo' => 'vp',
+            'privado' => true
+        ]);
+        $this->pedido->update([
+            'viewed_at' => now(),
+        ]);
+    }
+
 }

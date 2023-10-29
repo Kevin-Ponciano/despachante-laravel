@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire\despachante;
 
+use App\Jobs\sendPasswordResetNotificationJob;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Log;
+use Throwable;
 
 class UsuarioEditar extends Component
 {
@@ -32,10 +35,15 @@ class UsuarioEditar extends Component
             'name.unique' => 'Nome de usuário já cadastrado.',
             'name.regex' => 'O nome de usuário não pode conter caracteres especiais.'
         ]);
-        $this->user->update([
-            'name' => $this->name,
-        ]);
-        $this->emit('savedName');
+        try {
+            $this->user->update([
+                'name' => $this->name,
+            ]);
+            $this->emit('savedName');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar nome de usuário');
+        }
     }
 
     public function changeEmail()
@@ -47,53 +55,78 @@ class UsuarioEditar extends Component
             'email.email' => 'E-mail inválido.',
             'email.unique' => 'E-mail já cadastrado.',
         ]);
-        $this->user->update([
-            'email' => $this->email,
-        ]);
-        $this->emit('savedEmail');
+        try {
+            $this->user->update([
+                'email' => $this->email,
+            ]);
+            $this->emit('savedEmail');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar e-mail de usuário');
+        }
     }
 
     public function changeRole()
     {
         #TODO: Implementar permissoes parecidos com o do BACKPACK
-        $usersAdmin = Auth::user()->despachante->users()->where('role', 'da')->get();
-        if ($usersAdmin->count() == 1 && $this->role != 'da') {
-            $this->addError('role', 'Deve haver pelo menos um administrador.');
-            return;
+        try {
+            $usersAdmin = Auth::user()->despachante->users()->where('role', 'da')->get();
+            if ($usersAdmin->count() == 1 && $this->role != 'da') {
+                $this->addError('role', 'Deve haver pelo menos um administrador.');
+                return;
+            }
+            $this->user->update([
+                'role' => $this->role,
+            ]);
+            $this->emit('savedRole');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar permissões de usuário');
         }
-        $this->user->update([
-            'role' => $this->role,
-        ]);
-        $this->emit('savedRole');
     }
 
     public function switchStatus()
     {
-        $this->user->update([
-            'status' => $this->user->status == 'at' ? 'in' : 'at',
-        ]);
+        try {
+            $this->user->update([
+                'status' => $this->user->status == 'at' ? 'in' : 'at',
+            ]);
 
-        if ($this->user->status == 'at') {
-            $this->emit('success', ['message' => 'Usuário ativado com sucesso']);
-            $this->status = 'at';
-        } else {
-            $this->emit('error', 'Usuário desativado com sucesso');
-            $this->status = 'in';
+            if ($this->user->status == 'at') {
+                $this->emit('success', ['message' => 'Usuário ativado com sucesso']);
+                $this->status = 'at';
+            } else {
+                $this->emit('error', 'Usuário desativado com sucesso');
+                $this->status = 'in';
+            }
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar status de usuário');
         }
-
     }
 
     public function delete()
     {
-        $this->user->delete();
-
-        session()->flash('success', "Usuário deletado com sucesso");
-        return redirect()->route('despachante.usuarios');
+        try {
+            $this->user->delete();
+            session()->flash('success', "Usuário deletado com sucesso");
+            return redirect()->route('despachante.usuarios');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao deletar usuário');
+        }
     }
 
     public function resetPassword()
     {
-        $this->emit('success', ['message' => 'Um e-mail será enviado para o usuário<br> para que ele possa redefinir sua senha']);
+        try {
+            //TODO: corrigir, https://laracasts.com/series/laravel-authentication-options
+            sendPasswordResetNotificationJob::dispatch($this->user);
+            $this->emit('success', ['message' => 'Um e-mail será enviado para o usuário<br> para que ele possa redefinir sua senha']);
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao redefinir senha de usuário');
+        }
     }
 
     public function render()

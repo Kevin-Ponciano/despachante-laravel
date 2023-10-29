@@ -9,6 +9,8 @@ use App\Traits\FunctionsHelpers;
 use App\Traits\HandinFiles;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Log;
+use Throwable;
 
 class ProcessoNovo extends Component
 {
@@ -69,54 +71,24 @@ class ProcessoNovo extends Component
         }
     }
 
-    public function setPrecoPlaca()
-    {
-        if ($this->clienteId == null || $this->clienteId == -1)
-            return;
-        if ($this->qtdPlacas == 1)
-            $this->precoPlaca = $this->regexMoneyToView($this->cliente->preco_1_placa);
-        elseif ($this->qtdPlacas == 2)
-            $this->precoPlaca = $this->regexMoneyToView($this->cliente->preco_2_placa);
-        else
-            $this->precoPlaca = 0;
-    }
-
-    public function setPrecoHonorario()
-    {
-        if ($this->clienteId == null || $this->clienteId == -1)
-            return;
-        if ($this->compradorTipo == 'tc')
-            $this->precoHonorario = $this->regexMoneyToView($this->cliente->preco_terceiro);
-        elseif ($this->compradorTipo == 'lj')
-            $this->precoHonorario = $this->regexMoneyToView($this->cliente->preco_loja);
-    }
-
-    public function setPrecos()
-    {
-        if ($this->clienteId == null || $this->clienteId == -1)
-            return;
-        if (\Auth::user()->isDespachante())
-            $this->cliente = \Auth::user()->despachante->clientes()->find($this->clienteId);
-        else
-            $this->cliente = \Auth::user()->cliente;
-        $this->setPrecoPlaca();
-        $this->setPrecoHonorario();
-        $this->precoSettado = true;
-    }
-
     public function addServico()
     {
-        if ($this->servicoId == null || $this->servicoId == -1)
-            return;
-        if (\Auth::user()->isDespachante())
-            $servico = \Auth::user()->despachante->servicos()->find($this->servicoId)->toArray();
-        else
-            $servico = \Auth::user()->cliente->despachante->servicos()->find($this->servicoId)->toArray();
-        $serviceIds = array_map(function ($service) {
-            return $service['id'];
-        }, $this->servicos);
-        if (!in_array($servico['id'], $serviceIds)) {
-            $this->servicos[] = $servico;
+        try {
+            if ($this->servicoId == null || $this->servicoId == -1)
+                return;
+            if (\Auth::user()->isDespachante())
+                $servico = \Auth::user()->despachante->servicos()->find($this->servicoId)->toArray();
+            else
+                $servico = \Auth::user()->cliente->despachante->servicos()->find($this->servicoId)->toArray();
+            $serviceIds = array_map(function ($service) {
+                return $service['id'];
+            }, $this->servicos);
+            if (!in_array($servico['id'], $serviceIds)) {
+                $this->servicos[] = $servico;
+            }
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao adicionar serviço.');
         }
     }
 
@@ -130,6 +102,7 @@ class ProcessoNovo extends Component
     public function store()
     {
         $this->validate();
+
         if (\Auth::user()->isCliente() && empty($this->arquivos)) {
             return $this->addError('arquivos.*', 'Obrigatório.');
         }
@@ -188,6 +161,41 @@ class ProcessoNovo extends Component
             'message' => 'Processo criado com sucesso.',
             'url' => $url,
         ]);
+    }
+
+    public function setPrecos()
+    {
+        if ($this->clienteId == null || $this->clienteId == -1)
+            return;
+        if (\Auth::user()->isDespachante())
+            $this->cliente = \Auth::user()->despachante->clientes()->find($this->clienteId);
+        else
+            $this->cliente = \Auth::user()->cliente;
+        $this->setPrecoPlaca();
+        $this->setPrecoHonorario();
+        $this->precoSettado = true;
+    }
+
+    public function setPrecoPlaca()
+    {
+        if ($this->clienteId == null || $this->clienteId == -1)
+            return;
+        if ($this->qtdPlacas == 1)
+            $this->precoPlaca = $this->regexMoneyToView($this->cliente->preco_1_placa);
+        elseif ($this->qtdPlacas == 2)
+            $this->precoPlaca = $this->regexMoneyToView($this->cliente->preco_2_placa);
+        else
+            $this->precoPlaca = 0;
+    }
+
+    public function setPrecoHonorario()
+    {
+        if ($this->clienteId == null || $this->clienteId == -1)
+            return;
+        if ($this->compradorTipo == 'tc')
+            $this->precoHonorario = $this->regexMoneyToView($this->cliente->preco_terceiro);
+        elseif ($this->compradorTipo == 'lj')
+            $this->precoHonorario = $this->regexMoneyToView($this->cliente->preco_loja);
     }
 
     public function clearInputs()

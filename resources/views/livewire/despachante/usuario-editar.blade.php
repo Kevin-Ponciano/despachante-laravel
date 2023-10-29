@@ -54,13 +54,9 @@
                                 Redefinir Senha
                             </a>
                         @else
-                            <form action="{{ route('despachante.reset-password') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="email" value="{{$email}}">
-                                <button type="submit" wire:click="resetPassword" class="btn btn-ghost-warning">
-                                    Redefinir Senha
-                                </button>
-                            </form>
+                            <button type="submit" wire:click="resetPassword" class="btn btn-ghost-warning">
+                                Redefinir Senha
+                            </button>
                         @endif
                         <div class="col-auto ms-auto d-print-none">
                             <div x-data="{ status: @entangle('status')}" class="btn-list">

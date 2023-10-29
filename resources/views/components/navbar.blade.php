@@ -6,7 +6,7 @@
                     <a class="card-link" href="{{route('dashboard')}}">
                         <img src="{{asset('assets/img/logo3.png')}}" alt="Saled"
                              class="navbar-brand-image">
-                        .G.P.D
+                        {{config('app.name')}}
                     </a>
                 </h1>
                 <div class="fw-bolder text-capitalize text-center w-8">
@@ -212,7 +212,11 @@
                                 Perfil</a>
                             {{--                            <a href="#" class="dropdown-item">Feedback</a>--}}
                             {{--                            <div class="dropdown-divider"></div>--}}
-                            {{--                            <a href="./settings.html" class="dropdown-item">Settings</a>--}}
+                            @can('[DESPACHANTE] - Alterar Configurações')
+                                <a href="{{route('despachante.settings')}}" class="dropdown-item">
+                                    <i class="dropdown-item-icon icon ti ti-settings"></i>
+                                    Configurações</a>
+                            @endcan
                             <form method="POST" action="{{ route('logout') }}" id="logout">
                                 @csrf
                             </form>

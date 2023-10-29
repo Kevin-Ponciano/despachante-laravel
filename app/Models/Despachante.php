@@ -25,7 +25,7 @@ class Despachante extends Model
         'nome_fantasia',
         'cnpj',
         'celular',
-        'telefone',
+        'celular_secundario',
         'email',
         'site',
         'status',

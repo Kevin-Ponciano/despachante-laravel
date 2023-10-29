@@ -4,25 +4,35 @@ namespace App\Http\Livewire\despachante;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Log;
+use Throwable;
 
 class Usuarios extends Component
 {
     public function dataTable()
     {
-        $data = [];
-        $usuarios = Auth::user()->despachante->users;
-        foreach ($usuarios as $usuario) {
-            $data[] = [
-                'id' => $usuario->id,
-                'name' => $usuario->name,
-                'email' => $usuario->email,
-                'role' => $usuario->getFuncao(),
-                'status' => $usuario->status,
-            ];
+        try {
+            $data = [];
+            $usuarios = Auth::user()->despachante->users;
+            foreach ($usuarios as $usuario) {
+                $data[] = [
+                    'id' => $usuario->id,
+                    'name' => $usuario->name,
+                    'email' => $usuario->email,
+                    'role' => $usuario->getFuncao(),
+                    'status' => $usuario->status,
+                ];
+            }
+            return response()->json([
+                'data' => $data,
+            ]);
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao carregar usuários.');
+            return response()->json([
+                'data' => [],
+            ]);
         }
-        return response()->json([
-            'data' => $data,
-        ]);
     }
 
     public function render()

@@ -67,6 +67,8 @@ class Timeline extends Model
                 return ['step-color' => 'steps-orange', 'icon' => 'text-warning ti ti-alert-circle', 'bg' => 'bg-warning'];
             case 'rp':
                 return ['step-color' => 'steps-orange', 'icon' => 'text-warning ti ti-refresh-alert', 'bg' => 'bg-warning'];
+            case 'vp':
+                return ['step-color' => 'steps-blue', 'icon' => 'text-primary ti ti-eye', 'bg' => 'bg-primary'];
             case 'pr':
                 return ['step-color' => 'steps-green', 'icon' => 'text-success ti ti-checks', 'bg' => 'bg-success'];
             case 'uf':

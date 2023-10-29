@@ -163,13 +163,9 @@
                             <button class="btn btn-primary" wire:click="updateUsuarioCliente">
                                 Alterar Nome de Usuário
                             </button>
-                            <form action="{{ route('despachante.reset-password') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="email" value="{{$emailUsuario}}">
-                                <button type="submit" wire:click="resetPassword" class="btn btn-ghost-warning">
-                                    Redefinir Senha
-                                </button>
-                            </form>
+                            <button type="submit" wire:click="resetPassword" class="btn btn-ghost-warning">
+                                Redefinir Senha
+                            </button>
                         </div>
                     </fieldset>
                 </div>

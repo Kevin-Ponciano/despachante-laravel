@@ -1,10 +1,10 @@
 <x-guest-layout>
-    <div class="page page-center">
+    <div class="page page-center border-top-wide border-primary">
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
                 <a class="navbar-brand navbar-brand-autodark">
                     <img src="{{asset('assets/img/logo3.png')}}" height="36" alt="saled logo">
-                    ALED
+                    {{config('app.name')}}
                 </a>
             </div>
             <form class="card card-md" action="{{ route('password.email') }}" method="POST">
@@ -13,10 +13,25 @@
                     <h2 class="card-title text-center mb-4">Esqueceu sua senha</h2>
                     <p class="text-muted mb-4">Digite seu endereço de e-mail e um link de redefinição de senha será
                         enviado para você!</p>
+                    <div class="text-success">
+                        @if (session('status'))
+                            {{ session('status') }}
+                        @endif
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">Endereço de email</label>
-                        <input type="email" name="email" class="form-control" placeholder="Digite o e-mail"
+                        <input type="email" name="email" class="form-control @if($errors->any())  is-invalid @endif"
+                               placeholder="Digite o e-mail"
                                :value="old('email')" required autofocus autocomplete="username">
+                        @if ($errors->any())
+                            <div class="text-danger mt-1">
+                                <div>
+                                    @foreach ($errors->all() as $error)
+                                        <span>{{ $error }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-footer">
                         <button type="submit" class="btn btn-primary w-100">

@@ -4,6 +4,13 @@
             <div class="col-lg-auto ms-lg-auto">
                 <ul class="list-inline list-inline-dots mb-0">
                     <li class="list-inline-item">
+                        <a href="{{route('welcome')}}" class="link-secondary" rel="noopener">
+                            <i class="ti ti-home"></i>
+                            Sobre Nós
+                        </a>
+                    </li>
+
+                    <li class="list-inline-item">
                         <a href="mailto:kevin.ponciano@outlook.com" class="link-secondary" rel="noopener">
                             <i class="ti ti-mail"></i>
                             Suporte

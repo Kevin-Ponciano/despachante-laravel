@@ -8,17 +8,17 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-5">
+    <div class="col-7">
         <div class="mb-3">
             {{$nomeComprador}}
         </div>
     </div>
-    <div class="col-2">
+    <div class="col-5">
         <div class="mb-3">
             {{$telefone}}
         </div>
     </div>
-    <div class="col-5">
+    <div class="col-7">
         <div class="mb-3">
             {{$responsavel}}
         </div>

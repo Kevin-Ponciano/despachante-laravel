@@ -38,7 +38,7 @@
                         @endif
                     </div>
                 </div>
-                @can('[ADMIN] - Acessar Admin')
+                @can('[DESPACHANTE] - Acessar Sistema')
                     <div class="mt-2">
                         <div x-data="{status : @entangle('status') }" class="btn-list">
                             <button class="btn btn-primary" x-show="status==='ab' || status==='pe' || status==='rp'"
@@ -70,7 +70,7 @@
                         </div>
                     </x-modal-aviso>
                 @endcan
-                @cannot('[ADMIN] - Acessar Admin')
+                @cannot('[DESPACHANTE] - Acessar Sistema')
                     <div></div>
                 @endcannot
             @endif

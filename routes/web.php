@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardRouteController;
+use App\Http\Controllers\Fortify\PasswordResetLinkController;
 use App\Http\Controllers\SearchPedidoController;
 use App\Http\Livewire\Atpvs;
 use App\Http\Livewire\AtpvShow;
@@ -9,13 +10,13 @@ use App\Http\Livewire\despachante\ClienteEditar;
 use App\Http\Livewire\despachante\Clientes;
 use App\Http\Livewire\despachante\RelatorioPedidos;
 use App\Http\Livewire\despachante\Servicos;
+use App\Http\Livewire\despachante\Settings;
 use App\Http\Livewire\despachante\UsuarioEditar;
 use App\Http\Livewire\despachante\Usuarios;
 use App\Http\Livewire\Perfil;
 use App\Http\Livewire\Processos;
 use App\Http\Livewire\ProcessoShow;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 Route::get('/', function () {
     return view('lading-page');
@@ -31,6 +32,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');
         Route::get('/transferencias', Atpvs::class)->name('atpvs');
         Route::get('/transferencias/{id}', AtpvShow::class)->name('atpvs.show');
+
+        Route::middleware(['can:[DESPACHANTE] - Alterar Configurações'])->group(function () {
+            Route::get('/settings', Settings::class)->name('settings');
+        });
 
         Route::middleware(['can:[DESPACHANTE] - Gerenciar Clientes'])->group(function () {
             Route::get('/clientes', Clientes::class)->name('clientes');

@@ -6,7 +6,9 @@ use Auth;
 use Hash;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Log;
 use Storage;
+use Throwable;
 
 class Perfil extends Component
 {
@@ -40,14 +42,19 @@ class Perfil extends Component
 
     public function savePhoto()
     {
-        if (!$this->photo)
-            return;
-        $this->delete();
-        $this->user->update([
-            'profile_photo_path' => $this->photo->store('profile-photos', 'public'),
-        ]);
-        $this->emit('$refresh');
-        $this->emit('savedPhoto');
+        try {
+            if (!$this->photo)
+                return;
+            $this->delete();
+            $this->user->update([
+                'profile_photo_path' => $this->photo->store('profile-photos', 'public'),
+            ]);
+            $this->emit('$refresh');
+            $this->emit('savedPhoto');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao salvar foto.');
+        }
     }
 
     public function delete()
@@ -60,29 +67,40 @@ class Perfil extends Component
 
     public function deletePhoto()
     {
-        $this->delete();
-        $this->user->update([
-            'profile_photo_path' => null,
-        ]);
-        $this->emit('$refresh');
-        $this->emit('deletedPhoto');
+        try {
+
+            $this->delete();
+            $this->user->update([
+                'profile_photo_path' => null,
+            ]);
+            $this->emit('$refresh');
+            $this->emit('deletedPhoto');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao deletar foto.');
+        }
     }
 
     public function changeName()
     {
         $this->validate([
-            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,' . $this->user->id
+            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,' . $this->user->id,
         ], [
             'name.required' => 'Obrigatório.',
             'name.regex' => 'O nome de usuário não pode conter caracteres especiais.',
             'name.unique' => 'Nome de usuário já cadastrado.',
         ]);
 
-        $this->user->update([
-            'name' => $this->name,
-        ]);
+        try {
+            $this->user->update([
+                'name' => $this->name,
+            ]);
 
-        $this->emit('savedName');
+            $this->emit('savedName');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao salvar nome.');
+        }
     }
 
     public function changeEmail()
@@ -95,11 +113,16 @@ class Perfil extends Component
             'email.unique' => 'E-mail já cadastrado.',
         ]);
 
-        $this->user->update([
-            'email' => $this->email,
-        ]);
+        try {
+            $this->user->update([
+                'email' => $this->email,
+            ]);
 
-        $this->emit('savedEmail');
+            $this->emit('savedEmail');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao salvar e-mail.');
+        }
     }
 
     public function changePassword()
@@ -116,11 +139,16 @@ class Perfil extends Component
             ]
         );
 
-        $this->user->update([
-            'password' => Hash::make($this->newPassword),
-        ]);
+        try {
+            $this->user->update([
+                'password' => Hash::make($this->newPassword),
+            ]);
 
-        $this->emit('savedPassword');
+            $this->emit('savedPassword');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao salvar senha.');
+        }
     }
 
 

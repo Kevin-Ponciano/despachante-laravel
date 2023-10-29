@@ -78,6 +78,7 @@ class Atpvs extends Component
             'tipo',
             'movimentacao',
             'downloadDisponivel',
+            'paginators'
         ]);
     }
 
