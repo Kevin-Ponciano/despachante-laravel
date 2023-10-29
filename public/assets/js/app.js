@@ -32,4 +32,8 @@ $(document).ready(function () {
         let modalPendencias = new bootstrap.Modal(document.getElementById('modal-pendencias'))
         modalPendencias.show()
     })
+
+    Livewire.on('open-link', function (data) {
+        window.open(data, '_blank');
+    })
 });

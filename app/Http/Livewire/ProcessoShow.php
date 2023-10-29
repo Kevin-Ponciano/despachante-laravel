@@ -45,6 +45,7 @@ class ProcessoShow extends Component
     protected $listeners = [
         '$refresh',
         'deleteFile',
+        'visualizar'
     ];
 
     protected $rules = [

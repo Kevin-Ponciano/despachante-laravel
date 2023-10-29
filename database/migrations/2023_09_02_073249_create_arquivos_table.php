@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('folder');
             $table->string('mime_type');
             $table->text('url');
+            $table->dateTime('expires_at')->nullable();
             $table->timestamps();
         });
     }

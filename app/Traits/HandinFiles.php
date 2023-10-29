@@ -3,18 +3,22 @@
 namespace App\Traits;
 
 use App\Models\Arquivo;
+use Arr;
 use Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
+use Log;
+use Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Throwable;
 use ZipArchive;
 
 trait HandinFiles
 {
     use WithFileUploads;
 
-    public string $rootPath = 'SALED';
+    public string $rootPath = 'ProcessCar';
     public $arquivos = [];
     public $arquivosDoPedido = [];
     public $arquivosCodCrlv = [];
@@ -152,6 +156,32 @@ trait HandinFiles
         $this->arquivos = [];
     }
 
+    protected function saveFile($file, $path, $folder, $nome = null)
+    {
+        if (empty($nome))
+            $nome = $file->getClientOriginalName();
+        $pathFile = Storage::putFileAs($path, $file, $nome);
+        if (!$pathFile)
+            return null;
+        $mime = Storage::mimeType($pathFile);
+        $url = Storage::temporaryUrl($pathFile, Carbon::now()->addDays(7));
+
+        Arquivo::updateOrCreate(
+            [
+                'path' => $pathFile,
+            ],
+            [
+                'pedido_id' => $this->pedido->id,
+                'nome' => $nome,
+                'folder' => $folder,
+                'mime_type' => $mime,
+                'url' => $url,
+                'expires_at' => Carbon::now()->addDays(6),
+                'created_at' => now(),
+            ]
+        );
+        return $nome;
+    }
 
     public function uploadCodCrlv()
     {
@@ -232,7 +262,6 @@ trait HandinFiles
         $this->arquivoAtpv = null;
     }
 
-
     /**
      * @param $folder
      * @return array
@@ -246,7 +275,7 @@ trait HandinFiles
             $link = $file->url;
             $path = $file->path;
             $mime = $file->mime_type;
-            $data = $file->updated_at;
+            $data = $file->getCreatedAt();
 
             $files[] = [
                 'name' => $name,
@@ -258,7 +287,6 @@ trait HandinFiles
         }
         return $files;
     }
-
 
     public function downloadFile($path)
     {
@@ -285,7 +313,7 @@ trait HandinFiles
 
         $files = $this->pedido->arquivos()->where('folder', $folder)->pluck('path')->toArray();
         $zip = new ZipArchive();
-        $zipFileName = \Str::replace('/', '_', $folder) . '_' . $pedidoId . '.zip';
+        $zipFileName = Str::replace('/', '_', $folder) . '_' . $pedidoId . '.zip';
         $zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         foreach ($files as $file) {
             $tempFile = Storage::get($file);
@@ -295,7 +323,7 @@ trait HandinFiles
         $zip->close();
 
         if (Auth::user()->isCliente() && $this->pedido) {
-            $nomeArquivos = \Arr::map($files, function ($file) {
+            $nomeArquivos = Arr::map($files, function ($file) {
                 return basename($file);
             });
             $nomeArquivos = implode(', ', $nomeArquivos);
@@ -331,30 +359,20 @@ trait HandinFiles
         }
     }
 
-    protected function saveFile($file, $path, $folder, $nome = null)
+    public function visualizar($path)
     {
-        if (empty($nome))
-            $nome = $file->getClientOriginalName();
-        $pathFile = Storage::putFileAs($path, $file, $nome);
-        if (!$pathFile)
-            return null;
-        $mime = Storage::mimeType($pathFile);
-        # TODO: Criar um evento que ao clicar em visualizar o arquivo, verifica se o link ainda é válido, se não for, cria um novo link e atualiza no banco de dados
-        $url = Storage::url($pathFile, Carbon::now()->addDays(7));
-
-        Arquivo::updateOrCreate(
-            [
-                'path' => $pathFile,
-            ],
-            [
-                'pedido_id' => $this->pedido->id,
-                'nome' => $nome,
-                'folder' => $folder,
-                'mime_type' => $mime,
-                'url' => $url,
-                'updated_at' => now(),
-            ]
-        );
-        return $nome;
+        $file = Arquivo::where('path', $path)->first();
+        $expiresAt = $file->expires_at;
+        $url = $file->url;
+        try {
+            if ($expiresAt < now()) {
+                $url = Storage::temporaryUrl($path, Carbon::now()->addDays(7));
+                $file->update(['url' => $url, 'expires_at' => Carbon::now()->addDays(6)]);
+            }
+            $this->emit('open-link', $url);
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao abrir o arquivo.');
+        }
     }
 }
