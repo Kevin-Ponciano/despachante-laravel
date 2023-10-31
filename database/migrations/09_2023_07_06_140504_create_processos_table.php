@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('processos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade');
             $table->char('tipo', 2);
             $table->char('comprador_tipo', 2);
             $table->tinyInteger('qtd_placas')->default(0);

@@ -4,10 +4,11 @@ namespace App\Http\Livewire;
 
 use Auth;
 use Livewire\Component;
+use function Laravel\Prompts\select;
 
 class Dashboard extends Component
 {
-    protected $listeners = ['$refresh'];
+    protected $listeners = ['atualizarDashboard'];
     public $empresa;
 
     public function mount()
@@ -15,10 +16,16 @@ class Dashboard extends Component
         $this->empresa = Auth::user()->empresa();
     }
 
+    function atualizarDashboard()
+    {
+        $this->render();
+        $this->emit('atualizarDashboardDone');
+    }
+
     public function render()
     {
-        $pedidosProcessos = $this->empresa->pedidosProcessos()->whereIn('pedidos.status', ['ab', 'rp', 'ea', 'pe'])->get();
-        $pedidosAtpvs = $this->empresa->pedidosAtpvs()->whereIn('pedidos.status', ['ab', 'rp', 'ea', 'pe', 'sc'])->get();
+        $pedidosProcessos = $this->empresa->pedidosProcessos()->whereIn('pedidos.status', ['ab', 'rp', 'ea', 'pe'])->select('pedidos.status')->get();
+        $pedidosAtpvs = $this->empresa->pedidosAtpvs()->whereIn('pedidos.status', ['ab', 'rp', 'ea', 'pe', 'sc'])->select('pedidos.status')->get();
 
         $qtdProcessosAbertos = $pedidosProcessos->where('status', 'ab')->count();
         $qtdProcessosRetornados = $pedidosProcessos->where('status', 'rp')->count();

@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_bin';
             $table->id();
-            $table->foreignId('pedido_id')->constrained('pedidos')->onDelete('cascade');
+            $table->foreignId('pedido_id')->constrained('pedidos');
             $table->string('nome');
             $table->string('path')->unique();
             $table->string('folder');

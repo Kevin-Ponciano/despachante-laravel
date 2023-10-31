@@ -11,7 +11,7 @@ class StatusVerifyMiddleware
     {
         if (\Auth::user()->isDespachante()) {
             if (\Auth::user()->despachante->status == 'in') {
-                abort(423, 'Acesso Negado', ['message' => 'Seu acesso foi bloqueado. Entre em contato com o administrador.']);
+                abort(423, 'Acesso Negado', ['message' => 'Seu acesso foi bloqueado. Entre em contato com o Suporte do Sistema.']);
             } elseif (\Auth::user()->status == 'in') {
                 abort(423, 'Acesso Negado', ['message' => 'Seu usuário foi bloqueado. Entre em contato com o administrador da sua Empresa Despachante.']);
             }

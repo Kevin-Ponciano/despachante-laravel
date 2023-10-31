@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('numero_cliente')->index();
-            $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('endereco_id')->nullable()->constrained('enderecos')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade');
+            $table->foreignId('endereco_id')->nullable()->constrained('enderecos')->onUpdate('cascade');
             $table->string('nome');
             $table->string('cpf_cnpj')->nullable()->unique();
             $table->char('telefone', 15)->nullable();

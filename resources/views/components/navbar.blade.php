@@ -1,4 +1,4 @@
-<header class="navbar-expand-md">
+<header class="navbar-expand-md z-2">
     <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar">
             <div class="container-fluid">
@@ -212,7 +212,7 @@
                                 Perfil</a>
                             {{--                            <a href="#" class="dropdown-item">Feedback</a>--}}
                             {{--                            <div class="dropdown-divider"></div>--}}
-                            @can('[DESPACHANTE] - Alterar Configurações')
+                            @can('[DESPACHANTE] - Acessar Sistema')
                                 <a href="{{route('despachante.settings')}}" class="dropdown-item">
                                     <i class="dropdown-item-icon icon ti ti-settings"></i>
                                     Configurações</a>

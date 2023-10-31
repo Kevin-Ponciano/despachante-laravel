@@ -1,4 +1,4 @@
-<div id="loading-page" class="bg-body-tertiary bg-opacity-100 page page-center pb-8 position-fixed w-100 z-1">
+<div id="loading-page" class="bg-body-tertiary bg-opacity-100 page page-center pb-8 position-fixed w-100 z-3">
     <div class="container container-slim py-4">
         <div class="text-center">
             <div class="mb-3">

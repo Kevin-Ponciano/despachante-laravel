@@ -3,9 +3,14 @@
 namespace App\Http\Livewire\despachante;
 
 use App\Jobs\sendPasswordResetNotificationJob;
+use Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Can;
 use Livewire\Component;
 use Log;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Str;
 use Throwable;
 
 class UsuarioEditar extends Component
@@ -15,15 +20,38 @@ class UsuarioEditar extends Component
     public $email;
     public $role;
     public $status;
+    public $userPermissions;
+    public $permissions;
 
     public function mount($id)
     {
-        $this->user = Auth::user()->despachante->users()->findOrFail($id);
+        $this->user = Auth::user()->despachante->users()->with('permissions')->findOrFail($id);
         $this->name = $this->user->name;
         $this->email = $this->user->email;
         $this->role = $this->user->role;
         $this->status = $this->user->status;
 
+        $roleName = '[DESPACHANTE] - ADMIN';
+        $excludedPermission = '[DESPACHANTE] - Acessar Sistema';
+        try {
+            $role = Role::with(['permissions' => function ($query) use ($excludedPermission) {
+                $query->where('name', '!=', $excludedPermission)->orderBy('name');
+            }])->where('name', $roleName)->firstOrFail();
+            $this->permissions = collect($role->permissions)->map(function ($permission) {
+                return [
+                    'id' => $permission->id,
+                    'name' => $permission->name,
+                    'alias' => Str::after($permission->name, '[DESPACHANTE] - '),
+                ];
+            })->all();
+            $userPermissions = $this->user->permissions->pluck('name')->all();
+            $this->userPermissions = collect($this->permissions)->mapWithKeys(function ($permission) use ($userPermissions) {
+                return [$permission['name'] => in_array($permission['name'], $userPermissions)];
+            })->all();
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao carregar permissões');
+        }
     }
 
     public function changeName()
@@ -66,24 +94,22 @@ class UsuarioEditar extends Component
         }
     }
 
-    public function changeRole()
+    public function changePermission()
     {
-        #TODO: Implementar permissoes parecidos com o do BACKPACK
         try {
-            $usersAdmin = Auth::user()->despachante->users()->where('role', 'da')->get();
-            if ($usersAdmin->count() == 1 && $this->role != 'da') {
-                $this->addError('role', 'Deve haver pelo menos um administrador.');
-                return;
-            }
-            $this->user->update([
-                'role' => $this->role,
-            ]);
-            $this->emit('savedRole');
+            $permissions = array_keys(array_filter($this->userPermissions, function ($hasPermission, $permissionName) {
+                return $hasPermission && in_array($permissionName, array_column($this->permissions, 'name'));
+            }, ARRAY_FILTER_USE_BOTH));
+
+            $this->user->syncPermissions($permissions);
+
+            $this->emit('savedPermission');
         } catch (Throwable $th) {
             Log::error($th);
-            $this->emit('error', 'Erro ao atualizar permissões de usuário');
+            $this->emit('error', 'Erro ao atualizar permissões do usuário');
         }
     }
+
 
     public function switchStatus()
     {
@@ -108,7 +134,7 @@ class UsuarioEditar extends Component
     public function delete()
     {
         try {
-            $this->user->delete();
+            $this->user->update(['status' => 'ex']);
             session()->flash('success', "Usuário deletado com sucesso");
             return redirect()->route('despachante.usuarios');
         } catch (Throwable $th) {

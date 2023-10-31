@@ -30,7 +30,6 @@ class UserFactory extends Factory
             'email' => $faker->unique()->email,
             'email_verified_at' => now(),
             'password' => Hash::make('123'),
-            'role' => 'du',
             'status' => 'at',
             'despachante_id' => 1,
             'cliente_id' => null,
@@ -40,39 +39,6 @@ class UserFactory extends Factory
             'profile_photo_path' => null,
         ];
     }
-
-    /**
-     * Indicate that the user is an admin.
-     */
-    public function adminDespachante(): static
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'role' => 'da',
-            ];
-        });
-    }
-
-    public function cliente(): static
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'role' => 'cu',
-                'cliente_id' => 1,
-            ];
-        });
-    }
-
-    public function adminCliente(): static
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'role' => 'ca',
-                'cliente_id' => 1,
-            ];
-        });
-    }
-
 
     /**
      * Indicate that the model's email address should be unverified.

@@ -7,9 +7,9 @@
    que ainda tem pendências no documento/campos
 3. Adicionar versão do sistema no rodapé usando a api do git
 4. Implementar o Cascade soft delete nas models recursivamente
-5. Implementar o Pruning Models para remover os registros que foram deletados
-6. Implementar a redefinição de senha no primeiro acesso
-7. Refatorar controllers adicionando arrays desde de variáveis únicas (prioridade -1)
-8. salvar de forma temporaria no sistema os arquivos que foram selecionados pra enviar
-9. Notificações globais para novos pedidos/retornos
-10. Opção de refresh com tempo na dashboard usando sessão pra controle
+5. Implementar o Cascade Delete nas models recursivamente
+6. Implementar o Pruning Models para remover os registros que foram deletados
+7. Implementar a redefinição de senha no primeiro acesso
+8. Refatorar controllers adicionando arrays desde de variáveis únicas (prioridade -1)
+9. salvar de forma temporaria no sistema os arquivos que foram selecionados pra enviar
+10. Notificações globais para novos pedidos/retornos

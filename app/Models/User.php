@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Log;
 use Spatie\Permission\Traits\HasRoles;
 use Storage;
 
@@ -23,12 +24,6 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use HasRoles;
 
-    protected static function boot()
-    {
-        parent::boot();
-        static::addGlobalScope(new SoftDeleteScope);
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -38,11 +33,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
         'status',
         'profile_photo_path'
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -54,7 +47,6 @@ class User extends Authenticatable
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];
-
     /**
      * The attributes that should be cast.
      *
@@ -63,7 +55,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
     /**
      * The accessors to append to the model's array form.
      *
@@ -72,6 +63,12 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new SoftDeleteScope);
+    }
 
     public function despachante()
     {
@@ -98,6 +95,23 @@ class User extends Authenticatable
         return $this->hasMany(Pedido::class, 'concluido_por');
     }
 
+    public function getFuncao()
+    {
+        $this->hasAnyRole('[ADMIN]', '[DESPACHANTE] - ADMIN') ? $funcao = 'Administrador' : $funcao = 'Usuário';
+        return $funcao;
+    }
+
+    public function getUuidDespachante()
+    {
+        if ($this->isDespachante())
+            return $this->despachante->uuid;
+        elseif ($this->isCliente())
+            return $this->cliente->despachante->uuid;
+        else
+            Log::error('Erro ao obter uuid do despachante.');
+        abort(500, 'Erro ao obter uuid do despachante.');
+    }
+
     public function isDespachante(): bool
     {
         return $this->despachante_id != null && $this->hasPermissionTo('[DESPACHANTE] - Acessar Sistema');
@@ -108,31 +122,6 @@ class User extends Authenticatable
         return $this->cliente_id != null && $this->hasPermissionTo('[CLIENTE] - Acessar Sistema');
     }
 
-    public function getFuncao()
-    {
-        $role = $this->role[1];
-        if ($role === 'a') {
-            return 'Administrador';
-        } elseif ($role === 'u') {
-            return 'Usuário';
-        } elseif ($role === 'm') {
-            return 'Master';
-        } else {
-            return 'undefined';
-        }
-    }
-
-    public function getUuidDespachante()
-    {
-        if ($this->isDespachante())
-            return $this->despachante->uuid;
-        elseif ($this->isCliente())
-            return $this->cliente->despachante->uuid;
-        else
-            \Log::error('Erro ao obter uuid do despachante.');
-            abort(500, 'Erro ao obter uuid do despachante.');
-    }
-
     public function empresa()
     {
         if ($this->isDespachante())
@@ -140,8 +129,8 @@ class User extends Authenticatable
         elseif ($this->isCliente())
             return $this->cliente;
         else
-            \Log::error('Erro ao obter a empresa.');
-            abort(500, 'Erro ao obter a empresa.');
+            Log::error('Erro ao obter a empresa.');
+        abort(500, 'Erro ao obter a empresa.');
     }
 
     public function getStatus()

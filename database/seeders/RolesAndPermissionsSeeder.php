@@ -18,7 +18,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => '[ADMIN] - Excluir Pedidos']);
         Permission::create(['name' => '[ADMIN] - Acessar Telescope']);
         Permission::create(['name' => '[ADMIN] - Acessar Horizon']);
-        Role::create(['name' => 'Admin'])->givePermissionTo([
+        Role::create(['name' => '[ADMIN]'])->givePermissionTo([
             '[ADMIN] - Acessar Admin',
             '[ADMIN] - Excluir Pedidos',
             '[ADMIN] - Acessar Telescope',
@@ -33,9 +33,9 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => '[DESPACHANTE] - Gerenciar Serviços']);
         Permission::create(['name' => '[DESPACHANTE] - Alterar Configurações']);
 
-        Role::create(['name' => 'Despachante-User'])->givePermissionTo('[DESPACHANTE] - Acessar Sistema');
+        Role::create(['name' => '[DESPACHANTE] - USUÁRIO'])->givePermissionTo('[DESPACHANTE] - Acessar Sistema');
 
-        Role::create(['name' => 'Despachante-Admin'])->givePermissionTo([
+        Role::create(['name' => '[DESPACHANTE] - ADMIN'])->givePermissionTo([
             '[DESPACHANTE] - Acessar Sistema',
             '[DESPACHANTE] - Excluir Pedidos',
             '[DESPACHANTE] - Gerenciar Clientes',
@@ -50,6 +50,6 @@ class RolesAndPermissionsSeeder extends Seeder
 
         ## CLIENTE
         Permission::create(['name' => '[CLIENTE] - Acessar Sistema']);
-        Role::create(['name' => 'Cliente'])->givePermissionTo('[CLIENTE] - Acessar Sistema');
+        Role::create(['name' => '[CLIENTE]'])->givePermissionTo('[CLIENTE] - Acessar Sistema');
     }
 }

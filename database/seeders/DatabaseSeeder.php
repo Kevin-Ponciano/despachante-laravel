@@ -50,18 +50,17 @@ class DatabaseSeeder extends Seeder
                 'despachante_id' => $despachante->id,
             ]);
             foreach ($user as $u) {
-                $u->assignRole('Despachante-Admin');
+                $u->assignRole('[DESPACHANTE] - USUÁRIO');
             }
 
             Cliente::factory($qtdClientesPorDespachante)->create([
                 'despachante_id' => $despachante->id,
             ])->each(function ($cliente) use ($qtdPendenciasPorPedido, $qtdPedidosPorCliente, $faker) {
                 $user = User::factory()->create([
-                    'role' => 'ca',
                     'despachante_id' => null,
                     'cliente_id' => $cliente->id,
                 ]);
-                $user->assignRole('Cliente');
+                $user->assignRole('[CLIENTE]');
 
                 Pedido::factory($qtdPedidosPorCliente)->create([
                     'criado_por' => $user->id,
@@ -90,29 +89,26 @@ class DatabaseSeeder extends Seeder
 
         });
 
-        User::find(1)->assignRole('Admin')->assignRole('Despachante-Admin')
+        User::find(1)->assignRole('[ADMIN]')->assignRole('[DESPACHANTE] - ADMIN')
             ->update([
                 'name' => 'admin',
                 'email' => 'admin@admin',
                 'password' => Hash::make('123'),
-                'role' => 'da',
                 'status' => 'at',
             ]);
-        User::find(2)->assignRole('Despachante-Admin')
+        User::find(2)->assignRole('[DESPACHANTE] - ADMIN')
             ->update([
                 'name' => 'despachante',
                 'email' => 'despachante@despachante',
                 'password' => Hash::make('123'),
-                'role' => 'da',
                 'status' => 'at',
             ]);
 
-        User::find(3)->assignRole('Cliente')->removeRole('Despachante-Admin')
+        User::find(5)->assignRole('[CLIENTE]')->removeRole('[DESPACHANTE] - ADMIN')
             ->update([
                 'name' => 'cliente',
                 'email' => 'cliente@cliente',
                 'password' => Hash::make('123'),
-                'role' => 'ca',
                 'status' => 'at',
                 'cliente_id' => 1,
                 'despachante_id' => null,

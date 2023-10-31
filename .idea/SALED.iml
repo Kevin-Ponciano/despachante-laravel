@@ -161,7 +161,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/temporary-directory" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/horizon" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/predis/predis" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/mohsenabrishami/stethoscope" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
