@@ -12,7 +12,7 @@ const Toast = Swal.mixin({
     position: 'top-end',
     showConfirmButton: false,
     showCloseButton: true,
-    timer: 5000,
+    timer: 10000,
     timerProgressBar: true,
     background: bgToast,
     width: 'auto',
@@ -76,6 +76,3 @@ Livewire.on('error', (data) => {
 Livewire.on('warning', (data) => {
     warning(data);
 })
-
-// TODO: refatorar deixando apenas uma função
-

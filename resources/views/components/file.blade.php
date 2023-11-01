@@ -15,19 +15,20 @@
                             </svg>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="{{$link}}" target="_blank" class="dropdown-item">Visualizar</a>
-                            <a href="#" wire:click="downloadFile('{{$path}}')" class="dropdown-item">Download</a>
-                            @if(Auth::user()->isDespachante())
+{{--                            <a href="{{$link}}" target="_blank" class="dropdown-item">Visualizar</a>--}}
+                            <a wire:click="visualizar('{{$path}}')" class="dropdown-item cursor-pointer">Visualizar</a>
+                            <a wire:click="downloadFile('{{$path}}')" class="dropdown-item cursor-pointer">Download</a>
+                            @can(['[DESPACHANTE] - Acessar Sistema'])
                                 <a href="#"
                                    onclick="$(window).trigger('deleteFile', {path: '{{$path}}',nome: '{{$nome}}',})"
                                    class=" dropdown-item deleteFile text-danger">Excluir</a>
-                            @endif
+                            @endcan
                         </div>
                     </div>
                 </div>
                 <div class="col-12 mb-1">
                     <div class="font-weight-medium">
-                        <a href="{{$link}}" target="_blank" class="text-decoration-none text-reset">
+                        <a wire:click="visualizar('{{$path}}')" class="text-decoration-none text-reset cursor-pointer">
                             <svg width="48px" height="48px" viewBox="0 0 400 400"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <defs>

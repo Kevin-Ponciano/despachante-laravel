@@ -1,0 +1,4 @@
+alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
+alias a='sail artisan'
+alias c='sail composer'
+alias mrs='a migrate:refresh --seed'

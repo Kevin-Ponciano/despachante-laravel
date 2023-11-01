@@ -12,10 +12,14 @@ return new class extends Migration {
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('numero_cliente')->index();
+            $table->foreignId('despachante_id')->constrained('despachantes')->onUpdate('cascade');
+            $table->foreignId('endereco_id')->nullable()->constrained('enderecos')->onUpdate('cascade');
             $table->string('nome');
+            $table->string('cpf_cnpj')->nullable()->unique();
+            $table->char('telefone', 15)->nullable();
             $table->char('status', 2);
+            #TODO: Criar tabela de precos
             $table->decimal('preco_1_placa', 12)->default(0);
             $table->decimal('preco_2_placa', 12)->default(0);
             $table->decimal('preco_atpv', 12)->default(0);

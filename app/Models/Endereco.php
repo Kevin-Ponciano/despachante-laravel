@@ -28,8 +28,14 @@ class Endereco extends Model
         return $this->hasOne(Despachante::class);
     }
 
+    public function cliente()
+    {
+        return $this->hasOne(Cliente::class);
+    }
+
     public function atpvs()
     {
         return $this->hasMany(Atpv::class, 'comprador_endereco_id');
     }
+
 }

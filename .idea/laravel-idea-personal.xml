@@ -6,9 +6,9 @@
       <map>
         <entry key="createHttpException.code" value="404" />
         <entry key="createMailable.markdown" value="1" />
-        <entry key="newModelSimpleOption:timestampsFields" value="" />
+        <entry key="newModelSimpleOption:addFillable" value="1" />
+        <entry key="newModelSimpleOption:softDeletes" value="1" />
         <entry key="postGeneration:databaseClassFactory" value="1" />
-        <entry key="postGeneration:migration" value="" />
       </map>
     </option>
   </component>

@@ -9,8 +9,8 @@ return new class extends Migration {
     {
         Schema::create('timelines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('pedido_id')->constrained('pedidos')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('pedido_id')->constrained('pedidos');
             $table->string('titulo');
             $table->text('descricao');
             $table->boolean('privado')->default(false);

@@ -16,6 +16,7 @@ class PedidoFactory extends Factory
         return [
             'comprador_nome' => $faker->name,
             'comprador_telefone' => $faker->cellphoneNumber,
+            'responsavel_nome' => $faker->name,
             'placa' => $faker->regexify('[A-Z]{3}[0-9]{4}'),
             'veiculo' => $faker->word,
             'preco_honorario' => $faker->randomFloat(2, 100, 1000),

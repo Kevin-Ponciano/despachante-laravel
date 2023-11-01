@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('atpvs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade');
             $table->char('renavam', 11);
             $table->char('numero_crv', 12);
             $table->char('codigo_crv', 12)->nullable();

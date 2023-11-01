@@ -7,7 +7,9 @@ use App\Traits\HandinFiles;
 use Arr;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Log;
 use Str;
+use Throwable;
 
 class AtpvShow extends Component
 {
@@ -106,7 +108,7 @@ class AtpvShow extends Component
 
     public function mount($id)
     {
-        $this->pedido = Auth::user()->empresa()->pedidosAtpvs()->where('numero_pedido', $id)->firstOrFail();
+        $this->pedido = Auth::user()->empresa()->pedidosAtpvs()->with('atpv', 'atpv.compradorEndereco', 'timelines', 'timelines.user')->where('numero_pedido', $id)->firstOrFail();
         $this->cliente = $this->pedido->cliente->nome;
         $this->tipo = $this->pedido->atpv->getTipo();
         switch ($this->tipo) {
@@ -149,7 +151,7 @@ class AtpvShow extends Component
             $this->servicoSC['preco'] = $this->regexMoneyToView($this->servicoSC['pivot']['preco']);
 
         if (Auth::user()->isDespachante())
-            $this->despachanteId = Auth::user()->despachante->id;
+            $this->despachanteId = Auth::user()->despachante_id;
         if (Auth::user()->isCliente()) {
             $this->inputPendenciasCliente = Arr::collapse(
                 Arr::map(
@@ -162,17 +164,25 @@ class AtpvShow extends Component
             if (empty($this->inputPendenciasCliente))
                 $this->inputPendenciasCliente = false;
         }
+
+        if (Auth::user()->isCliente() && $this->pedido->viewed_at == null)
+            $this->wasViewed();
     }
 
 
     public function savePrecoHonorario()
     {
-        if ($this->precoHonorario == null || $this->hasConludeOrExcluded())
-            return;
-        $this->pedido->update([
-            'preco_honorario' => $this->regexMoney($this->precoHonorario),
-        ]);
-        $this->emit('savedPrecoHonorario');
+        try {
+            if ($this->precoHonorario == null || $this->hasConludeOrExcluded())
+                return;
+            $this->pedido->update([
+                'preco_honorario' => $this->regexMoney($this->precoHonorario),
+            ]);
+            $this->emit('savedPrecoHonorario');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar preço do honorário.');
+        }
     }
 
     public function update()
@@ -182,63 +192,68 @@ class AtpvShow extends Component
         if ($this->isEditing || $this->inputPendenciasCliente) {
             $this->validate();
 
-            if ($this->veiculo['dataHodometro'] === '') $this->veiculo['dataHodometro'] = null;
-            if ($this->veiculo['hodometro'] === '') $this->veiculo['hodometro'] = null;
+            try {
+                if ($this->veiculo['dataHodometro'] === '') $this->veiculo['dataHodometro'] = null;
+                if ($this->veiculo['hodometro'] === '') $this->veiculo['hodometro'] = null;
 
-            $this->pedido->update([
-                'comprador_nome' => $this->comprador['nome'],
-                'comprador_telefone' => $this->comprador['telefone'],
-                'placa' => Str::upper($this->veiculo['placa']),
-                'veiculo' => $this->veiculo['veiculo'],
-                'observacoes' => $this->observacoes,
-            ]);
-            $this->pedido->atpv->update([
-                'renavam' => $this->veiculo['renavam'],
-                'numero_crv' => $this->veiculo['numeroCrv'],
-                'codigo_crv' => $this->veiculo['codigoCrv'] ?? null,
-                'hodometro' => $this->veiculo['hodometro'],
-                'data_hodometro' => $this->veiculo['dataHodometro'],
-                'preco_venda' => $this->regexMoney($this->veiculo['precoVenda']),
-                'vendedor_email' => $this->vendedor['email'],
-                'vendedor_telefone' => $this->vendedor['telefone'],
-                'vendedor_cpf_cnpj' => $this->vendedor['cpfCnpj'],
-                'comprador_email' => $this->comprador['email'],
-                'comprador_cpf_cnpj' => $this->comprador['cpfCnpj'],
-            ]);
-            $this->pedido->atpv->compradorEndereco->update([
-                'cep' => $this->endereco['cep'],
-                'logradouro' => $this->endereco['logradouro'],
-                'numero' => $this->endereco['numero'],
-                'bairro' => $this->endereco['bairro'],
-                'cidade' => $this->endereco['cidade'],
-                'estado' => $this->endereco['uf'],
-            ]);
+                $this->pedido->update([
+                    'comprador_nome' => $this->comprador['nome'],
+                    'comprador_telefone' => $this->comprador['telefone'],
+                    'placa' => Str::upper($this->veiculo['placa']),
+                    'veiculo' => $this->veiculo['veiculo'],
+                    'observacoes' => $this->observacoes,
+                ]);
+                $this->pedido->atpv->update([
+                    'renavam' => $this->veiculo['renavam'],
+                    'numero_crv' => $this->veiculo['numeroCrv'],
+                    'codigo_crv' => $this->veiculo['codigoCrv'] ?? null,
+                    'hodometro' => $this->veiculo['hodometro'],
+                    'data_hodometro' => $this->veiculo['dataHodometro'],
+                    'preco_venda' => $this->regexMoney($this->veiculo['precoVenda']),
+                    'vendedor_email' => $this->vendedor['email'],
+                    'vendedor_telefone' => $this->vendedor['telefone'],
+                    'vendedor_cpf_cnpj' => $this->vendedor['cpfCnpj'],
+                    'comprador_email' => $this->comprador['email'],
+                    'comprador_cpf_cnpj' => $this->comprador['cpfCnpj'],
+                ]);
+                $this->pedido->atpv->compradorEndereco->update([
+                    'cep' => $this->endereco['cep'],
+                    'logradouro' => $this->endereco['logradouro'],
+                    'numero' => $this->endereco['numero'],
+                    'bairro' => $this->endereco['bairro'],
+                    'cidade' => $this->endereco['cidade'],
+                    'estado' => $this->endereco['uf'],
+                ]);
 
-            if (Auth::user()->isDespachante()) {
-                $this->isEditing = false;
-                $this->emit('success', [
-                    'message' => "$this->tipo atualizado com sucesso!",
-                ]);
-            } else {
-                $this->pedido->pendencias()->where('tipo', 'cp')->where('status', 'pe')->update(['status' => 'rp']);
-                $this->pedido->update(['status' => 'rp']);
-                $this->pedido->timelines()->create([
-                    'user_id' => Auth::user()->id,
-                    'titulo' => 'Pedido retornado',
-                    'descricao' => 'Pedido retornado para o despachante para análise das informações atualizadas.',
-                    'tipo' => 'rp',
-                ]);
-                $this->emit('modal-sucesso-campos');
-            }
-            $camposAlterados = $this->fieldsChanged();
-            if ($camposAlterados) {
-                $this->pedido->timelines()->create([
-                    'user_id' => Auth::user()->id,
-                    'titulo' => $this->tipo . ' atualizado',
-                    'descricao' => "Os campos <b>|" . $camposAlterados . "|</b> foram atualizados.",
-                    'tipo' => 'up',
-                    'privado' => Auth::user()->isDespachante(),
-                ]);
+                if (Auth::user()->isDespachante()) {
+                    $this->isEditing = false;
+                    $this->emit('success', [
+                        'message' => "$this->tipo atualizado com sucesso!",
+                    ]);
+                } else {
+                    $this->pedido->pendencias()->where('tipo', 'cp')->where('status', 'pe')->update(['status' => 'rp']);
+                    $this->pedido->update(['status' => 'rp']);
+                    $this->pedido->timelines()->create([
+                        'user_id' => Auth::user()->id,
+                        'titulo' => 'Pedido retornado',
+                        'descricao' => 'Pedido retornado para o despachante para análise das informações atualizadas.',
+                        'tipo' => 'rp',
+                    ]);
+                    $this->emit('modal-sucesso-campos');
+                }
+                $camposAlterados = $this->fieldsChanged();
+                if ($camposAlterados) {
+                    $this->pedido->timelines()->create([
+                        'user_id' => Auth::user()->id,
+                        'titulo' => $this->tipo . ' atualizado',
+                        'descricao' => "Os campos <b>|" . $camposAlterados . "|</b> foram atualizados.",
+                        'tipo' => 'up',
+                        'privado' => Auth::user()->isDespachante(),
+                    ]);
+                }
+            } catch (Throwable $th) {
+                Log::error($th);
+                $this->emit('error', 'Erro ao atualizar ' . $this->tipo . '.');
             }
         }
     }
@@ -282,51 +297,126 @@ class AtpvShow extends Component
 
     public function savePrecoServico()
     {
-        if ($this->servicoSC['preco'] == null || $this->hasConludeOrExcluded())
-            return;
-        $this->pedido->servicos()->updateExistingPivot($this->servicoSC['id'], [
-            'preco' => $this->regexMoney($this->servicoSC['preco']),
-        ]);
-        $this->emit('savedPrecoServico');
+        try {
+            if ($this->servicoSC['preco'] == null || $this->hasConludeOrExcluded())
+                return;
+            $this->pedido->servicos()->updateExistingPivot($this->servicoSC['id'], [
+                'preco' => $this->regexMoney($this->servicoSC['preco']),
+            ]);
+            $this->emit('savedPrecoServico');
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao atualizar preço do serviço.');
+        }
     }
 
     public function solicitarCancelamento()
     {
-        if ($this->status === 'ex')
-            return;
-        $this->solicitadoCancelamento = true;
-        $this->pedido->update([
-            'status' => 'sc',
-            'solicitado_cancelamento' => $this->solicitadoCancelamento,
-        ]);
-        if (!$this->servicoSC) {
-            $servico = Auth::user()->cliente->despachante->servicos()->where('nome', 'Solicitação de Cancelamento')->first();
-            if (!$servico) {
-                $servico = Auth::user()->cliente->despachante->servicos()->create([
-                    'nome' => 'Solicitação de Cancelamento',
-                    'preco' => 0,
-                ]);
+        try {
+            if ($this->status === 'ex')
+                return;
+            $this->solicitadoCancelamento = true;
+            $this->pedido->update([
+                'status' => 'sc',
+                'solicitado_cancelamento' => $this->solicitadoCancelamento,
+            ]);
+            if (!$this->servicoSC) {
+                $servico = Auth::user()->cliente->despachante->servicos()->where('nome', 'Solicitação de Cancelamento')->first();
+                if (!$servico) {
+                    $servico = Auth::user()->cliente->despachante->servicos()->create([
+                        'nome' => 'Solicitação de Cancelamento',
+                        'preco' => 0,
+                    ]);
+                }
+                $this->pedido->servicos()->attach($servico->id);
+                $this->servicoSC = $this->pedido->servicos()->where('nome', 'Solicitação de Cancelamento')->first()->toArray();
             }
-            $this->pedido->servicos()->attach($servico->id);
-            $this->servicoSC = $this->pedido->servicos()->where('nome', 'Solicitação de Cancelamento')->first()->toArray();
-        }
-        $this->emit('success', [
-            'message' => 'Solicitação de cancelamento enviada com sucesso!',
-        ]);
+            $this->emit('success', [
+                'message' => 'Solicitação de cancelamento enviada com sucesso!',
+            ]);
 
-        $this->pedido->timelines()->create([
-            'user_id' => Auth::user()->id,
-            'titulo' => 'Solicitação de cancelamento',
-            'descricao' => Auth::user()->name . ' solicitou o cancelamento do ' . $this->tipo . '.',
-            'tipo' => 'sc',
-        ]);
+            $this->pedido->timelines()->create([
+                'user_id' => Auth::user()->id,
+                'titulo' => 'Solicitação de cancelamento',
+                'descricao' => Auth::user()->name . ' solicitou o cancelamento do ' . $this->tipo . '.',
+                'tipo' => 'sc',
+            ]);
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao solicitar cancelamento.');
+        }
     }
 
     public function storeInputPendencias()
     {
-        //Todo: Pensar em outra alternativa para nao usar eventos
-        $this->emit('storeInputPendencias', $this->inputPendencias);
-        $this->inputPendencias = [];
+        try {
+            if ($this->hasConludeOrExcluded())
+                return;
+            $count = 0;
+            $inputPendencias = array_reverse($this->inputPendencias);
+            foreach ($inputPendencias as $key => $inputPendencia) {
+                if ($inputPendencia) {
+                    $matchingPendencia = $this->pedido->pendencias->firstWhere('input', $key);
+                    $nome = match ($key) {
+                        'placa' => 'A Placa do veículo está incorreta.',
+                        'renavam' => 'O Renavam do veículo está incorreto.',
+                        'numero_crv' => 'O Número do CRV do veículo está incorreto.',
+                        'codigo_seguranca_crv' => 'O Código de Segurança do CRV do veículo está incorreto.',
+                        'hodometro' => 'O Hodômetro do veículo está incorreto.',
+                        'data_hora_medicao' => 'A Data/Hora de medição do Hodômetro do veículo está incorreta.',
+                        'preco_venda' => 'O Preço de Venda do veículo está incorreto.',
+                        'veiculo' => 'O Veículo está incorreto.',
+                        'email_do_vendedor' => 'O E-mail do Vendedor está incorreto.',
+                        'telefone_do_vendedor' => 'O Telefone do Vendedor está incorreto.',
+                        'cpf_cnpj_do_vendedor' => 'O CPF/CNPJ do Vendedor está incorreto.',
+                        'nome_do_comprador' => 'O Nome do Comprador está incorreto.',
+                        'email_do_comprador' => 'O E-mail do Comprador está incorreto.',
+                        'telefone_do_comprador' => 'O Telefone do Comprador está incorreto.',
+                        'cpf_cnpj_do_comprador' => 'O CPF/CNPJ do Comprador está incorreto.',
+                        'cep' => 'O CEP do Endereço está incorreto.',
+                        'logradouro' => 'O Logradouro do Endereço está incorreto.',
+                        'numero' => 'O Número do Endereço está incorreto.',
+                        'bairro' => 'O Bairro do Endereço está incorreto.',
+                        'cidade' => 'A Cidade do Endereço está incorreta.',
+                        'uf' => 'A UF do Endereço está incorreta.',
+                        default => null,
+                    };
+
+                    if (!$matchingPendencia) {
+                        $this->pedido->pendencias()->create([
+                            'nome' => $nome,
+                            'input' => $key,
+                            'observacao' => "Esta informação está incorreta, por favor corrigir.",
+                            'tipo' => 'cp',
+                            'status' => 'pe',
+                        ]);
+                    } else {
+                        $matchingPendencia->update([
+                            'status' => 'pe',
+                            'concluded_at' => null,
+                        ]);
+                    }
+                    $count++;
+                }
+            }
+            if ($count > 0) {
+                $this->pedido->update(['status' => 'pe']);
+                $this->emit('success', ['message' => 'Pendências criadas com sucesso!']);
+                $this->pedido->timelines()->updateOrCreate([
+                    'descricao' => 'Informado que alguns dados do pedido estão incorretos.',
+                    'created_at' => now(),
+                    'user_id' => Auth::user()->id,
+                    'titulo' => 'Pedido pendente',
+                    'tipo' => 'pp',
+                ]);
+                $this->emit('$refresh');
+            } else {
+                $this->emit('warning', 'Nenhuma pendência selecionada.');
+            }
+        } catch (Throwable $th) {
+            Log::error($th);
+            $this->emit('error', 'Erro ao criar pendências.');
+        }
     }
 
     public function render()

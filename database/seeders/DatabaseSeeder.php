@@ -24,15 +24,16 @@ class DatabaseSeeder extends Seeder
         $qtdDespachantes = 3;
         $qtdUsuariosPorDespachante = 3;
         $qtdClientesPorDespachante = 3;
-        $qtdServicosPorDespachante = 3;
-        $qtdPedidosPorCliente = 15;
+        $qtdServicosPorDespachante = 10;
+        $qtdPedidosPorCliente = 10;
         $qtdPendenciasPorPedido = 0;
 
         RolesAndPermissionsSeeder::run();
         $faker = Factory::create('pt_BR');
-        Despachante::factory($qtdDespachantes)->create()->each(function ($despachante) use ($qtdPedidosPorCliente, $qtdPendenciasPorPedido, $qtdClientesPorDespachante, $qtdUsuariosPorDespachante, $faker) {
-            $despachante->endereco_id = Endereco::factory()->create()->id;
-            $despachante->save();
+        Endereco::factory($qtdDespachantes)->create()->each(function ($endereco) use ($qtdPedidosPorCliente, $qtdPendenciasPorPedido, $qtdClientesPorDespachante, $qtdUsuariosPorDespachante, $faker) {
+            $despachante = Despachante::factory()->create([
+                'endereco_id' => $endereco->id,
+            ]);
             Servico::factory(3)->create([
                 'despachante_id' => $despachante->id,
             ]);
@@ -49,18 +50,17 @@ class DatabaseSeeder extends Seeder
                 'despachante_id' => $despachante->id,
             ]);
             foreach ($user as $u) {
-                $u->assignRole('Despachante-Admin');
+                $u->assignRole('[DESPACHANTE] - USUÁRIO');
             }
 
             Cliente::factory($qtdClientesPorDespachante)->create([
                 'despachante_id' => $despachante->id,
             ])->each(function ($cliente) use ($qtdPendenciasPorPedido, $qtdPedidosPorCliente, $faker) {
                 $user = User::factory()->create([
-                    'role' => 'ca',
                     'despachante_id' => null,
                     'cliente_id' => $cliente->id,
                 ]);
-                $user->assignRole('Cliente');
+                $user->assignRole('[CLIENTE]');
 
                 Pedido::factory($qtdPedidosPorCliente)->create([
                     'criado_por' => $user->id,
@@ -70,12 +70,6 @@ class DatabaseSeeder extends Seeder
                         'comprador_endereco_id' => Endereco::factory()->create()->id,
                         'pedido_id' => $pedido->id,
                     ]);
-//                    PedidoServico::create([
-//                        'pedido_id' => $pedido->id,
-//                        'servico_id' => Servico::factory()->create([
-//                            'despachante_id' => $pedido->cliente->despachante->id,
-//                        ])->id,
-//                    ]);
                     Pendencia::factory($qtdPendenciasPorPedido)->create([
                         'pedido_id' => $pedido->id,
                     ]);
@@ -87,13 +81,6 @@ class DatabaseSeeder extends Seeder
                     Processo::factory()->create([
                         'pedido_id' => $pedido->id,
                     ]);
-                    PedidoServico::create([
-                        'pedido_id' => $pedido->id,
-                        'servico_id' => Servico::factory()->create([
-                            'despachante_id' => $pedido->cliente->despachante->id,
-                        ])->id,
-                        'preco' => $faker->randomFloat(2, 1, 10000),
-                    ]);
                     Pendencia::factory($qtdPendenciasPorPedido)->create([
                         'pedido_id' => $pedido->id,
                     ]);
@@ -102,29 +89,26 @@ class DatabaseSeeder extends Seeder
 
         });
 
-        User::find(1)->assignRole('Admin')->assignRole('Despachante-Admin')
+        User::find(1)->assignRole('[ADMIN]')->assignRole('[DESPACHANTE] - ADMIN')
             ->update([
                 'name' => 'admin',
                 'email' => 'admin@admin',
                 'password' => Hash::make('123'),
-                'role' => 'da',
                 'status' => 'at',
             ]);
-        User::find(2)->assignRole('Despachante-Admin')
+        User::find(2)->assignRole('[DESPACHANTE] - ADMIN')
             ->update([
                 'name' => 'despachante',
                 'email' => 'despachante@despachante',
                 'password' => Hash::make('123'),
-                'role' => 'da',
                 'status' => 'at',
             ]);
 
-        User::find(3)->assignRole('Cliente')
+        User::find(5)->assignRole('[CLIENTE]')->removeRole('[DESPACHANTE] - ADMIN')
             ->update([
                 'name' => 'cliente',
                 'email' => 'cliente@cliente',
                 'password' => Hash::make('123'),
-                'role' => 'ca',
                 'status' => 'at',
                 'cliente_id' => 1,
                 'despachante_id' => null,

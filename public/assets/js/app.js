@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $('#loading-page').hide();
+
     $(window).on('deleteFile', function (e, data) {
         $('#file-name-delete').text(data.nome);
         $('#modal-delete-file').modal('show');
@@ -29,5 +31,9 @@ $(document).ready(function () {
     Livewire.on('modal-pendencias', function (data) {
         let modalPendencias = new bootstrap.Modal(document.getElementById('modal-pendencias'))
         modalPendencias.show()
+    })
+
+    Livewire.on('open-link', function (data) {
+        window.open(data, '_blank');
     })
 });

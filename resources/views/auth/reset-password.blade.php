@@ -1,10 +1,10 @@
 <x-guest-layout>
-    <div class="page page-center">
+    <div class="page page-center border-top-wide border-primary">
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
                 <a class="navbar-brand navbar-brand-autodark">
                     <img src="{{asset('assets/img/logo3.png')}}" height="36" alt="saled logo">
-                    ALED
+                    {{config('app.name')}}
                 </a>
             </div>
             <form class="card card-md" action="{{ route('password.update') }}" method="POST">
@@ -33,6 +33,15 @@
                             <span class="text-red">A senha deve ter no mínimo 8 caracteres</span>
                         @endif
                         @enderror
+                        @if ($errors->any())
+                            <div class="text-danger mt-1">
+                                <div>
+                                    @foreach ($errors->all() as $error)
+                                        <span>{{ $error }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-footer">
                         <button type="submit" class="btn btn-primary w-100">

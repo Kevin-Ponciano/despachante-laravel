@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('pendencias', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('pedido_id')->constrained('pedidos')->onUpdate('cascade');
             $table->string('nome');
             $table->char('tipo', 2);
             $table->char('status', 2);

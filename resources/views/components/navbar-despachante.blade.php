@@ -22,10 +22,9 @@
                 </span>
             </a>
         </li>
-        @if(Auth::user()->hasAnyPermission(['[DESPACHANTE] - Gerenciar Clientes', '[DESPACHANTE] - Gerenciar Usuários', '[DESPACHANTE] - Gerenciar Serviços']))
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="" data-bs-toggle="dropdown"
-                   data-bs-auto-close="outside" role="button" aria-expanded="false">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" data-bs-toggle="dropdown"
+               data-bs-auto-close="outside" role="button" aria-expanded="false">
                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                        viewBox="0 0 24 24"
@@ -37,77 +36,70 @@
                           d="M16 5.25l-8 4.5"></path>
                   </svg>
                 </span>
-                    <span class="nav-link-title">
+                <span class="nav-link-title">
                     Gestão
                 </span>
-                </a>
-                <div class="dropdown-menu">
-                    <div class="dropdown-menu-columns">
-                        <div class="dropdown-menu-column">
-                            @can('[DESPACHANTE] - Gerenciar Clientes')
-                                <a class="dropdown-item" href="{{route('despachante.clientes')}}">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="icon icon-tabler icon-tabler-manual-gearbox" width="24" height="24"
-                                         viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M5 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                        <path d="M12 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                        <path d="M19 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                        <path d="M5 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                        <path d="M12 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                        <path d="M5 8l0 8"></path>
-                                        <path d="M12 8l0 8"></path>
-                                        <path d="M19 8v2a2 2 0 0 1 -2 2h-12"></path>
-                                    </svg>
-                                    <span class="ms-2">
+            </a>
+            <div class="dropdown-menu">
+                <div class="dropdown-menu-columns">
+                    <div class="dropdown-menu-column">
+                        <a class="dropdown-item" href="{{route('despachante.clientes')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="icon icon-tabler icon-tabler-manual-gearbox" width="24" height="24"
+                                 viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M5 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                <path d="M12 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                <path d="M19 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                <path d="M5 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                <path d="M12 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                <path d="M5 8l0 8"></path>
+                                <path d="M12 8l0 8"></path>
+                                <path d="M19 8v2a2 2 0 0 1 -2 2h-12"></path>
+                            </svg>
+                            <span class="ms-2">
                                 Clientes
                             </span>
-                                </a>
-                            @endcan
-                            @can('[DESPACHANTE] - Gerenciar Usuários')
-                                <a class="dropdown-item" href="{{route('despachante.usuarios')}}">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="icon icon-tabler icon-tabler-users-group" width="24" height="24"
-                                         viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
-                                        <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1"></path>
-                                        <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
-                                        <path d="M17 10h2a2 2 0 0 1 2 2v1"></path>
-                                        <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
-                                        <path d="M3 13v-1a2 2 0 0 1 2 -2h2"></path>
-                                    </svg>
-                                    <span class="ms-2">
+                        </a>
+                        <a class="dropdown-item" href="{{route('despachante.usuarios')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="icon icon-tabler icon-tabler-users-group" width="24" height="24"
+                                 viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1"></path>
+                                <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                <path d="M17 10h2a2 2 0 0 1 2 2v1"></path>
+                                <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                <path d="M3 13v-1a2 2 0 0 1 2 -2h2"></path>
+                            </svg>
+                            <span class="ms-2">
                                 Usuários
                             </span>
-                                </a>
-                            @endcan
-                            @can('[DESPACHANTE] - Gerenciar Serviços')
-                                <a class="dropdown-item" href="{{route('despachante.servicos')}}">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="icon icon-tabler icon-tabler-tools" width="24" height="24"
-                                         viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"></path>
-                                        <path d="M14.5 5.5l4 4"></path>
-                                        <path d="M12 8l-5 -5l-4 4l5 5"></path>
-                                        <path d="M7 8l-1.5 1.5"></path>
-                                        <path d="M16 12l5 5l-4 4l-5 -5"></path>
-                                        <path d="M16 17l-1.5 1.5"></path>
-                                    </svg>
-                                    <span class="ms-2">
-                                    Serviços
-                                </span>
-                                </a>
-                            @endcan
-                        </div>
+                        </a>
+                        <a class="dropdown-item" href="{{route('despachante.servicos')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="icon icon-tabler icon-tabler-tools" width="24" height="24"
+                                 viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"></path>
+                                <path d="M14.5 5.5l4 4"></path>
+                                <path d="M12 8l-5 -5l-4 4l5 5"></path>
+                                <path d="M7 8l-1.5 1.5"></path>
+                                <path d="M16 12l5 5l-4 4l-5 -5"></path>
+                                <path d="M16 17l-1.5 1.5"></path>
+                            </svg>
+                            <span class="ms-2">
+                                Serviços
+                            </span>
+                        </a>
                     </div>
                 </div>
-            </li>
-        @endif
+            </div>
+        </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="" data-bs-toggle="dropdown"
                data-bs-auto-close="outside" role="button" aria-expanded="false">

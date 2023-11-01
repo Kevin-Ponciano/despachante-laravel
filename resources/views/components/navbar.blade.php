@@ -1,12 +1,12 @@
-<header class="navbar-expand-md">
+<header class="navbar-expand-md z-2">
     <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar">
-            <div class="container-xl">
+            <div class="container-fluid">
                 <h1 class="navbar-brand d-none-navbar-horizontal pe-0 pe-md-3">
                     <a class="card-link" href="{{route('dashboard')}}">
                         <img src="{{asset('assets/img/logo3.png')}}" alt="Saled"
                              class="navbar-brand-image">
-                        .G.P.D
+                        {{config('app.name')}}
                     </a>
                 </h1>
                 <div class="fw-bolder text-capitalize text-center w-8">
@@ -212,7 +212,11 @@
                                 Perfil</a>
                             {{--                            <a href="#" class="dropdown-item">Feedback</a>--}}
                             {{--                            <div class="dropdown-divider"></div>--}}
-                            {{--                            <a href="./settings.html" class="dropdown-item">Settings</a>--}}
+                            @can('[DESPACHANTE] - Acessar Sistema')
+                                <a href="{{route('despachante.settings')}}" class="dropdown-item">
+                                    <i class="dropdown-item-icon icon ti ti-settings"></i>
+                                    Configurações</a>
+                            @endcan
                             <form method="POST" action="{{ route('logout') }}" id="logout">
                                 @csrf
                             </form>

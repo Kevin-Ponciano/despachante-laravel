@@ -1,8 +1,9 @@
 <div>
-    <x-page-title title="Processos"/>
+
+    <x-page-title title="Processos" class-container="container-fluid"/>
     <x-livewire-table :data="$pedidos">
         <x-slot:filters>
-            @can('[ADMIN] - Acessar Admin')
+            @can('[DESPACHANTE] - Acessar Sistema')
                 <div class="text-muted">
                     Clientes:
                     <div class="me-2 d-inline-block" wire:ignore>
@@ -109,7 +110,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6">
+                    <td colspan="7">
                         <div class="d-flex justify-content-center">
                             <span class="text-muted">
                                 Nenhum Processo Encontrado...

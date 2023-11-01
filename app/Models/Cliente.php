@@ -19,6 +19,8 @@ class Cliente extends Model
     protected $fillable = [
         'numero_cliente',
         'nome',
+        'cpf_cnpj',
+        'telefone',
         'status',
         'preco_1_placa',
         'preco_2_placa',
@@ -53,6 +55,11 @@ class Cliente extends Model
     public function despachante()
     {
         return $this->belongsTo(Despachante::class);
+    }
+
+    public function endereco()
+    {
+        return $this->belongsTo(Endereco::class);
     }
 
     public function user()

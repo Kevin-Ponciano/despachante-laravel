@@ -93,17 +93,17 @@ class AtpvNovo extends Component
 
     public function mount()
     {
-        if (\Auth::user()->isDespachante()) {
-            $this->clientes = \Auth::user()->despachante->clientes;
+        if (Auth::user()->isDespachante()) {
+            $this->clientes = Auth::user()->despachante->clientes;
         } else {
-            $this->clienteId = \Auth::user()->cliente->id;
+            $this->clienteId = Auth::user()->cliente->id;
         }
     }
 
     public function store()
     {
         $this->validate();
-        if (\Auth::user()->isCliente() && empty($this->arquivos) && $this->isRenave) {
+        if (Auth::user()->isCliente() && empty($this->arquivos) && $this->isRenave) {
             return $this->addError('arquivos.*', 'Obrigatório.');
         }
         if ($this->isRenave) {
@@ -183,7 +183,7 @@ class AtpvNovo extends Component
         ]);
 
         $this->clearInputs();
-        if (\Auth::user()->isDespachante()) {
+        if (Auth::user()->isDespachante()) {
             $url = route('despachante.atpvs.show', $pedido->numero_pedido);
         } else {
             $url = route('cliente.atpvs.show', $pedido->numero_pedido);

@@ -12,13 +12,15 @@ return new class extends Migration {
     {
         Schema::create('despachantes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('endereco_id')->unique()->constrained('enderecos')->onUpdate('cascade');
+            $table->uuid()->unique();
+            $table->foreignId('endereco_id')->constrained('enderecos')->onUpdate('cascade');
             $table->string('razao_social');
             $table->string('nome_fantasia')->nullable();
             $table->char('cnpj', 18)->unique()->index();
             $table->string('email')->unique();
-            $table->char('celular', 15)->nullable();
-            $table->char('telefone', 14)->nullable();
+            $table->char('celular', 15);
+            $table->char('celular_secundario', 15)->nullable();
+            $table->string('site')->nullable();
             $table->char('status', 2)->default('at');
             $table->timestamps();
             $table->softDeletes();

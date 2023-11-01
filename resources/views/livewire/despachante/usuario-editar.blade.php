@@ -16,6 +16,17 @@
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
                                        wire:model.defer="name" wire:change="changeName">
                                 @error('name') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                <div class="mt-2">
+                                    @if(Auth::user()->id == $user->id)
+                                        <a href="{{route('despachante.perfil')}}" class="btn btn-ghost-warning">
+                                            Redefinir Senha
+                                        </a>
+                                    @else
+                                        <button type="submit" wire:click="resetPassword" class="btn btn-ghost-warning">
+                                            Redefinir Senha
+                                        </button>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="col">
@@ -29,55 +40,44 @@
                                 <input type="email" class="form-control @error('email') is-invalid @enderror"
                                        wire:model.defer="email" wire:change="changeEmail">
                                 @error('email') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                <div x-data="{ status: @entangle('status')}" class="btn-list mt-2">
+                                    @if(Auth::user()->id != $user->id)
+                                        <button x-show="status==='at'" class="btn btn-danger" wire:click="switchStatus">
+                                            Inativar Usuário
+                                        </button>
+                                        <button x-show="status==='in'" class="btn btn-ghost-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modal-delete">
+                                            Excluir Usuário
+                                        </button>
+                                    @endif
+                                    <button x-show="status==='in'" class="btn btn-success" wire:click="switchStatus">
+                                        Ativar Usuário
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="col">
-                            <div class="mb-3">
-                                <div class="d-flex">
-                                    <label class="form-label">Função</label>
-                                    <x-action-message class="ms-2" on="savedRole">
-                                        Alterado com sucesso!
-                                    </x-action-message>
+                            <fieldset class="form-fieldset">
+                                <div class="mb-3">
+                                    <div class="d-flex">
+                                        <label class="form-label">Permissões</label>
+                                        <x-action-message class="ms-2" on="savedPermission">
+                                            Alterado com sucesso!
+                                        </x-action-message>
+                                    </div>
+                                    <div class="row">
+                                        @foreach($permissions as $permission)
+                                            <label class="form-check col-6">
+                                                <input class="form-check-input" type="checkbox"
+                                                       wire:click="changePermission"
+                                                       wire:model="userPermissions.{{$permission['name']}}">
+                                                <span class="form-check-label">{{$permission['alias']}}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
                                 </div>
-                                <select class="form-select @error('role') is-invalid @enderror"
-                                        wire:model.defer="role" wire:change="changeRole">
-                                    <option value="du">Usuário</option>
-                                    <option value="da">Administador</option>
-                                </select>
-                                @error('role') <span class="invalid-feedback">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between gap-2">
-                        @if(Auth::user()->id == $user->id)
-                            <a href="{{route('despachante.perfil')}}" class="btn btn-ghost-warning">
-                                Redefinir Senha
-                            </a>
-                        @else
-                            <form action="{{ route('despachante.reset-password') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="email" value="{{$email}}">
-                                <button type="submit" wire:click="resetPassword" class="btn btn-ghost-warning">
-                                    Redefinir Senha
-                                </button>
-                            </form>
-                        @endif
-                        <div class="col-auto ms-auto d-print-none">
-                            <div x-data="{ status: @entangle('status')}" class="btn-list">
-                                @if(Auth::user()->id != $user->id)
-                                    <button x-show="status==='at'" class="btn btn-danger" wire:click="switchStatus">
-                                        Inativar Usuário
-                                    </button>
-                                    <button x-show="status==='in'" class="btn btn-ghost-danger"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modal-delete">
-                                        Excluir Usuário
-                                    </button>
-                                @endif
-                                <button x-show="status==='in'" class="btn btn-success" wire:click="switchStatus">
-                                    Ativar Usuário
-                                </button>
-                            </div>
+                            </fieldset>
                         </div>
                     </div>
                 </div>

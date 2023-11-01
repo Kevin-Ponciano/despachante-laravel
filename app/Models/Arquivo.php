@@ -17,6 +17,7 @@ class Arquivo extends Model
         'folder',
         'mime_type',
         'url',
+        'expires_at',
         'updated_at',
     ];
 

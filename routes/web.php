@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\DashboardRouteController;
+use App\Http\Controllers\Fortify\PasswordResetLinkController;
+use App\Http\Controllers\SearchPedidoController;
 use App\Http\Livewire\Atpvs;
 use App\Http\Livewire\AtpvShow;
 use App\Http\Livewire\Dashboard;
@@ -7,44 +10,21 @@ use App\Http\Livewire\despachante\ClienteEditar;
 use App\Http\Livewire\despachante\Clientes;
 use App\Http\Livewire\despachante\RelatorioPedidos;
 use App\Http\Livewire\despachante\Servicos;
+use App\Http\Livewire\despachante\Settings;
 use App\Http\Livewire\despachante\UsuarioEditar;
 use App\Http\Livewire\despachante\Usuarios;
 use App\Http\Livewire\Perfil;
 use App\Http\Livewire\Processos;
 use App\Http\Livewire\ProcessoShow;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 Route::get('/', function () {
     return view('lading-page');
 })->name('welcome');
-Route::redirect('/', '/login');
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'status'])->group(function () {
 
-    Route::get('/dashboard', function () {
-        if (auth()->user()->isDespachante())
-            return redirect()->route('despachante.dashboard');
-        elseif (auth()->user()->isCliente())
-            return redirect()->route('cliente.dashboard');
-        else
-            abort(500);
-    })->name('dashboard');
-
-    Route::get('/pedido/{id}', function ($id) {
-        $pedido = Auth::user()->empresa()->pedidos()->with('processo', 'atpv')->where('numero_pedido', $id)->firstOrFail();
-        $route = null;
-        if ($pedido->processo) {
-            $route = Auth::user()->isDespachante() ? 'despachante.processos.show' : (Auth::user()->isCliente() ? 'cliente.processos.show' : null);
-        } elseif ($pedido->atpv) {
-            $route = Auth::user()->isDespachante() ? 'despachante.atpvs.show' : (Auth::user()->isCliente() ? 'cliente.atpvs.show' : null);
-        }
-        if ($route) {
-            return redirect()->route($route, $pedido->numero_pedido);
-        } else {
-            abort(500);
-        }
-    })->name('get-pedido');
-
+    Route::get('/dashboard', [DashboardRouteController::class, 'index'])->name('dashboard');
+    Route::get('/pedido/{id}', [SearchPedidoController::class, 'index'])->name('get-pedido');
 
     Route::middleware(['can:[DESPACHANTE] - Acessar Sistema'])->prefix('despachante')->name('despachante.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
@@ -52,6 +32,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');
         Route::get('/transferencias', Atpvs::class)->name('atpvs');
         Route::get('/transferencias/{id}', AtpvShow::class)->name('atpvs.show');
+
+        Route::middleware(['can:[DESPACHANTE] - Alterar Configurações'])->group(function () {
+            Route::get('/settings', Settings::class)->name('settings');
+        });
 
         Route::middleware(['can:[DESPACHANTE] - Gerenciar Clientes'])->group(function () {
             Route::get('/clientes', Clientes::class)->name('clientes');

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="67a1f18c-5c8a-4bd4-968f-c3a001b6285b" name="hostinger" url="http://193.203.182.156/">
+        <fileTransfer rootFolder="/home/kevin/repositories/laravel-app" accessType="SFTP" host="193.203.182.156" port="22" sshConfigId="cc9566e0-d5c1-4631-9c9f-f4ac40ded2eb" sshConfig="kevin@193.203.182.156:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

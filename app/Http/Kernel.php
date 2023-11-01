@@ -88,8 +88,6 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
-        'despachante' => DespachanteMiddleware::class,
-        'cliente' => ClienteMiddleware::class,
         'status' => StatusVerifyMiddleware::class
     ];
 }

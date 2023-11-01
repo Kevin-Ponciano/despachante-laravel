@@ -5278,7 +5278,6 @@
                 return;
             }
 
-            // TODO: v6 remove this or make it optional
             this._disposePopper();
             const tip = this._getTipElement();
             this._element.setAttribute('aria-describedby', tip.getAttribute('id'));
@@ -5368,12 +5367,11 @@
         _createTipElement(content) {
             const tip = this._getTemplateFactory(content).toHtml();
 
-            // TODO: remove this check in v6
             if (!tip) {
                 return null;
             }
             tip.classList.remove(CLASS_NAME_FADE$2, CLASS_NAME_SHOW$2);
-            // TODO: v6 the following can be achieved with CSS only
+
             tip.classList.add(`bs-${this.constructor.NAME}-auto`);
             const tipId = getUID(this.constructor.NAME).toString();
             tip.setAttribute('id', tipId);
@@ -5767,7 +5765,7 @@
     const SELECTOR_DROPDOWN_TOGGLE$1 = '.dropdown-toggle';
     const Default$1 = {
         offset: null,
-        // TODO: v6 @deprecated, keep it for backwards compatibility reasons
+
         rootMargin: '0px 0px -25%',
         smoothScroll: false,
         target: null,
@@ -5775,7 +5773,7 @@
     };
     const DefaultType$1 = {
         offset: '(number|null)',
-        // TODO v6 @deprecated, keep it for backwards compatibility reasons
+
         rootMargin: 'string',
         smoothScroll: 'boolean',
         target: 'element',
@@ -5837,10 +5835,10 @@
 
         // Private
         _configAfterMerge(config) {
-            // TODO: on v6 target should be given explicitly & remove the {target: 'ss-target'} case
+
             config.target = getElement(config.target) || document.body;
 
-            // TODO: v6 Only for backwards compatibility reasons. Use rootMargin only
+
             config.rootMargin = config.offset ? `${config.offset}px 0px -30%` : config.rootMargin;
             if (typeof config.threshold === 'string') {
                 config.threshold = config.threshold.split(',').map(value => Number.parseFloat(value));
@@ -6042,7 +6040,7 @@
     const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]';
     const SELECTOR_OUTER = '.nav-item, .list-group-item';
     const SELECTOR_INNER = `.nav-link${NOT_SELECTOR_DROPDOWN_TOGGLE}, .list-group-item${NOT_SELECTOR_DROPDOWN_TOGGLE}, [role="tab"]${NOT_SELECTOR_DROPDOWN_TOGGLE}`;
-    const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]'; // TODO: could only be `tab` in v6
+    const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]';
     const SELECTOR_INNER_ELEM = `${SELECTOR_INNER}, ${SELECTOR_DATA_TOGGLE}`;
     const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="pill"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="list"]`;
 
@@ -6056,7 +6054,7 @@
             this._parent = this._element.closest(SELECTOR_TAB_PANEL);
             if (!this._parent) {
                 return;
-                // TODO: should throw exception in v6
+
                 // throw new TypeError(`${element.outerHTML} has not a valid parent ${SELECTOR_INNER_ELEM}`)
             }
 

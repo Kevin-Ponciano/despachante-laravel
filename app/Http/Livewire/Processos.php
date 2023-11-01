@@ -71,6 +71,7 @@ class Processos extends Component
             'tipo',
             'comprador',
             'downloadDisponivel',
+            'paginators'
         ]);
     }
 
@@ -111,11 +112,11 @@ class Processos extends Component
 
         $pedidos = $pedidosQuery
             ->where(function (Builder $query) {
-                $query->where('comprador_nome', 'like', '%' . $this->search . '%');
-                $query->orWhere('pedidos.numero_pedido', 'like', '%' . $this->search . '%');
+                $query->where('comprador_nome', 'like', $this->search . '%');
+                $query->orWhere('pedidos.numero_pedido', 'like', $this->search . '%');
                 if (Auth::user()->isDespachante())
-                    $query->orWhere('clientes.nome', 'like', '%' . $this->search . '%');
-                $query->orWhere('pedidos.placa', 'like', '%' . $this->search . '%');
+                    $query->orWhere('clientes.nome', 'like', $this->search . '%');
+                $query->orWhere('pedidos.placa', 'like', $this->search . '%');
             })
             ->paginate($this->paginate);
         $this->iconDirection = $this->sortDirection === 'asc' ? 'up' : 'down';

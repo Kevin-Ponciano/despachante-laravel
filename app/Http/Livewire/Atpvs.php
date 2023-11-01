@@ -78,6 +78,7 @@ class Atpvs extends Component
             'tipo',
             'movimentacao',
             'downloadDisponivel',
+            'paginators'
         ]);
     }
 
@@ -126,11 +127,11 @@ class Atpvs extends Component
 
         $pedidos = $pedidosQuery
             ->where(function (Builder $query) {
-                $query->where('comprador_nome', 'like', '%' . $this->search . '%');
-                $query->orWhere('pedidos.numero_pedido', 'like', '%' . $this->search . '%');
+                $query->where('comprador_nome', 'like', $this->search . '%');
+                $query->orWhere('pedidos.numero_pedido', 'like', $this->search . '%');
                 if (Auth::user()->isDespachante())
-                    $query->orWhere('clientes.nome', 'like', '%' . $this->search . '%');
-                $query->orWhere('pedidos.placa', 'like', '%' . $this->search . '%');
+                    $query->orWhere('clientes.nome', 'like', $this->search . '%');
+                $query->orWhere('pedidos.placa', 'like', $this->search . '%');
             })
             ->paginate($this->paginate);
 

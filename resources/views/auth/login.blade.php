@@ -5,11 +5,11 @@
                 class="col-12 col-lg-6 col-xl-4 border-top-wide border-primary d-flex flex-column justify-content-center">
                 <div class="container container-tight my-5 px-lg-5">
                     <div class="text-center mb-4">
-                        <a class="navbar-brand navbar-brand-autodark">
+                        <a href="{{route('welcome')}}" class="navbar-brand navbar-brand-autodark">
                             <img src="{{asset('assets/img/logo3.png')}}" height="36" alt="SALED logo">
-                            ALED
+                            {{config('app.name')}}
                         </a>
-                        <p>Sistema Despachante</p>
+                        <p>{{config('app.slogan')}}</p>
                     </div>
                     <h2 class="h3 text-center mb-3">
                         Faça login na sua conta

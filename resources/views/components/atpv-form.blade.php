@@ -64,7 +64,7 @@
                 <div class="col">
                     <div class="mb-3">
                         <div class="row">
-                            <label class="form-label col-auto">Código Segurança CRV
+                            <label class="form-label col-auto text-nowrap">Código Segurança CRV
                                 <span x-show="isPendingInput.codigo_seguranca_crv"
                                       class="text-warning ms-1">Incorreto</span>
                             </label>

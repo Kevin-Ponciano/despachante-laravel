@@ -17,10 +17,9 @@ class DespachanteFactory extends Factory
             'razao_social' => $faker->company,
             'nome_fantasia' => $faker->company,
             'cnpj' => $faker->numerify('##.###.###/####-##'),
-            'telefone' => $faker->numerify('(##) ####-####'),
             'celular' => $faker->cellphoneNumber,
             'email' => $faker->unique()->safeEmail,
-            'endereco_id' => $faker->unique()->numberBetween(1, 10000),
+            'site' => $faker->url,
         ];
     }
 }
