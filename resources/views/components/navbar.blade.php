@@ -1,4 +1,4 @@
-<header class="navbar-expand-md z-2">
+<header class="navbar-expand-md z-3">
     <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar">
             <div class="container-fluid">
@@ -215,14 +215,16 @@
                             @can('[DESPACHANTE] - Acessar Sistema')
                                 <a href="{{route('despachante.settings')}}" class="dropdown-item">
                                     <i class="dropdown-item-icon icon ti ti-settings"></i>
-                                    Configurações</a>
+                                    Configurações
+                                </a>
                             @endcan
                             <form method="POST" action="{{ route('logout') }}" id="logout">
                                 @csrf
                             </form>
                             <a href="#" onclick="$('#logout').submit()" class="dropdown-item">
                                 <i class="dropdown-item-icon icon ti ti-logout"></i>
-                                Sair</a>
+                                Sair
+                            </a>
                         </div>
                     </div>
                 </div>

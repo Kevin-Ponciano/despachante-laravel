@@ -13,11 +13,19 @@ class AtpvFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('pt_BR');
+        $isRenave = $faker->boolean(50);
+        if($isRenave){
+            $codigo_crv = $faker->numerify('############');
+            $movimentacao = $faker->randomElement(['in', 'out']);
+        }else{
+            $codigo_crv = null;
+            $movimentacao = null;
+        }
         return [
             'renavam' => $faker->numerify('###########'),
             'numero_crv' => $faker->numerify('############'),
-            'codigo_crv' => $faker->randomElement([null, $faker->numerify('############')]),
-            'movimentacao' => $faker->randomElement([null, 'in', 'out']),
+            'codigo_crv' => $codigo_crv,
+            'movimentacao' => $movimentacao,
             'hodometro' => $this->faker->randomFloat(2, 0, 1000),
             'data_hodometro' => $faker->dateTime->format('Y-m-d H:i:s'),
             'vendedor_email' => $faker->email,

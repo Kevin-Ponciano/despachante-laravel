@@ -15,10 +15,10 @@ $(document).ready(function () {
 
     function atualizarDashboard() {
         $('#loading-overlay').show();
-        window.livewire.emit('atualizarDashboard');
+        Livewire.emit('atualizarDashboard');
     }
 
-    window.livewire.on('atualizarDashboardDone', () => {
+    Livewire.on('atualizarDashboardDone', function () {
         $('#loading-overlay').hide();
         resetCountdown();
     });
@@ -26,7 +26,6 @@ $(document).ready(function () {
     function resetCountdown() {
         countdownTime = timeRefreshDashboard; // Resetar o contador
     }
-
 
     function checkAndUpdateDashboard() {
         if (localStorage.getItem('autoUpdateEnabled') === 'true') {

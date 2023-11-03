@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    $('#loading-page').hide();
-
     $(window).on('deleteFile', function (e, data) {
         $('#file-name-delete').text(data.nome);
         $('#modal-delete-file').modal('show');
@@ -37,3 +35,7 @@ $(document).ready(function () {
         window.open(data, '_blank');
     })
 });
+
+$(document).on('livewire:load', function () {
+    $('#loading-page').hide();
+})

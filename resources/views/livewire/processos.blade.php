@@ -92,7 +92,7 @@
         </x-slot:thead>
         <x-slot:tbody>
             @forelse($pedidos as $pedido)
-                <tr class="cursor-pointer" wire:click="show({{$pedido->numero_pedido}})">
+                <tr class="cursor-pointer" onclick="window.location.href='{{route('get-pedido',$pedido->numero_pedido)}}'">
                     <td class="fw-bold">{{$pedido->numero_pedido}}</td>
                     @if(Auth::user()->isDespachante())
                         <td>{{$pedido->cliente->nome}}</td>

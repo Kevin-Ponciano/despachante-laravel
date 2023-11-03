@@ -57,6 +57,8 @@ class Atpv extends Model
             return 'ENTRADA';
         } elseif ($this->movimentacao === 'out') {
             return 'SAÍDA';
+        }else{
+            return null;
         }
     }
 }

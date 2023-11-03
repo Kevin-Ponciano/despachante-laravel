@@ -24,6 +24,7 @@ class PedidoFactory extends Factory
             'criado_por' => 1,
             'responsavel_por' => null,
             'cliente_id' => 1,
+            'created_at' => $faker->dateTimeBetween('-1 year'),
         ];
     }
 }

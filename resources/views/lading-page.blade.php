@@ -51,7 +51,7 @@
 
         <a href="{{route('welcome')}}" class="logo text-white me-auto">
             <x-application-logo/>
-            .A.L.E.D
+            {{config('app.name')}}
         </a>
 
         <nav id="navbar" class="navbar">
@@ -100,7 +100,7 @@
         <div class="row">
             <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
                  data-aos="fade-up" data-aos-delay="200">
-                <h1>Soluções Eficientes para o Seu Serviço de Despacho de Veículos</h1>
+                <h1>Soluções Eficientes para o Seu Serviço de Despachante Veicular</h1>
                 <h2>Somos uma equipe dedicada de especialistas que agilizam seus processos com nossa plataforma baseada
                     na web</h2>
 
@@ -543,79 +543,22 @@
             </div>
 
             <div class="row">
-
-                <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="100">
+                <div class="col-lg-6 mx-auto" data-aos="zoom-in" data-aos-delay="100">
                     <div class="member d-flex align-items-start">
-                        <div class="pic"><img src="{{asset('arsha/img/team/team-1.jpg')}}" class="img-fluid" alt="">
+                        <div class="pic"><img src="https://avatars.githubusercontent.com/u/69651491?v=4" class="img-fluid" alt="">
                         </div>
                         <div class="member-info">
-                            <h4>Walter White</h4>
-                            <span>Chief Executive Officer</span>
-                            <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                            <h4>Kevin Ponciano</h4>
+                            <span>Desenvolvedor Full Stack Laravel</span>
+                            <p></p>
                             <div class="social">
-                                <a href=""><i class="ri-twitter-fill"></i></a>
-                                <a href=""><i class="ri-facebook-fill"></i></a>
-                                <a href=""><i class="ri-instagram-fill"></i></a>
-                                <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                                <a href="https://github.com/Kevin-Ponciano"><i class="ri-github-fill"></i></a>
+                                <a href="https://www.instagram.com/kevinponciano13/"><i class="ri-instagram-fill"></i></a>
+                                <a href="https://www.linkedin.com/in/kevin-ponciano-a462661a3/"> <i class="ri-linkedin-box-fill"></i> </a>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-6 mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="member d-flex align-items-start">
-                        <div class="pic"><img src="{{asset('arsha/img/team/team-2.jpg')}}" class="img-fluid" alt="">
-                        </div>
-                        <div class="member-info">
-                            <h4>Sarah Jhonson</h4>
-                            <span>Product Manager</span>
-                            <p>Aut maiores voluptates amet et quis praesentium qui senda para</p>
-                            <div class="social">
-                                <a href=""><i class="ri-twitter-fill"></i></a>
-                                <a href=""><i class="ri-facebook-fill"></i></a>
-                                <a href=""><i class="ri-instagram-fill"></i></a>
-                                <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 mt-4" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="member d-flex align-items-start">
-                        <div class="pic"><img src="{{asset('arsha/img/team/team-3.jpg')}}" class="img-fluid" alt="">
-                        </div>
-                        <div class="member-info">
-                            <h4>William Anderson</h4>
-                            <span>CTO</span>
-                            <p>Quisquam facilis cum velit laborum corrupti fuga rerum quia</p>
-                            <div class="social">
-                                <a href=""><i class="ri-twitter-fill"></i></a>
-                                <a href=""><i class="ri-facebook-fill"></i></a>
-                                <a href=""><i class="ri-instagram-fill"></i></a>
-                                <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 mt-4" data-aos="zoom-in" data-aos-delay="400">
-                    <div class="member d-flex align-items-start">
-                        <div class="pic"><img src="{{asset('arsha/img/team/team-4.jpg')}}" class="img-fluid" alt="">
-                        </div>
-                        <div class="member-info">
-                            <h4>Amanda Jepson</h4>
-                            <span>Accountant</span>
-                            <p>Dolorum tempora officiis odit laborum officiis et et accusamus</p>
-                            <div class="social">
-                                <a href=""><i class="ri-twitter-fill"></i></a>
-                                <a href=""><i class="ri-facebook-fill"></i></a>
-                                <a href=""><i class="ri-instagram-fill"></i></a>
-                                <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
         </div>

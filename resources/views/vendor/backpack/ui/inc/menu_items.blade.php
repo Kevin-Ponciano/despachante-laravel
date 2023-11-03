@@ -16,10 +16,12 @@
 <x-backpack::menu-item title="Planos" icon="la la-wallet" :link="backpack_url('plano')"/>
 <x-backpack::menu-item title="Plano Do Despachante" icon="la la-question" :link="backpack_url('plano-despachante')"/>
 <x-backpack::menu-dropdown title="Gerenciamento do Sistema" icon="la la-cog">
-<x-backpack::menu-dropdown-item title='Backups' icon='la la-hdd-o' :link="backpack_url('backup')" />
-<x-backpack::menu-dropdown-item title='Logs' icon='la la-terminal' :link="backpack_url('log')"/>
-<x-backpack::menu-dropdown-item title='Horizon' icon='la la-sync' :link="route('horizon.index')"/>
-<x-backpack::menu-dropdown-item title='Telescope' icon='la la-binoculars' :link="route('telescope')"/>
+    <x-backpack::menu-dropdown-item title='Backups' icon='la la-hdd-o' :link="backpack_url('backup')"/>
+    <x-backpack::menu-dropdown-item title='Logs' icon='la la-terminal' :link="backpack_url('log')"/>
+    <x-backpack::menu-dropdown-item title='Horizon' icon='la la-sync' :link="route('horizon.index')"/>
+    @if(env('TELESCOPE_ENABLED'))
+        <x-backpack::menu-dropdown-item title='Telescope' icon='la la-binoculars' :link="route('telescope')"/>
+    @endif
 </x-backpack::menu-dropdown>
 
 <x-backpack::menu-item title="Trocar Sistema" icon='la la-sync' :link="route('login')"/>

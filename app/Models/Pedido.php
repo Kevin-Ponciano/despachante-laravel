@@ -33,6 +33,7 @@ class Pedido extends Model
         'viewed_at',
         'concluded_at',
         'cliente_id',
+        'created_at',
     ];
 
     protected static function boot()
@@ -132,6 +133,14 @@ class Pedido extends Model
                     return ['Em Análise', 'bg-warning'];
             default:
                 return ['Desconhecido', 'bg-secondary'];
+        }
+    }
+
+    public function getTipo(){
+        if($this->processo){
+            return 'PROCESSO';
+        }else{
+            return $this->atpv->getTipo();
         }
     }
 }

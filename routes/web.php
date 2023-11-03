@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('lading-page');
 })->name('welcome');
+Route::redirect('/', '/login');
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'status'])->group(function () {
 
     Route::get('/dashboard', [DashboardRouteController::class, 'index'])->name('dashboard');
@@ -54,6 +55,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         });
 
         Route::get('/relatorios/pedidos', RelatorioPedidos::class)->name('relatorios.pedidos');
+        Route::POST('/relatorios/pedidos/table', [RelatorioPedidos::class, 'data'])->name('relatorios.pedidos.table ');
         Route::get('/perfil', Perfil::class)->name('perfil');
 
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('reset-password');

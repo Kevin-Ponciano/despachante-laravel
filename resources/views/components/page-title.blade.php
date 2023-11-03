@@ -11,7 +11,7 @@
                             {{$subtitle ?? ''}}
                         </div>
                     </div>
-                    @can('[ADMIN] - Acessar Admin')
+                    @can('[DESPACHANTE] - Acessar Sistema')
                         @if($status??false)
                             <div class="mt-5">
                                 <span class="page-subtitle">Responsável: </span>

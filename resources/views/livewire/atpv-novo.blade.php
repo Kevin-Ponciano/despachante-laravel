@@ -2,7 +2,7 @@
     @csrf
     <div class="p-3">
         <div class="d-flex justify-content-between">
-            @can('[ADMIN] - Acessar Admin')
+            @can('[DESPACHANTE] - Acessar Sistema')
                 <div class="col-auto">
                     <div class="mb-3">
                         <label class="form-label">Cliente Logista</label>

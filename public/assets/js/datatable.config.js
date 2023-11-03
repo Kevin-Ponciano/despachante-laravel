@@ -110,9 +110,53 @@ $(document).ready(function () {
         }
     });
 
-    $('#servicos-table').DataTable({
-        ...configDefault,
-    });
+    // let relatoriosPedido = $('#relatorios-pedido-table').DataTable({
+    //     ...configDefault,
+    //     'order': [[0, 'asc']],
+    //     'ajax': '/despachante/relatorios/pedidos/table',
+    //     // dom: 'Bfrtip',
+    //     // buttons: [
+    //     //     'copy', 'excel', 'pdf'
+    //     // ],
+    //     'columns': [
+    //         {'data': 'numero_pedido'},
+    //         {'data': 'status'},
+    //         {'data': 'criado_em'},
+    //         {'data': 'concluido_em'},
+    //         {'data': 'cliente'},
+    //         {'data': 'comprador_nome'},
+    //         {'data': 'placa'},
+    //         {'data': 'veiculo'},
+    //         {'data': 'honorario'},
+    //         {'data': 'tipo'},
+    //         {'data': 'movimentacao'},
+    //         {
+    //             'data': 'servicos',
+    //             'render': function (data, type, row) {
+    //                 if (!data || !data.length) {
+    //                     return 'Nenhum serviço';
+    //                 }
+    //                 let servicosHtml = '<div class="">'
+    //                 if (data.length === 1) {
+    //                     servicosHtml += `<strong>${data[0].nome}</strong>: R$ ${data[0].preco}`
+    //                 } else {
+    //                     data.forEach((servico) => {
+    //                         servicosHtml += `
+    //                     <div>
+    //                         <strong>${servico.nome}</strong>: R$ ${servico.preco}
+    //                     </div>
+    //                 `;
+    //                     });
+    //                 }
+    //
+    //                 // Fechar o contêiner flexível
+    //                 servicosHtml += '</div>';
+    //
+    //                 return servicosHtml;
+    //             }
+    //         }
+    //     ]
+    // });
 
     Livewire.on('tableRefresh', () => {
         $('#modal-cliente-novo').modal('hide');
