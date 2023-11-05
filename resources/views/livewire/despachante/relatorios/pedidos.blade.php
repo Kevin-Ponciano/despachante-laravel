@@ -26,6 +26,11 @@
                             </button>
                         </div>
                     </div>
+                    <div>
+                        <button id="pendencias" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-original-title="Gera um relatório com as pendências em aberto dos pedidos">Pendências
+                        </button>
+                    </div>
                 </div>
             </div>
             <div id="loading-overlay" class="bg-white"

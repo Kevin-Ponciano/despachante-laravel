@@ -64,7 +64,7 @@ $(document).ready(function () {
         function customizeToolbar(toolbar) {
             let tabs = toolbar.getTabs(); // get all tabs from the toolbar
             toolbar.getTabs = function () {
-                tabs = tabs.filter(tab => tab.id !== "wdr-tab-connect")
+                tabs = tabs.filter(tab => tab.id !== "wdr-tab-connect" && tab.id !== "wdr-tab-options" && tab.id !== "wdr-tab-open" && tab.id !== "wdr-tab-save");
                 return tabs;
             }
         }
@@ -136,7 +136,6 @@ $(document).ready(function () {
                     grandTotalsPosition: 'bottom',
                     showHeaders: false,
                     saveAllFormats: true,
-                    //showFilter: false,
                 }
             };
         }
@@ -256,22 +255,28 @@ $(document).ready(function () {
                 {uniqueName: "veiculo", caption: "Veículo"},
                 {uniqueName: "tipo"},
                 {uniqueName: "honorario", caption: "Honorário"},
+                {uniqueName: "pendencias", caption: "Pendências"},
                 ...servicos.map(servico => ({uniqueName: servico})),
             ];
         }
 
         function createMeasures(servicos) {
-            return [
-                {uniqueName: "honorario", aggregation: "sum", format: "pt_br"},
-                {uniqueName: "numero_pedido", aggregation: "count"},
-                {uniqueName: "valor_placas", aggregation: "sum", format: "pt_br"},
-                ...servicos.map(servico => ({
-                    uniqueName: servico,
-                    aggregation: "sum",
-                    format: "pt_br"
-                })),
-                ...createTotalFormula(servicos),
-            ];
+            if (servicos.length === 0)
+                return [
+                    {uniqueName: "numero_pedido", aggregation: "count"},
+                ]
+            else
+                return [
+                    {uniqueName: "honorario", aggregation: "sum", format: "pt_br"},
+                    {uniqueName: "numero_pedido", aggregation: "count"},
+                    {uniqueName: "valor_placas", aggregation: "sum", format: "pt_br"},
+                    ...servicos.map(servico => ({
+                        uniqueName: servico,
+                        aggregation: "sum",
+                        format: "pt_br"
+                    })),
+                    ...createTotalFormula(servicos),
+                ];
         }
 
         function createSorting(measures, type = 'asc') {
@@ -439,6 +444,18 @@ $(document).ready(function () {
             })
         }
 
+        function createReportPendencias() {
+            $.ajax({
+                url: '/despachante/relatorios/pedidos/pendencias',
+                type: 'GET',
+                success: function (data) {
+                    setReport(data);
+                },
+                error: function (data) {
+                }
+            })
+        }
+
         function prepareFilter() {
             let filters = getFilters();
             return filters.map(filter => {
@@ -481,6 +498,24 @@ $(document).ready(function () {
             }
         }
 
+        function setSliceStorage() {
+            const slice = relatorio_pedido.getReport().slice;
+            const sliceString = JSON.stringify(slice);
+            if (relatorio_pedido.getOptions().grid.type === 'flat')
+                localStorage.setItem('relatorio_pedido_slice_flat', sliceString);
+            else if (relatorio_pedido.getOptions().grid.type === 'compact')
+                localStorage.setItem('relatorio_pedido_slice_compact', sliceString);
+        }
+
+        function getSliceStorage() {
+            let sliceString;
+            if (relatorio_pedido.getOptions().grid.type === 'flat')
+                sliceString = localStorage.getItem('relatorio_pedido_slice_flat');
+            else if (relatorio_pedido.getOptions().grid.type === 'compact')
+                sliceString = localStorage.getItem('relatorio_pedido_slice_compact');
+            return JSON.parse(sliceString);
+        }
+
         $('#setDateReport').on('click', function () {
             if (!getDates()) return;
             createReport();
@@ -490,6 +525,10 @@ $(document).ready(function () {
         $('#somatorio').on('click', function () {
             if (!getDates()) return;
             createReportSomatorio();
+        })
+
+        $('#pendencias').on('click', function () {
+            createReportPendencias();
         })
 
         relatorio_pedido.on('reportcomplete', function () {
@@ -514,7 +553,12 @@ $(document).ready(function () {
                 const parent = btn.parent();
                 parent.attr('data-bs-original-title', 'Gerar um relatório com a soma dos valores');
             }
+
         });
+
+        // relatorio_pedido.on('reportchange', function () {
+        //     setSliceStorage();
+        // });
     }
 )
 
