@@ -4,7 +4,7 @@ namespace App\Http\Livewire\despachante\Relatorios;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Livewire\component;
+use Livewire\Component;
 use Log;
 use Throwable;
 
