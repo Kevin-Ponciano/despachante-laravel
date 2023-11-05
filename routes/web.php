@@ -54,9 +54,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::get('/servicos', Servicos::class)->name('servicos');
         });
 
-        Route::get('/relatorios/pedidos', Pedidos::class)->name('relatorios.pedidos');
-        Route::POST('/relatorios/pedidos/geral', [Pedidos::class, 'geral'])->name('relatorios.pedidos.geral');
-        Route::POST('/relatorios/pedidos/total', [Pedidos::class, 'somatorio'])->name('relatorios.pedidos.somatorio');
+        Route::middleware('can:[DESPACHANTE] - Gerenciar Relatórios')->group(function () {
+            Route::get('/relatorios/pedidos', Pedidos::class)->name('relatorios.pedidos');
+            Route::post('/relatorios/pedidos/geral', [Pedidos::class, 'geral'])->name('relatorios.pedidos.geral');
+            Route::post('/relatorios/pedidos/total', [Pedidos::class, 'somatorio'])->name('relatorios.pedidos.somatorio');
+            Route::get('/relatorios/pedidos/pendencias', [Pedidos::class, 'pendencias'])->name('relatorios.pedidos.pendencias');
+        });
+
         Route::get('/perfil', Perfil::class)->name('perfil');
 
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('reset-password');

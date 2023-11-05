@@ -38,7 +38,6 @@ class Pedidos extends Component
                     'tipo' => $pedido->getTipo() . ' ' . $pedido->atpv?->getMovimentacao(),
                 ];
 
-                // Adicionando serviços e preços ao pedido
                 foreach ($servicosList as $servicoId => $servicoNome) {
                     $servicoPedido = $pedido->servicos->where('id', $servicoId)->first();
                     $pedidoData[$servicoNome] = $servicoPedido ? $servicoPedido->pivot->preco : 0;
@@ -178,6 +177,32 @@ class Pedidos extends Component
         }
 
         return $filters;
+    }
+
+    public function pendencias()
+    {
+        $data = [];
+
+        $pedidos = Auth::user()->despachante->pedidos()->where('pedidos.status', 'pe')
+            ->with(['processo', 'cliente', 'atpv', 'servicos', 'pendencias'])
+            ->get();
+
+        foreach ($pedidos as $pedido) {
+            $pedidoData = [
+                'numero_pedido' => $pedido->numero_pedido,
+                'status' => $pedido->getStatus()[0],
+                'criado_em' => $pedido->created_at->format('y-m-d'),
+                'tipo' => $pedido->getTipo() . ' ' . $pedido->atpv?->getMovimentacao(),
+                'cliente' => $pedido->cliente->nome,
+                'comprador_nome' => $pedido->comprador_nome,
+                'placa' => $pedido->placa,
+                'veiculo' => $pedido->veiculo,
+                'pendencias' => implode(', ', $pedido->pendencias->where('status', 'pe')->pluck('nome')->toArray()),
+            ];
+
+            $data[] = $pedidoData;
+        }
+        return response()->json(['report' => $data, 'servicos' => []]);
     }
 
     public function render()

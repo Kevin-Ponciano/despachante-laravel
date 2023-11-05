@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $qtdClientesPorDespachante = 3;
         $qtdServicosPorDespachante = 3;
         $qtdPedidosPorCliente = 10;
-        $qtdPendenciasPorPedido = 0;
+        $qtdPendenciasPorPedido = 5;
 
         RolesAndPermissionsSeeder::run();
         $faker = Factory::create('pt_BR');
@@ -70,9 +70,12 @@ class DatabaseSeeder extends Seeder
                         'comprador_endereco_id' => Endereco::factory()->create()->id,
                         'pedido_id' => $pedido->id,
                     ]);
-                    Pendencia::factory($qtdPendenciasPorPedido)->create([
-                        'pedido_id' => $pedido->id,
-                    ]);
+
+                    if ($pedido->status === 'pe') {
+                        Pendencia::factory($qtdPendenciasPorPedido)->create([
+                            'pedido_id' => $pedido->id,
+                        ]);
+                    }
                 });
                 Pedido::factory($qtdPedidosPorCliente)->create([
                     'criado_por' => $user->id,
@@ -81,9 +84,11 @@ class DatabaseSeeder extends Seeder
                     Processo::factory()->create([
                         'pedido_id' => $pedido->id,
                     ]);
-                    Pendencia::factory($qtdPendenciasPorPedido)->create([
-                        'pedido_id' => $pedido->id,
-                    ]);
+                    if ($pedido->status === 'pe') {
+                        Pendencia::factory($qtdPendenciasPorPedido)->create([
+                            'pedido_id' => $pedido->id,
+                        ]);
+                    }
                     for ($i = 0; $i < $qtdServicosPorDespachante; $i++) {
                         $servidoId = $pedido->cliente->despachante->servicos->random()->id;
                         PedidoServico::updateOrCreate([

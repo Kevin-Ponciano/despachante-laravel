@@ -31,6 +31,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => '[DESPACHANTE] - Gerenciar Clientes']);
         Permission::create(['name' => '[DESPACHANTE] - Gerenciar Usuários']);
         Permission::create(['name' => '[DESPACHANTE] - Gerenciar Serviços']);
+        Permission::create(['name' => '[DESPACHANTE] - Gerenciar Relatórios']);
         Permission::create(['name' => '[DESPACHANTE] - Alterar Configurações']);
 
         Role::create(['name' => '[DESPACHANTE] - USUÁRIO'])->givePermissionTo('[DESPACHANTE] - Acessar Sistema');
@@ -41,6 +42,7 @@ class RolesAndPermissionsSeeder extends Seeder
             '[DESPACHANTE] - Gerenciar Clientes',
             '[DESPACHANTE] - Gerenciar Usuários',
             '[DESPACHANTE] - Gerenciar Serviços',
+            '[DESPACHANTE] - Gerenciar Relatórios',
             '[DESPACHANTE] - Alterar Configurações',
         ]);
 
