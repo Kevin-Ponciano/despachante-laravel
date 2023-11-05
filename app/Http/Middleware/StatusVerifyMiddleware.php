@@ -22,6 +22,7 @@ class StatusVerifyMiddleware
                 abort(423, 'Acesso Negado', ['message' => 'Seu usuário foi bloqueado. Entre em contato com o administrador.']);
             }
         }
+
         return $next($request);
     }
 }

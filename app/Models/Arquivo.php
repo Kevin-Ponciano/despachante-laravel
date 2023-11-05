@@ -21,10 +21,8 @@ class Arquivo extends Model
         'updated_at',
     ];
 
-
     public function pedido(): BelongsTo
     {
         return $this->belongsTo(Pedido::class);
     }
-
 }

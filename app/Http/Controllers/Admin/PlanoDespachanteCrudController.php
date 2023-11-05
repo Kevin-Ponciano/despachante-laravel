@@ -16,16 +16,16 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class PlanoDespachanteCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read CrudPanel $crud
  */
 class PlanoDespachanteCrudController extends CrudController
 {
-    use ListOperation;
     use CreateOperation;
-    use UpdateOperation;
     use DeleteOperation;
+    use ListOperation;
     use ShowOperation;
+    use UpdateOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -35,7 +35,7 @@ class PlanoDespachanteCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(PlanoDespachante::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/plano-despachante');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/plano-despachante');
         CRUD::setEntityNameStrings('plano despachante', 'plano despachantes');
     }
 
@@ -43,6 +43,7 @@ class PlanoDespachanteCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -59,6 +60,7 @@ class PlanoDespachanteCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()
@@ -70,19 +72,20 @@ class PlanoDespachanteCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
     {
         CRUD::setValidation(PlanoDespachanteRequest::class);
         CRUD::setFromDb(); // set fields from db columns.
-//        CRUD::addField([
-//            'label' => "Despachante",
-//            'type' => 'select',
-//            'name' => 'despachante_id',
-//            'entity' => 'despachante',
-//            'attribute' => 'razao_social',
-//        ]);
+        //        CRUD::addField([
+        //            'label' => "Despachante",
+        //            'type' => 'select',
+        //            'name' => 'despachante_id',
+        //            'entity' => 'despachante',
+        //            'attribute' => 'razao_social',
+        //        ]);
         CRUD::addField([
             'label' => 'Despachante',
             'name' => 'despachante_id',

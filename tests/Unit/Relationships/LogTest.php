@@ -2,13 +2,11 @@
 
 namespace Tests\Unit\Relationships;
 
-
 use App\Models\Log;
 use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-
 
 class LogTest extends TestCase
 {
@@ -33,5 +31,4 @@ class LogTest extends TestCase
 
         $this->assertTrue($log->pedido->is($pedido));
     }
-
 }

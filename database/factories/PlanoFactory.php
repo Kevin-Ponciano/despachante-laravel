@@ -13,6 +13,7 @@ class PlanoFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('pt_BR');
+
         return [
             'nome' => $faker->word,
             'preco' => $faker->randomFloat(2, 100, 1000),

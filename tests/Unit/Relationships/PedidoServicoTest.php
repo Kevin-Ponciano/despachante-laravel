@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Relationships;
 
-
 use App\Models\Pedido;
 use App\Models\PedidoServico;
 use App\Models\Servico;

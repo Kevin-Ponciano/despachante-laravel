@@ -13,7 +13,7 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        ## ADMIN
+        //# ADMIN
         Permission::create(['name' => '[ADMIN] - Acessar Admin']);
         Permission::create(['name' => '[ADMIN] - Excluir Pedidos']);
         Permission::create(['name' => '[ADMIN] - Acessar Telescope']);
@@ -25,7 +25,7 @@ class RolesAndPermissionsSeeder extends Seeder
             '[ADMIN] - Acessar Horizon',
         ]);
 
-        ## DESPACHANTE
+        //# DESPACHANTE
         Permission::create(['name' => '[DESPACHANTE] - Acessar Sistema']);
         Permission::create(['name' => '[DESPACHANTE] - Excluir Pedidos']);
         Permission::create(['name' => '[DESPACHANTE] - Gerenciar Clientes']);
@@ -44,11 +44,11 @@ class RolesAndPermissionsSeeder extends Seeder
             '[DESPACHANTE] - Alterar Configurações',
         ]);
 
-        ## MÓDULOS DESPACHANTE
+        //# MÓDULOS DESPACHANTE
         //Role::create(['name'=> '[Módulo] - Relatório de Pedidos']);
         //Role::create(['name'=> '[Módulo] - Financeiro']);
 
-        ## CLIENTE
+        //# CLIENTE
         Permission::create(['name' => '[CLIENTE] - Acessar Sistema']);
         Role::create(['name' => '[CLIENTE]'])->givePermissionTo('[CLIENTE] - Acessar Sistema');
     }

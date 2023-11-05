@@ -11,10 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cliente extends Model
 {
+    use AttributeModel;
     use CrudTrait;
     use HasFactory;
     use softDeletes;
-    use AttributeModel;
 
     protected $fillable = [
         'numero_cliente',
@@ -77,19 +77,19 @@ class Cliente extends Model
         return $this->hasManyThrough(Processo::class, Pedido::class);
     }
 
-//    public function pedidosWithProcessos()
-//    {
-//        return $this->pedidos()->with('processo')->get()->reject(function ($value) {
-//            return $value->processo == null;
-//        });
-//    }
+    //    public function pedidosWithProcessos()
+    //    {
+    //        return $this->pedidos()->with('processo')->get()->reject(function ($value) {
+    //            return $value->processo == null;
+    //        });
+    //    }
 
-//    public function pedidosWithAtpvs()
-//    {
-//        return $this->pedidos()->with('atpv')->get()->reject(function ($value) {
-//            return $value->atpv == null;
-//        });
-//    }
+    //    public function pedidosWithAtpvs()
+    //    {
+    //        return $this->pedidos()->with('atpv')->get()->reject(function ($value) {
+    //            return $value->atpv == null;
+    //        });
+    //    }
 
     public function pedidosProcessos()
     {

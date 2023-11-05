@@ -20,9 +20,9 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasRoles;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -34,8 +34,9 @@ class User extends Authenticatable
         'email',
         'password',
         'status',
-        'profile_photo_path'
+        'profile_photo_path',
     ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,6 +48,7 @@ class User extends Authenticatable
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];
+
     /**
      * The attributes that should be cast.
      *
@@ -55,6 +57,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -98,17 +101,19 @@ class User extends Authenticatable
     public function getFuncao()
     {
         $this->hasAnyRole('[ADMIN]', '[DESPACHANTE] - ADMIN') ? $funcao = 'Administrador' : $funcao = 'Usuário';
+
         return $funcao;
     }
 
     public function getUuidDespachante()
     {
-        if ($this->isDespachante())
+        if ($this->isDespachante()) {
             return $this->despachante->uuid;
-        elseif ($this->isCliente())
+        } elseif ($this->isCliente()) {
             return $this->cliente->despachante->uuid;
-        else
+        } else {
             Log::error('Erro ao obter uuid do despachante.');
+        }
         abort(500, 'Erro ao obter uuid do despachante.');
     }
 
@@ -124,12 +129,13 @@ class User extends Authenticatable
 
     public function empresa()
     {
-        if ($this->isDespachante())
+        if ($this->isDespachante()) {
             return $this->despachante;
-        elseif ($this->isCliente())
+        } elseif ($this->isCliente()) {
             return $this->cliente;
-        else
+        } else {
             Log::error('Erro ao obter a empresa.');
+        }
         abort(500, 'Erro ao obter a empresa.');
     }
 
@@ -147,9 +153,7 @@ class User extends Authenticatable
         if ($this->profile_photo_path) {
             return Storage::disk('public')->url($this->profile_photo_path);
         } else {
-            return 'https://ui-avatars.com/api/?name=' . $this->name[0] . '&color=7F9CF5&background=EBF4FF';
+            return 'https://ui-avatars.com/api/?name='.$this->name[0].'&color=7F9CF5&background=EBF4FF';
         }
     }
-
-
 }

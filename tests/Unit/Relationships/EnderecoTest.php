@@ -5,7 +5,6 @@ namespace Tests\Unit\Relationships;
 use App\Models\Atpv;
 use App\Models\Despachante;
 use App\Models\Endereco;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,7 +16,7 @@ class EnderecoTest extends TestCase
     {
         $endereco = Endereco::factory()->create();
         $despachante = Despachante::factory()->state([
-            'endereco_id' => $endereco->id
+            'endereco_id' => $endereco->id,
         ])->create();
 
         $this->assertTrue($endereco->despachante->is($despachante));

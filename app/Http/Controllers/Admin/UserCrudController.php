@@ -18,15 +18,15 @@ use Request;
 
 class UserCrudController extends CrudController
 {
-    use ListOperation;
     use CreateOperation {
         store as traitStore;
     }
-    use UpdateOperation {
-        update as traitUpdate;
-    }
     use DeleteOperation {
         destroy as traitDestroy;
+    }
+    use ListOperation;
+    use UpdateOperation {
+        update as traitUpdate;
     }
 
     public function setup()
@@ -39,8 +39,9 @@ class UserCrudController extends CrudController
     public function setupListOperation()
     {
         $filtroEmpresa = Request::get('empresa-filtro');
-        if ($filtroEmpresa)
+        if ($filtroEmpresa) {
             CRUD::addClause('whereHas', $filtroEmpresa);
+        }
         $this->crud->addColumn([
             'name' => 'id',
         ]);
@@ -64,9 +65,9 @@ class UserCrudController extends CrudController
                     'element' => 'a',
                     'class' => 'badge bg-primary',
                     'href' => function ($crud, $column, $entry, $related_key) {
-                        return backpack_url('despachante/' . $entry->despachante->id . '/show');
+                        return backpack_url('despachante/'.$entry->despachante->id.'/show');
                     },
-                ]
+                ],
             ]);
         } elseif ($filtroEmpresa == 'cliente') {
             $this->crud->addColumn([
@@ -78,9 +79,9 @@ class UserCrudController extends CrudController
                     'element' => 'a',
                     'class' => 'badge bg-warning',
                     'href' => function ($crud, $column, $entry, $related_key) {
-                        return backpack_url('cliente/' . $entry->cliente->id . '/show');
+                        return backpack_url('cliente/'.$entry->cliente->id.'/show');
                     },
-                ]
+                ],
             ]);
         } else {
             $this->crud->addColumn([
@@ -102,12 +103,13 @@ class UserCrudController extends CrudController
                         }
                     },
                     'href' => function ($crud, $column, $entry, $related_key) {
-                        if ($entry->isDespachante())
-                            return backpack_url('despachante/' . $entry->despachante->id . '/show');
-                        elseif ($entry->isCliente())
-                            return backpack_url('cliente/' . $entry->cliente->id . '/show');
-                        else
+                        if ($entry->isDespachante()) {
+                            return backpack_url('despachante/'.$entry->despachante->id.'/show');
+                        } elseif ($entry->isCliente()) {
+                            return backpack_url('cliente/'.$entry->cliente->id.'/show');
+                        } else {
                             return '#';
+                        }
                     },
                 ],
             ]);
@@ -153,7 +155,6 @@ class UserCrudController extends CrudController
         ]);
         CRUD::addButtonFromView('top', 'empresas', 'empresas', 'end');
     }
-
 
     public function setupCreateOperation()
     {
@@ -275,6 +276,7 @@ class UserCrudController extends CrudController
     {
         $this->crud->hasAccessOrFail('delete');
         app(DeleteUser::class)->delete(User::find($id), true);
+
         return CRUD::delete($id);
     }
 }

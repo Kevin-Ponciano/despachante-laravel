@@ -15,7 +15,7 @@ class ProcessoTest extends TestCase
     {
         $pedido = Pedido::factory()->create();
         $processo = Processo::factory()->state([
-            'pedido_id' => $pedido->id
+            'pedido_id' => $pedido->id,
         ])->create();
 
         $this->assertTrue($processo->pedido->is($pedido));

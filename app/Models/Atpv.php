@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Atpv extends Model
 {
+    use AttributeModel;
     use HasFactory;
     use softDeletes;
-    use AttributeModel;
 
     protected $touches = ['pedido'];
+
     protected $fillable = [
         'renavam',
         'numero_crv',
@@ -51,13 +52,24 @@ class Atpv extends Model
         }
     }
 
+    public function getTipo2()
+    {
+        if ($this->movimentacao === 'in') {
+            return 'renave_entrada';
+        } elseif ($this->movimentacao === 'out') {
+            return 'renave_saida';
+        } else {
+            return 'atpv';
+        }
+    }
+
     public function getMovimentacao()
     {
         if ($this->movimentacao === 'in') {
             return 'ENTRADA';
         } elseif ($this->movimentacao === 'out') {
             return 'SAÍDA';
-        }else{
+        } else {
             return null;
         }
     }

@@ -22,7 +22,7 @@ class DespachanteTest extends TestCase
     {
         $endereco = Endereco::factory()->create();
         $despachante = Despachante::factory()->state([
-            'endereco_id' => $endereco->id
+            'endereco_id' => $endereco->id,
         ])->create();
 
         $this->assertTrue($despachante->endereco->is($endereco));
@@ -32,7 +32,7 @@ class DespachanteTest extends TestCase
     {
         $plano = Plano::factory()->create();
         $despachante = Despachante::factory()->state([
-            'plano_id' => $plano->id
+            'plano_id' => $plano->id,
         ])->create();
 
         $this->assertTrue($despachante->plano->is($plano));
@@ -42,7 +42,7 @@ class DespachanteTest extends TestCase
     {
         $despachante = Despachante::factory()->create();
         $clientes = Cliente::factory()->count(3)->state([
-            'despachante_id' => $despachante->id
+            'despachante_id' => $despachante->id,
         ])->create();
 
         foreach ($clientes as $cliente) {

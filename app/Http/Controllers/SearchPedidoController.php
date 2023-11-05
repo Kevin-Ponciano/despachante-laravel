@@ -18,7 +18,7 @@ class SearchPedidoController extends Controller
         if ($route) {
             return redirect()->route($route, $pedido->numero_pedido);
         } else {
-            \Log::error('Rota não encontrada para o pedido ' . $pedido->numero_pedido);
+            \Log::error('Rota não encontrada para o pedido '.$pedido->numero_pedido);
             abort(404);
         }
     }

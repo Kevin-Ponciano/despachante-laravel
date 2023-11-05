@@ -12,7 +12,8 @@ use Illuminate\Queue\SerializesModels;
 class sendPasswordResetNotificationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public  $user;
+
+    public $user;
 
     public function __construct(User $user)
     {

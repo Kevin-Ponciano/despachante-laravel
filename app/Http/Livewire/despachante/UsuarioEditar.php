@@ -3,12 +3,9 @@
 namespace App\Http\Livewire\despachante;
 
 use App\Jobs\sendPasswordResetNotificationJob;
-use Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\Can;
 use Livewire\Component;
 use Log;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Str;
 use Throwable;
@@ -16,11 +13,17 @@ use Throwable;
 class UsuarioEditar extends Component
 {
     public $user;
+
     public $name;
+
     public $email;
+
     public $role;
+
     public $status;
+
     public $userPermissions;
+
     public $permissions;
 
     public function mount($id)
@@ -57,11 +60,11 @@ class UsuarioEditar extends Component
     public function changeName()
     {
         $this->validate([
-            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,' . $this->id,
+            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,'.$this->id,
         ], [
             'name.required' => 'Obrigatório.',
             'name.unique' => 'Nome de usuário já cadastrado.',
-            'name.regex' => 'O nome de usuário não pode conter caracteres especiais.'
+            'name.regex' => 'O nome de usuário não pode conter caracteres especiais.',
         ]);
         try {
             $this->user->update([
@@ -77,7 +80,7 @@ class UsuarioEditar extends Component
     public function changeEmail()
     {
         $this->validate([
-            'email' => 'required|email|unique:users,email,' . $this->id,
+            'email' => 'required|email|unique:users,email,'.$this->id,
         ], [
             'email.required' => 'Obrigatório.',
             'email.email' => 'E-mail inválido.',
@@ -110,7 +113,6 @@ class UsuarioEditar extends Component
         }
     }
 
-
     public function switchStatus()
     {
         try {
@@ -135,7 +137,8 @@ class UsuarioEditar extends Component
     {
         try {
             $this->user->update(['status' => 'ex']);
-            session()->flash('success', "Usuário deletado com sucesso");
+            session()->flash('success', 'Usuário deletado com sucesso');
+
             return redirect()->route('despachante.usuarios');
         } catch (Throwable $th) {
             Log::error($th);

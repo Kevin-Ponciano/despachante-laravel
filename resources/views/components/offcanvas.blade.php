@@ -1,4 +1,4 @@
-<div class="offcanvas offcanvas-{{$direction}}" tabindex="-1" id="{{$id??'offcanvas'}}" style="width: 35rem;"
+<div class="offcanvas offcanvas-{{$direction}}" tabindex="-1" id="{{$id??'offcanvas'}}" style="{{$style??''}}"
      aria-labelledby="offcanvas{{\Str::ucfirst($direction)}}Label">
     <div class="offcanvas-header">
         <h2 class="offcanvas-title" id="offcanvas{{\Str::ucfirst($direction)}}Label">{{$title}}</h2>

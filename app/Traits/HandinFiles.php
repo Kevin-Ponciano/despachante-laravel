@@ -19,13 +19,21 @@ trait HandinFiles
     use WithFileUploads;
 
     public string $rootPath = 'ProcessCar';
+
     public $arquivos = [];
+
     public $arquivosDoPedido = [];
+
     public $arquivosCodCrlv = [];
+
     public $arquivosRenave = [];
+
     public $arquivoCodSeg;
+
     public $arquivoCrlv;
+
     public $arquivosAtpvs;
+
     public $arquivoAtpv;
 
     protected array $rulesMsgArquivos = [[
@@ -77,23 +85,21 @@ trait HandinFiles
         $this->validate($this->rulesMsgArquivoAtpv[0], $this->rulesMsgArquivoAtpv[1]);
     }
 
-
     /**
      * @param $folder - Pasta onde os arquivos serão salvos
-     * @return void
      */
     public function uploadFiles($folder): void
     {
         $this->validate($this->rulesMsgArquivos[0], $this->rulesMsgArquivos[1]);
         if (empty($this->arquivos)) {
             $this->addError('arquivos.*', 'Obrigatório.');
+
             return;
         }
 
         $despachanteId = Auth::user()->getUuidDespachante();
         $clienteId = $this->pedido->cliente->numero_cliente;
         $pedidoId = $this->pedido->numero_pedido;
-
 
         $arquivosSalvos = [];
         $path = "$this->rootPath/$despachanteId/$clienteId/$pedidoId/$folder";
@@ -158,11 +164,13 @@ trait HandinFiles
 
     protected function saveFile($file, $path, $folder, $nome = null)
     {
-        if (empty($nome))
+        if (empty($nome)) {
             $nome = $file->getClientOriginalName();
+        }
         $pathFile = Storage::putFileAs($path, $file, $nome);
-        if (!$pathFile)
+        if (! $pathFile) {
             return null;
+        }
         $mime = Storage::mimeType($pathFile);
         $url = Storage::temporaryUrl($pathFile, Carbon::now()->addDays(7));
 
@@ -180,6 +188,7 @@ trait HandinFiles
                 'created_at' => now(),
             ]
         );
+
         return $nome;
     }
 
@@ -190,6 +199,7 @@ trait HandinFiles
 
         if (empty($this->arquivoCodSeg) && empty($this->arquivoCrlv)) {
             $this->emit('error', 'Nenhum arquivo Selecionado.');
+
             return;
         }
 
@@ -202,10 +212,12 @@ trait HandinFiles
         $codIsSaved = null;
         $crlvIsSaved = null;
 
-        if (!empty($this->arquivoCodSeg))
+        if (! empty($this->arquivoCodSeg)) {
             $codIsSaved = $this->saveFile($this->arquivoCodSeg, $path, 'cod_crlv', "COD_$placa.pdf");
-        if (!empty($this->arquivoCrlv))
+        }
+        if (! empty($this->arquivoCrlv)) {
             $crlvIsSaved = $this->saveFile($this->arquivoCrlv, $path, 'cod_crlv', "CRLV_$placa.pdf");
+        }
         if ($codIsSaved == null) {
             $this->addError('arquivoCodSeg', 'Erro ao enviar o arquivo.');
         }
@@ -222,7 +234,7 @@ trait HandinFiles
 
         $this->pedido->timelines()->create([
             'user_id' => Auth::user()->id,
-            'titulo' => "Arquivos Enviados",
+            'titulo' => 'Arquivos Enviados',
             'descricao' => "Os arquivos COD/CRLV <b>| $nomeArquivos |</b> foram enviados para o CLIENTE",
             'tipo' => 'uf',
         ]);
@@ -262,10 +274,6 @@ trait HandinFiles
         $this->arquivoAtpv = null;
     }
 
-    /**
-     * @param $folder
-     * @return array
-     */
     public function _getFilesLink($folder): array
     {
         $arquivos = $this->pedido->arquivos()->where('folder', $folder)->get();
@@ -285,6 +293,7 @@ trait HandinFiles
                 'mime' => $mime,
             ];
         }
+
         return $files;
     }
 
@@ -300,25 +309,23 @@ trait HandinFiles
             ]);
             $this->emit('$refresh');
         }
+
         return Storage::download($path);
     }
 
-    /**
-     * @param $folder
-     * @return BinaryFileResponse
-     */
     public function downloadAllFiles($folder): BinaryFileResponse
     {
         $pedidoId = $this->pedido->numero_pedido;
 
         $files = $this->pedido->arquivos()->where('folder', $folder)->pluck('path')->toArray();
         $zip = new ZipArchive();
-        $zipFileName = Str::replace('/', '_', $folder) . '_' . $pedidoId . '.zip';
+        $zipFileName = Str::replace('/', '_', $folder).'_'.$pedidoId.'.zip';
         $zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         foreach ($files as $file) {
             $tempFile = Storage::get($file);
-            if ($tempFile != null)
+            if ($tempFile != null) {
                 $zip->addFromString(basename($file), $tempFile);
+            }
         }
         $zip->close();
 
@@ -335,6 +342,7 @@ trait HandinFiles
             ]);
             $this->emit('$refresh');
         }
+
         return response()->download($zipFileName)->deleteFileAfterSend(true);
     }
 
@@ -347,7 +355,7 @@ trait HandinFiles
             $this->pedido->timelines()->create([
                 'user_id' => Auth::user()->id,
                 'titulo' => 'Arquivo excluído',
-                'descricao' => "O arquivo <b>" . basename($path) . "</b> foi excluído",
+                'descricao' => 'O arquivo <b>'.basename($path).'</b> foi excluído',
                 'tipo' => 'ef',
                 'privado' => Auth::user()->isDespachante(),
             ]);

@@ -25,6 +25,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('pt_BR');
+
         return [
             'name' => $faker->unique()->name,
             'email' => $faker->unique()->email,
@@ -51,5 +52,4 @@ class UserFactory extends Factory
             ];
         });
     }
-
 }

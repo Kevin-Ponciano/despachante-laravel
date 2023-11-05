@@ -14,13 +14,14 @@ class AtpvFactory extends Factory
     {
         $faker = Faker::create('pt_BR');
         $isRenave = $faker->boolean(50);
-        if($isRenave){
+        if ($isRenave) {
             $codigo_crv = $faker->numerify('############');
             $movimentacao = $faker->randomElement(['in', 'out']);
-        }else{
+        } else {
             $codigo_crv = null;
             $movimentacao = null;
         }
+
         return [
             'renavam' => $faker->numerify('###########'),
             'numero_crv' => $faker->numerify('############'),

@@ -13,6 +13,7 @@ class ProcessoFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('pt_BR');
+
         return [
             'tipo' => $faker->randomElement(['ss', 'rv']),
             'comprador_tipo' => $faker->randomElement(['lj', 'tc']),

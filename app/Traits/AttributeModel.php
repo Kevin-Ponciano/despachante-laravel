@@ -13,10 +13,12 @@ trait AttributeModel
 
     public function dataTimeToBr($value): ?string
     {
-        if (!$value)
+        if (! $value) {
             return null;
+        }
         $newValue = Carbon::createFromFormat('Y-m-d H:i:s', $value);
-        return $newValue->format('d/m/Y') . ' - ' . $newValue->format('H:i');
+
+        return $newValue->format('d/m/Y').' - '.$newValue->format('H:i');
     }
 
     public function getUpdatedAt(): ?string

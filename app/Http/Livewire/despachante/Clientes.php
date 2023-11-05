@@ -28,6 +28,7 @@ class Clientes extends Component
         } catch (Throwable $th) {
             Log::error($th);
             $this->emit('error', 'Erro ao carregar clientes.');
+
             return response()->json([
                 'data' => [],
             ]);

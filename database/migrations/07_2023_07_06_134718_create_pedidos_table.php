@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -17,7 +18,7 @@ return new class extends Migration {
 
             $table->string('comprador_nome');
             $table->char('comprador_telefone', 15);
-            $table->string('responsavel_nome')->nullable();//Nome do responsável pelo pedido (cliente)
+            $table->string('responsavel_nome')->nullable(); //Nome do responsável pelo pedido (cliente)
             $table->char('placa', 7);
             $table->string('veiculo');
             $table->decimal('preco_honorario', 12)->default(0);
@@ -32,7 +33,7 @@ return new class extends Migration {
             $table->softDeletes();
 
             $table->foreignId('criado_por')->constrained('users')->onUpdate('cascade');
-            $table->foreignId('responsavel_por')->nullable()->constrained('users')->onUpdate('cascade');//Responsável por dar andamento no pedido (despacahnte)
+            $table->foreignId('responsavel_por')->nullable()->constrained('users')->onUpdate('cascade'); //Responsável por dar andamento no pedido (despacahnte)
             $table->foreignId('concluido_por')->nullable()->constrained('users')->onUpdate('cascade');
         });
     }

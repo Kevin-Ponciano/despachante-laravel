@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Endereco extends Model
 {
+    use AttributeModel;
     use HasFactory;
     use softDeletes;
-    use AttributeModel;
 
     protected $fillable = [
         'logradouro',
@@ -37,5 +37,4 @@ class Endereco extends Model
     {
         return $this->hasMany(Atpv::class, 'comprador_endereco_id');
     }
-
 }

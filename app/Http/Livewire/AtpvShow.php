@@ -17,25 +17,39 @@ class AtpvShow extends Component
     use HandinFiles;
 
     public $pedido;
+
     public $cliente;
+
     public $veiculo;
+
     public $vendedor;
+
     public $comprador;
 
     public $endereco;
+
     public $observacoes;
+
     public $precoHonorario;
 
     public $tipo;
+
     public $isRenave;
+
     public $isEditing = false;
+
     public $movimentacao;
+
     public $status;
 
     public $despachanteId;
+
     public $numeroCliente;
+
     public $numeroPedido;
+
     public $solicitadoCancelamento = false;
+
     public $servicoSC;
 
     public $inputPendencias = [];
@@ -147,34 +161,38 @@ class AtpvShow extends Component
         $this->numeroPedido = $this->pedido->numero_pedido;
         $this->solicitadoCancelamento = $this->pedido->solicitado_cancelamento;
         $this->servicoSC = $this->pedido->servicos()->where('nome', 'Solicitação de Cancelamento')->first()?->toArray();
-        if ($this->solicitadoCancelamento && $this->servicoSC)
+        if ($this->solicitadoCancelamento && $this->servicoSC) {
             $this->servicoSC['preco'] = $this->regexMoneyToView($this->servicoSC['pivot']['preco']);
+        }
 
-        if (Auth::user()->isDespachante())
+        if (Auth::user()->isDespachante()) {
             $this->despachanteId = Auth::user()->despachante_id;
+        }
         if (Auth::user()->isCliente()) {
             $this->inputPendenciasCliente = Arr::collapse(
                 Arr::map(
                     $this->pedido->pendencias->where('tipo', 'cp')->where('status', 'pe')->toArray(),
                     function ($pendencia) {
                         return [
-                            $pendencia['input'] => true
+                            $pendencia['input'] => true,
                         ];
                     }));
-            if (empty($this->inputPendenciasCliente))
+            if (empty($this->inputPendenciasCliente)) {
                 $this->inputPendenciasCliente = false;
+            }
         }
 
-        if (Auth::user()->isCliente() && $this->pedido->viewed_at == null)
+        if (Auth::user()->isCliente() && $this->pedido->viewed_at == null) {
             $this->wasViewed();
+        }
     }
-
 
     public function savePrecoHonorario()
     {
         try {
-            if ($this->precoHonorario == null || $this->hasConludeOrExcluded())
+            if ($this->precoHonorario == null || $this->hasConludeOrExcluded()) {
                 return;
+            }
             $this->pedido->update([
                 'preco_honorario' => $this->regexMoney($this->precoHonorario),
             ]);
@@ -187,14 +205,19 @@ class AtpvShow extends Component
 
     public function update()
     {
-        if ($this->hasConludeOrExcluded())
+        if ($this->hasConludeOrExcluded()) {
             return;
+        }
         if ($this->isEditing || $this->inputPendenciasCliente) {
             $this->validate();
 
             try {
-                if ($this->veiculo['dataHodometro'] === '') $this->veiculo['dataHodometro'] = null;
-                if ($this->veiculo['hodometro'] === '') $this->veiculo['hodometro'] = null;
+                if ($this->veiculo['dataHodometro'] === '') {
+                    $this->veiculo['dataHodometro'] = null;
+                }
+                if ($this->veiculo['hodometro'] === '') {
+                    $this->veiculo['hodometro'] = null;
+                }
 
                 $this->pedido->update([
                     'comprador_nome' => $this->comprador['nome'],
@@ -245,15 +268,15 @@ class AtpvShow extends Component
                 if ($camposAlterados) {
                     $this->pedido->timelines()->create([
                         'user_id' => Auth::user()->id,
-                        'titulo' => $this->tipo . ' atualizado',
-                        'descricao' => "Os campos <b>|" . $camposAlterados . "|</b> foram atualizados.",
+                        'titulo' => $this->tipo.' atualizado',
+                        'descricao' => 'Os campos <b>|'.$camposAlterados.'|</b> foram atualizados.',
                         'tipo' => 'up',
                         'privado' => Auth::user()->isDespachante(),
                     ]);
                 }
             } catch (Throwable $th) {
                 Log::error($th);
-                $this->emit('error', 'Erro ao atualizar ' . $this->tipo . '.');
+                $this->emit('error', 'Erro ao atualizar '.$this->tipo.'.');
             }
         }
     }
@@ -292,14 +315,16 @@ class AtpvShow extends Component
                 default => null,
             };
         });
+
         return implode(', ', $updatedFields);
     }
 
     public function savePrecoServico()
     {
         try {
-            if ($this->servicoSC['preco'] == null || $this->hasConludeOrExcluded())
+            if ($this->servicoSC['preco'] == null || $this->hasConludeOrExcluded()) {
                 return;
+            }
             $this->pedido->servicos()->updateExistingPivot($this->servicoSC['id'], [
                 'preco' => $this->regexMoney($this->servicoSC['preco']),
             ]);
@@ -313,16 +338,17 @@ class AtpvShow extends Component
     public function solicitarCancelamento()
     {
         try {
-            if ($this->status === 'ex')
+            if ($this->status === 'ex') {
                 return;
+            }
             $this->solicitadoCancelamento = true;
             $this->pedido->update([
                 'status' => 'sc',
                 'solicitado_cancelamento' => $this->solicitadoCancelamento,
             ]);
-            if (!$this->servicoSC) {
+            if (! $this->servicoSC) {
                 $servico = Auth::user()->cliente->despachante->servicos()->where('nome', 'Solicitação de Cancelamento')->first();
-                if (!$servico) {
+                if (! $servico) {
                     $servico = Auth::user()->cliente->despachante->servicos()->create([
                         'nome' => 'Solicitação de Cancelamento',
                         'preco' => 0,
@@ -338,7 +364,7 @@ class AtpvShow extends Component
             $this->pedido->timelines()->create([
                 'user_id' => Auth::user()->id,
                 'titulo' => 'Solicitação de cancelamento',
-                'descricao' => Auth::user()->name . ' solicitou o cancelamento do ' . $this->tipo . '.',
+                'descricao' => Auth::user()->name.' solicitou o cancelamento do '.$this->tipo.'.',
                 'tipo' => 'sc',
             ]);
         } catch (Throwable $th) {
@@ -350,8 +376,9 @@ class AtpvShow extends Component
     public function storeInputPendencias()
     {
         try {
-            if ($this->hasConludeOrExcluded())
+            if ($this->hasConludeOrExcluded()) {
                 return;
+            }
             $count = 0;
             $inputPendencias = array_reverse($this->inputPendencias);
             foreach ($inputPendencias as $key => $inputPendencia) {
@@ -382,11 +409,11 @@ class AtpvShow extends Component
                         default => null,
                     };
 
-                    if (!$matchingPendencia) {
+                    if (! $matchingPendencia) {
                         $this->pedido->pendencias()->create([
                             'nome' => $nome,
                             'input' => $key,
-                            'observacao' => "Esta informação está incorreta, por favor corrigir.",
+                            'observacao' => 'Esta informação está incorreta, por favor corrigir.',
                             'tipo' => 'cp',
                             'status' => 'pe',
                         ]);
@@ -425,8 +452,9 @@ class AtpvShow extends Component
         if ($this->isRenave) {
             $this->arquivosDoPedido = $this->_getFilesLink('renave/despachante');
             $this->arquivosRenave = $this->_getFilesLink('renave/cliente');
-        } else
+        } else {
             $this->arquivosAtpvs = $this->_getFilesLink('atpv');
+        }
 
         return view('livewire.atpv-show');
     }

@@ -15,7 +15,7 @@ class PlanoTest extends TestCase
     {
         $plano = Plano::factory()->create();
         $despachantes = Despachante::factory()->count(3)->state([
-            'plano_id' => $plano->id
+            'plano_id' => $plano->id,
         ])->create();
 
         foreach ($despachantes as $despachante) {

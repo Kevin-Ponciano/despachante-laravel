@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Plano extends Model
 {
+    use AttributeModel;
     use CrudTrait;
     use HasFactory;
-    use AttributeModel;
 
     protected $fillable = [
         'nome',

@@ -9,8 +9,8 @@ use Throwable;
 
 class Settings extends Component
 {
-
     public $despachante;
+
     public $despachanteCollection;
 
     protected $messages = [
@@ -29,8 +29,8 @@ class Settings extends Component
     public function update()
     {
         $this->validate([
-            'despachante.email' => 'required|email|unique:despachantes,email,' . $this->despachante['id'],
-            'despachante.celular' => 'required'
+            'despachante.email' => 'required|email|unique:despachantes,email,'.$this->despachante['id'],
+            'despachante.celular' => 'required',
         ]);
 
         try {
@@ -46,7 +46,6 @@ class Settings extends Component
             $this->emit('error', 'Erro ao atualizar dados.');
         }
     }
-
 
     public function render()
     {

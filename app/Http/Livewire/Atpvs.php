@@ -12,16 +12,27 @@ class Atpvs extends Component
     use WithPagination;
 
     public $search;
+
     public $paginate = 10;
+
     public $sortField = 'pedidos.numero_pedido';
+
     public $sortDirection = 'desc';
+
     public $iconDirection = 'up';
+
     public $clientes;
+
     public $cliente;
+
     public $status;
+
     public $tipo;
+
     public $downloadDisponivel;
+
     public $movimentacao;
+
     public $queryString = [
         'cliente' => ['except' => ''],
         'paginate' => ['except' => '10'],
@@ -31,17 +42,18 @@ class Atpvs extends Component
         'downloadDisponivel' => ['except' => ''],
     ];
 
-
     protected $paginationTheme = 'bootstrap';
+
     protected $listeners = [
         '$refresh',
-        'resetSearch'
+        'resetSearch',
     ];
 
     public function mount()
     {
-        if (Auth::user()->isDespachante())
+        if (Auth::user()->isDespachante()) {
             $this->clientes = Auth::user()->despachante->clientes;
+        }
     }
 
     public function sortBy($field)
@@ -55,18 +67,20 @@ class Atpvs extends Component
 
     public function checkTipo()
     {
-        if (!$this->tipo == 'rv')
+        if (! $this->tipo == 'rv') {
             $this->movimentacao = null;
+        }
     }
 
     public function show($id)
     {
-        if (Auth::user()->isDespachante())
+        if (Auth::user()->isDespachante()) {
             return redirect()->route('despachante.atpvs.show', $id);
-        elseif (Auth::user()->isCliente())
+        } elseif (Auth::user()->isCliente()) {
             return redirect()->route('cliente.atpvs.show', $id);
-        else
+        } else {
             return null;
+        }
     }
 
     public function clearFilters()
@@ -78,7 +92,7 @@ class Atpvs extends Component
             'tipo',
             'movimentacao',
             'downloadDisponivel',
-            'paginators'
+            'paginators',
         ]);
     }
 
@@ -98,6 +112,7 @@ class Atpvs extends Component
                         $query->where('codigo_crv', '!=', null);
                     });
                 }
+
                 return $query;
             })
             ->when($this->movimentacao, function (Builder $query, $movimentacao) {
@@ -106,7 +121,7 @@ class Atpvs extends Component
                 });
             })
             ->when($this->downloadDisponivel, function (Builder $query, $downloadDisponivel) {
-                return $query->whereHas('arquivos', function (Builder $query) use ($downloadDisponivel) {
+                return $query->whereHas('arquivos', function (Builder $query) {
                     $query->where('folder', 'atpv');
                     $query->orWhere('folder', 'renave/cliente');
                 });
@@ -127,17 +142,19 @@ class Atpvs extends Component
 
         $pedidos = $pedidosQuery
             ->where(function (Builder $query) {
-                $query->where('comprador_nome', 'like', $this->search . '%');
-                $query->orWhere('pedidos.numero_pedido', 'like', $this->search . '%');
-                if (Auth::user()->isDespachante())
-                    $query->orWhere('clientes.nome', 'like', $this->search . '%');
-                $query->orWhere('pedidos.placa', 'like', $this->search . '%');
+                $query->where('comprador_nome', 'like', $this->search.'%');
+                $query->orWhere('pedidos.numero_pedido', 'like', $this->search.'%');
+                if (Auth::user()->isDespachante()) {
+                    $query->orWhere('clientes.nome', 'like', $this->search.'%');
+                }
+                $query->orWhere('pedidos.placa', 'like', $this->search.'%');
             })
             ->paginate($this->paginate);
 
         $this->iconDirection = $this->sortDirection === 'asc' ? 'up' : 'down';
+
         return view('livewire.atpvs', [
-            'pedidos' => $pedidos
+            'pedidos' => $pedidos,
         ]);
     }
 }

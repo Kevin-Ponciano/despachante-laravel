@@ -356,7 +356,7 @@
                          description="Os documentos foram enviados com sucesso. Eles serão analisados e se estiverem corretos daremos continuidade ao processo."
                          url="{{route('cliente.dashboard')}}"/>
     @endif
-    <x-offcanvas direction="end" title="Atividades do Pedido">
+    <x-offcanvas direction="end" title="Atividades do Pedido" style="width: 35rem;">
         <x-timeline :timelines="$pedido->timelines()->orderByDesc('created_at')->get()"/>
     </x-offcanvas>
 </div>

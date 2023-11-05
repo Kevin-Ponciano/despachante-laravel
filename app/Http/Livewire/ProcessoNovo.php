@@ -14,28 +14,45 @@ use Throwable;
 
 class ProcessoNovo extends Component
 {
-    use HandinFiles;
     use FunctionsHelpers;
+    use HandinFiles;
 
     public $clientes;
+
     public $clienteId;
+
     public $cliente;
+
     public $compradorNome;
+
     public $telefone;
+
     public $responsavelNome;
+
     public $placa;
+
     public $veiculo;
+
     public $qtdPlacas = 0;
+
     public $compradorTipo = 'tc';
+
     public $processoTipo = 'ss';
+
     public $observacoes;
+
     public $precoPlaca;
+
     public $precoHonorario;
+
     public $servicosDespachante = [];
 
     public $servicos = [];
+
     public $servicoId;
+
     public $precoSettado = false;
+
     public $pedido;
 
     protected $rules = [
@@ -74,16 +91,18 @@ class ProcessoNovo extends Component
     public function addServico()
     {
         try {
-            if ($this->servicoId == null || $this->servicoId == -1)
+            if ($this->servicoId == null || $this->servicoId == -1) {
                 return;
-            if (\Auth::user()->isDespachante())
+            }
+            if (\Auth::user()->isDespachante()) {
                 $servico = \Auth::user()->despachante->servicos()->find($this->servicoId)->toArray();
-            else
+            } else {
                 $servico = \Auth::user()->cliente->despachante->servicos()->find($this->servicoId)->toArray();
+            }
             $serviceIds = array_map(function ($service) {
                 return $service['id'];
             }, $this->servicos);
-            if (!in_array($servico['id'], $serviceIds)) {
+            if (! in_array($servico['id'], $serviceIds)) {
                 $this->servicos[] = $servico;
             }
         } catch (Throwable $th) {
@@ -106,7 +125,7 @@ class ProcessoNovo extends Component
         if (\Auth::user()->isCliente() && empty($this->arquivos)) {
             return $this->addError('arquivos.*', 'Obrigatório.');
         }
-        if (!$this->precoSettado) {
+        if (! $this->precoSettado) {
             $this->setPrecos();
         }
         $pedido = Pedido::create([
@@ -128,7 +147,7 @@ class ProcessoNovo extends Component
             'preco_placa' => $this->regexMoney($this->precoPlaca),
             'pedido_id' => $pedido->id,
         ]);
-        if ($this->processoTipo === 'ss' && !empty($this->servicos)) {
+        if ($this->processoTipo === 'ss' && ! empty($this->servicos)) {
             foreach ($this->servicos as $servico) {
                 PedidoServico::create([
                     'pedido_id' => $pedido->id,
@@ -140,13 +159,14 @@ class ProcessoNovo extends Component
 
         //TODO: verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
         $this->pedido = $pedido;
-        if (!empty($this->arquivos))
+        if (! empty($this->arquivos)) {
             $this->uploadFiles('processos');
+        }
 
         $pedido->timelines()->create([
             'user_id' => Auth::user()->id,
             'titulo' => 'Processo criado',
-            'descricao' => 'O Processo foi criado por <b>' . Auth::user()->name . '</b>.',
+            'descricao' => 'O Processo foi criado por <b>'.Auth::user()->name.'</b>.',
             'tipo' => 'np',
         ]);
 
@@ -165,12 +185,14 @@ class ProcessoNovo extends Component
 
     public function setPrecos()
     {
-        if ($this->clienteId == null || $this->clienteId == -1)
+        if ($this->clienteId == null || $this->clienteId == -1) {
             return;
-        if (\Auth::user()->isDespachante())
+        }
+        if (\Auth::user()->isDespachante()) {
             $this->cliente = \Auth::user()->despachante->clientes()->find($this->clienteId);
-        else
+        } else {
             $this->cliente = \Auth::user()->cliente;
+        }
         $this->setPrecoPlaca();
         $this->setPrecoHonorario();
         $this->precoSettado = true;
@@ -178,24 +200,28 @@ class ProcessoNovo extends Component
 
     public function setPrecoPlaca()
     {
-        if ($this->clienteId == null || $this->clienteId == -1)
+        if ($this->clienteId == null || $this->clienteId == -1) {
             return;
-        if ($this->qtdPlacas == 1)
+        }
+        if ($this->qtdPlacas == 1) {
             $this->precoPlaca = $this->regexMoneyToView($this->cliente->preco_1_placa);
-        elseif ($this->qtdPlacas == 2)
+        } elseif ($this->qtdPlacas == 2) {
             $this->precoPlaca = $this->regexMoneyToView($this->cliente->preco_2_placa);
-        else
+        } else {
             $this->precoPlaca = 0;
+        }
     }
 
     public function setPrecoHonorario()
     {
-        if ($this->clienteId == null || $this->clienteId == -1)
+        if ($this->clienteId == null || $this->clienteId == -1) {
             return;
-        if ($this->compradorTipo == 'tc')
+        }
+        if ($this->compradorTipo == 'tc') {
             $this->precoHonorario = $this->regexMoneyToView($this->cliente->preco_terceiro);
-        elseif ($this->compradorTipo == 'lj')
+        } elseif ($this->compradorTipo == 'lj') {
             $this->precoHonorario = $this->regexMoneyToView($this->cliente->preco_loja);
+        }
     }
 
     public function clearInputs()

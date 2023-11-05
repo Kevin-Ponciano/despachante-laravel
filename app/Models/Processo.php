@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Processo extends Model
 {
+    use AttributeModel;
     use HasFactory;
     use softDeletes;
-    use AttributeModel;
 
     protected $touches = ['pedido'];
+
     protected $fillable = [
         'tipo',
         'comprador_tipo',
@@ -22,7 +23,6 @@ class Processo extends Model
         'preco_placa',
         'pedido_id',
     ];
-
 
     public function pedido(): BelongsTo
     {
@@ -32,11 +32,12 @@ class Processo extends Model
     public function getTipo()
     {
         $tipo = $this->tipo;
-        if ($tipo == 'ss')
+        if ($tipo == 'ss') {
             return 'Solicitação de Serviço';
-        elseif ($tipo == 'rv')
+        } elseif ($tipo == 'rv') {
             return 'RENAVE';
-        else
+        } else {
             return '-';
+        }
     }
 }

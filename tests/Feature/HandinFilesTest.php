@@ -36,14 +36,14 @@ class HandinFilesTest extends TestCase
             'crlv' => UploadedFile::fake()->create('crlv.pdf', 1000),
         ];
         $clienteId = '1';
-        $pedido = (object)[
+        $pedido = (object) [
             'id' => '1',
             'placa' => 'ABC1234',
         ];
         $filesSaved = $this->uploadCodCrlv($files, $clienteId, $pedido);
         $this->assertEquals([
             "SALED/$clienteId/$pedido->id/cod_crlv/cod_$pedido->placa.pdf",
-            "SALED/$clienteId/$pedido->id/cod_crlv/crlv_$pedido->placa.pdf"
+            "SALED/$clienteId/$pedido->id/cod_crlv/crlv_$pedido->placa.pdf",
         ], $filesSaved);
     }
 }

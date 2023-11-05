@@ -17,8 +17,11 @@ class ClienteNovo extends Component
     use FunctionsHelpers;
 
     public $nome;
+
     public $email;
+
     public $preco;
+
     public $qtd_clientes;
 
     protected $rules = [
@@ -46,13 +49,14 @@ class ClienteNovo extends Component
 
         if ($this->qtd_clientes <= 0) {
             $this->emit('error', "<b class='text-uppercase'>Limite de clientes atingido</b><br> Entre em contato com o suporte<br> para aumentar o limite de clientes");
+
             return;
         }
         $this->validate();
         try {
             $nomeUsuario = Str::lower($this->nome);
             $year = date('Y');
-            $password = Str::replace(' ', '_', $nomeUsuario) . "@$year";
+            $password = Str::replace(' ', '_', $nomeUsuario)."@$year";
 
             $preco = [
                 'placa1' => $this->regexMoney($this->preco['placa1'] ?? 0),

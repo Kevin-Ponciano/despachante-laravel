@@ -16,7 +16,7 @@ class ServicoTest extends TestCase
     {
         $despachante = Despachante::factory()->create();
         $servico = Servico::factory()->state([
-            'despachante_id' => $despachante->id
+            'despachante_id' => $despachante->id,
         ])->create();
 
         $this->assertTrue($servico->despachante->is($despachante));
@@ -26,7 +26,7 @@ class ServicoTest extends TestCase
     {
         $servico = Servico::factory()->create();
         $pedidoServico = PedidoServico::factory()->count(3)->state([
-            'servico_id' => $servico->id
+            'servico_id' => $servico->id,
         ])->create();
 
         foreach ($pedidoServico as $pedido) {

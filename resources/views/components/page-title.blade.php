@@ -1,4 +1,4 @@
-<div class="page-header m-0 d-print-none">
+<div class="page-header m-0 d-print-none z-2">
     <div class="{{$classContainer?? 'container'}}">
         <div class="d-flex justify-content-between">
             <div>

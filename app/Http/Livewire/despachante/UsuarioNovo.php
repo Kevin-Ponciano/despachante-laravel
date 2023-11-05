@@ -14,9 +14,13 @@ class UsuarioNovo extends Component
     use FunctionsHelpers;
 
     public $name;
+
     public $email;
+
     public $role = 'du';
+
     public $password;
+
     public $qtd_usuarios;
 
     protected $rules = [
@@ -47,6 +51,7 @@ class UsuarioNovo extends Component
     {
         if ($this->qtd_usuarios <= 0) {
             $this->emit('error', "<b class='text-uppercase'>Limite de usuários atingido</b><br> Entre em contato com o suporte<br> para aumentar o limite de usuários");
+
             return;
         }
         $this->validate();

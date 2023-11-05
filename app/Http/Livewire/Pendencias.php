@@ -13,11 +13,17 @@ use Throwable;
 class Pendencias extends Component
 {
     public $pendencias = [];
+
     public $pedidoId;
+
     public $name;
+
     public $tipo;
+
     public $observacao;
+
     public $createPendencia = false;
+
     public $isModal = false;
 
     protected $listeners = [
@@ -27,6 +33,7 @@ class Pendencias extends Component
     public static function hasPendingStatic($pedidoId)
     {
         $pendenciasCount = Auth::user()->empresa()->pedidos()->find($pedidoId)->pendencias->where('status', '!=', 'co')->count();
+
         return $pendenciasCount > 0;
     }
 
@@ -40,17 +47,20 @@ class Pendencias extends Component
     {
         $pendenciasCount = 0;
         foreach ($this->pendencias as $pendencia) {
-            if ($pendencia->status != 'co')
+            if ($pendencia->status != 'co') {
                 $pendenciasCount++;
+            }
         }
+
         return $pendenciasCount > 0;
     }
 
     public function resolverPendencia($id)
     {
         try {
-            if ($this->hasConludeOrExcluded())
+            if ($this->hasConludeOrExcluded()) {
                 return;
+            }
             $pendencia = Pendencia::find($id)->load('pedido', 'pedido.timelines');
             $pendencia->status = $pendencia->status == 'co' ? 'pe' : 'co';
             $pendencia->concluded_at = $pendencia->status == 'co' ? now() : null;
@@ -93,6 +103,7 @@ class Pendencias extends Component
         $status = Auth::user()->empresa()->pedidos()->find($this->pedidoId)->status;
         if ($status === 'co' || $status === 'ex') {
             $this->emit('warning', 'Pedido concluído ou excluído não pode ser editado.');
+
             return true;
         } else {
             return false;
@@ -102,8 +113,9 @@ class Pendencias extends Component
     public function resolverTodas()
     {
         try {
-            if ($this->hasConludeOrExcluded())
+            if ($this->hasConludeOrExcluded()) {
                 return;
+            }
             foreach ($this->pendencias as $pendencia) {
                 if ($pendencia->status !== 'co') {
                     $pendencia->status = 'co';
@@ -118,7 +130,7 @@ class Pendencias extends Component
                 ->timelines()->create([
                     'user_id' => Auth::user()->id,
                     'titulo' => 'Pendências resolvidas',
-                    'descricao' => "Todas as pendências foram resolvidas.",
+                    'descricao' => 'Todas as pendências foram resolvidas.',
                     'tipo' => 'pr',
                 ]);
             $this->emit('$refresh');
@@ -130,8 +142,9 @@ class Pendencias extends Component
 
     public function setPedidoAberto()
     {
-        if ($this->hasConludeOrExcluded())
+        if ($this->hasConludeOrExcluded()) {
             return;
+        }
         $pedido = Auth::user()->empresa()->pedidos()->find($this->pedidoId);
         $pedido->update(['status' => 'ab']);
         $pedido->timelines()->create([
@@ -148,11 +161,13 @@ class Pendencias extends Component
     public function store()
     {
         try {
-            if ($this->hasConludeOrExcluded())
+            if ($this->hasConludeOrExcluded()) {
                 return;
+            }
             if ($this->name == null) {
                 $this->createPendencia = false;
                 $this->clearFields();
+
                 return;
             }
             $pendencia = Pendencia::create([
@@ -201,8 +216,9 @@ class Pendencias extends Component
     public function deletePendencia($id)
     {
         try {
-            if ($this->hasConludeOrExcluded())
+            if ($this->hasConludeOrExcluded()) {
                 return;
+            }
             $pendencia = Pendencia::find($id);
             $pendencia->delete();
 
@@ -224,6 +240,7 @@ class Pendencias extends Component
     public function render()
     {
         $this->pendencias = Auth::user()->empresa()->pedidos()->find($this->pedidoId)->pendencias->sortByDesc('id');
+
         return view('livewire.pendencias');
     }
 }

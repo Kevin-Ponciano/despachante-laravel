@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -19,7 +20,7 @@ return new class extends Migration {
             $table->string('cpf_cnpj')->nullable()->unique();
             $table->char('telefone', 15)->nullable();
             $table->char('status', 2);
-            #TODO: Criar tabela de precos
+            //TODO: Criar tabela de precos
             $table->decimal('preco_1_placa', 12)->default(0);
             $table->decimal('preco_2_placa', 12)->default(0);
             $table->decimal('preco_atpv', 12)->default(0);

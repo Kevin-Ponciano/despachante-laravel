@@ -11,15 +11,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Servico extends Model
 {
+    use AttributeModel;
     use HasFactory;
     use softDeletes;
-    use AttributeModel;
 
     protected $fillable = [
         'nome',
         'preco',
         'descricao',
-        'despachante_id'
+        'despachante_id',
     ];
 
     public function despachante(): BelongsTo

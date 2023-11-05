@@ -15,16 +15,16 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class ClienteCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read CrudPanel $crud
  */
 class ClienteCrudController extends CrudController
 {
-    use ListOperation;
     use CreateOperation;
-    use UpdateOperation;
     use DeleteOperation;
+    use ListOperation;
     use ShowOperation;
+    use UpdateOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -34,7 +34,7 @@ class ClienteCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(Cliente::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/cliente');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/cliente');
         CRUD::setEntityNameStrings('cliente', 'clientes');
     }
 
@@ -42,6 +42,7 @@ class ClienteCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -80,6 +81,7 @@ class ClienteCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()
@@ -91,6 +93,7 @@ class ClienteCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()

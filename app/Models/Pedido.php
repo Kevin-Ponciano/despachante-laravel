@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pedido extends Model
 {
+    use AttributeModel;
     use CrudTrait;
     use HasFactory;
     use softDeletes;
-    use AttributeModel;
 
     protected $fillable = [
         'comprador_nome',
@@ -34,6 +34,10 @@ class Pedido extends Model
         'concluded_at',
         'cliente_id',
         'created_at',
+    ];
+
+    protected $casts = [
+        'concluded_at' => 'datetime',
     ];
 
     protected static function boot()
@@ -116,10 +120,11 @@ class Pedido extends Model
             case 'ea':
                 return ['Em Andamento', 'bg-primary'];
             case 'co':
-                if ($this->solicitado_cancelamento)
+                if ($this->solicitado_cancelamento) {
                     return ['Cancelamento Realizado', 'bg-success'];
-                else
+                } else {
                     return ['Concluído', 'bg-success'];
+                }
             case 'sc':
                 return ['Solicitado Cancelamento', 'bg-warning'];
             case 'ex':
@@ -127,20 +132,31 @@ class Pedido extends Model
             case 'pe':
                 return ['Pendente', 'bg-warning'];
             case 'rp':
-                if (Auth::user()->isDespachante())
+                if (Auth::user()->isDespachante()) {
                     return ['Retorno de Pendência', 'bg-warning'];
-                else
+                } else {
                     return ['Em Análise', 'bg-warning'];
+                }
             default:
                 return ['Desconhecido', 'bg-secondary'];
         }
     }
 
-    public function getTipo(){
-        if($this->processo){
+    public function getTipo()
+    {
+        if ($this->processo) {
             return 'PROCESSO';
-        }else{
+        } else {
             return $this->atpv->getTipo();
+        }
+    }
+
+    public function getTipo2()
+    {
+        if ($this->processo) {
+            return 'processo';
+        } else {
+            return $this->atpv->getTipo2();
         }
     }
 }

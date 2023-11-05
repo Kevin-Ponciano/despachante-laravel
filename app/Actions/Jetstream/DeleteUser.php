@@ -14,7 +14,7 @@ class DeleteUser implements DeletesUsers
     {
         $user->deleteProfilePhoto();
         $user->tokens->each->delete();
-        if (!$isBackpack) {
+        if (! $isBackpack) {
             $user->delete();
         }
     }

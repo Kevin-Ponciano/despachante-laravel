@@ -303,7 +303,7 @@
                          description="As informações foram alteradas com sucesso. Elas serão analisadas e se estiverem corretas daremos continuidade ao {{$tipo}}."
                          url="{{route('cliente.dashboard')}}"/>
     @endif
-    <x-offcanvas direction="end" title="Atividades do Pedido">
+    <x-offcanvas direction="end" title="Atividades do Pedido" style="width: 35rem;">
         <x-timeline :timelines="$pedido->timelines()->orderByDesc('created_at')->get()"/>
     </x-offcanvas>
 </div>

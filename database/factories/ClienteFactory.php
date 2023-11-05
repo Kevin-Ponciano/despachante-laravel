@@ -13,6 +13,7 @@ class ClienteFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('pt_BR');
+
         return [
             'nome' => $faker->company,
             'status' => 'at',

@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Timeline extends Model
 {
-    use SoftDeletes;
-    use HasFactory;
     use AttributeModel;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -39,9 +39,9 @@ class Timeline extends Model
         $now = Carbon::now();
 
         if ($carbon->isToday()) {
-            return "hoje às " . $carbon->format('H:i');
+            return 'hoje às '.$carbon->format('H:i');
         } elseif ($carbon->isYesterday()) {
-            return "ontem às " . $carbon->format('H:i');
+            return 'ontem às '.$carbon->format('H:i');
         } else {
             return $carbon->format('d/m/Y \à\s H:i');
         }

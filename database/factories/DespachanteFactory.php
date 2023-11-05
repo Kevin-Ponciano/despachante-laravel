@@ -13,6 +13,7 @@ class DespachanteFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('pt_BR');
+
         return [
             'razao_social' => $faker->company,
             'nome_fantasia' => $faker->company,

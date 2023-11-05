@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PedidoServico extends Model
 {
-    use HasFactory;
-    use softDeletes;
+    //use softDeletes;
     use AttributeModel;
+    use HasFactory;
 
     protected $touches = ['pedido'];
+
     protected $fillable = [
         'pedido_id',
         'servico_id',

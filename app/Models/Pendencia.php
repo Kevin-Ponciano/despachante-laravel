@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pendencia extends Model
 {
+    use AttributeModel;
     use HasFactory;
     use SoftDeletes;
-    use AttributeModel;
 
     protected $fillable = [
         'pedido_id',
@@ -27,7 +27,6 @@ class Pendencia extends Model
     {
         return $this->belongsTo(Pedido::class);
     }
-
 
     public function getStatus()
     {

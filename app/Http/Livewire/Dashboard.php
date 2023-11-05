@@ -4,11 +4,11 @@ namespace App\Http\Livewire;
 
 use Auth;
 use Livewire\Component;
-use function Laravel\Prompts\select;
 
 class Dashboard extends Component
 {
     protected $listeners = ['atualizarDashboard'];
+
     public $empresa;
 
     public function mount()
@@ -16,7 +16,7 @@ class Dashboard extends Component
         $this->empresa = Auth::user()->empresa();
     }
 
-    function atualizarDashboard()
+    public function atualizarDashboard()
     {
         $this->render();
         $this->emit('atualizarDashboardDone');
@@ -37,7 +37,6 @@ class Dashboard extends Component
         $qtdAtpvsEmAndamento = $pedidosAtpvs->where('status', 'ea')->count();
         $qtdAtpvsPendentes = $pedidosAtpvs->where('status', 'pe')->count();
         $qtdAtpvsSolicitadoCancelamento = $pedidosAtpvs->where('status', 'sc')->count();
-
 
         $qtdProcessosDisponivelDownload = 0;
         $qtdAtpvsDisponivelDownload = 0;

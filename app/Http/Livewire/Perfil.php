@@ -15,17 +15,24 @@ class Perfil extends Component
     use WithFileUploads;
 
     public $user;
+
     public $name;
+
     public $email;
+
     public $oldPassword;
+
     public $newPassword;
+
     public $photo;
+
     protected $rulesMsgPhoto = [[
         'photo' => 'image|max:10240',
     ], [
         'photo.image' => 'Formato inválido (Somente JPG).',
         'photo.max' => 'Tamanho máximo de 5MB.',
     ]];
+
     protected $listeners = ['$refresh'];
 
     public function mount()
@@ -43,8 +50,9 @@ class Perfil extends Component
     public function savePhoto()
     {
         try {
-            if (!$this->photo)
+            if (! $this->photo) {
                 return;
+            }
             $this->delete();
             $this->user->update([
                 'profile_photo_path' => $this->photo->store('profile-photos', 'public'),
@@ -84,7 +92,7 @@ class Perfil extends Component
     public function changeName()
     {
         $this->validate([
-            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,' . $this->user->id,
+            'name' => 'required|regex:/^[a-zA-Z0-9_ ]+$/|unique:users,name,'.$this->user->id,
         ], [
             'name.required' => 'Obrigatório.',
             'name.regex' => 'O nome de usuário não pode conter caracteres especiais.',
@@ -106,7 +114,7 @@ class Perfil extends Component
     public function changeEmail()
     {
         $this->validate([
-            'email' => 'required|email|unique:users,email,' . $this->user->id
+            'email' => 'required|email|unique:users,email,'.$this->user->id,
         ], [
             'email.required' => 'Obrigatório.',
             'email.email' => 'E-mail inválido.',
@@ -150,7 +158,6 @@ class Perfil extends Component
             $this->emit('error', 'Erro ao salvar senha.');
         }
     }
-
 
     public function render()
     {

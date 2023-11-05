@@ -18,7 +18,7 @@ class UserTest extends TestCase
     {
         $despachante = Despachante::factory()->create();
         $user = User::factory()->state([
-            'despachante_id' => $despachante->id
+            'despachante_id' => $despachante->id,
         ])->create();
 
         $this->assertTrue($user->despachante->is($despachante));
@@ -28,7 +28,7 @@ class UserTest extends TestCase
     {
         $cliente = Cliente::factory()->create();
         $user = User::factory()->state([
-            'cliente_id' => $cliente->id
+            'cliente_id' => $cliente->id,
         ])->create();
 
         $this->assertTrue($user->cliente->is($cliente));
@@ -38,7 +38,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
         $pedidos = Pedido::factory()->count(3)->state([
-            'criado_por' => $user->id
+            'criado_por' => $user->id,
         ])->create();
 
         foreach ($pedidos as $pedido) {
@@ -50,7 +50,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
         $pedidos = Pedido::factory()->count(3)->state([
-            'responsavel_por' => $user->id
+            'responsavel_por' => $user->id,
         ])->create();
 
         foreach ($pedidos as $pedido) {
@@ -62,7 +62,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
         $pedidos = Pedido::factory()->count(3)->state([
-            'concluido_por' => $user->id
+            'concluido_por' => $user->id,
         ])->create();
 
         foreach ($pedidos as $pedido) {
@@ -74,7 +74,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
         $logs = Log::factory()->count(3)->state([
-            'usuario_id' => $user->id
+            'usuario_id' => $user->id,
         ])->create();
 
         foreach ($logs as $log) {

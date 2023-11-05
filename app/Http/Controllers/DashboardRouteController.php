@@ -6,12 +6,13 @@ class DashboardRouteController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->isDespachante())
+        if (auth()->user()->isDespachante()) {
             return redirect()->route('despachante.dashboard');
-        elseif (auth()->user()->isCliente())
+        } elseif (auth()->user()->isCliente()) {
             return redirect()->route('cliente.dashboard');
-        else
+        } else {
             \Log::info('Usuário sem associação');
-            abort(403, 'Usuário sem associação');
+        }
+        abort(403, 'Usuário sem associação');
     }
 }

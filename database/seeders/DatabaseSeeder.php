@@ -85,13 +85,13 @@ class DatabaseSeeder extends Seeder
                         'pedido_id' => $pedido->id,
                     ]);
                     for ($i = 0; $i < $qtdServicosPorDespachante; $i++) {
-                        $pedido->servicos()->attach(
-                            [
-                                'servico_id' => $pedido->cliente->despachante->servicos->random()->id,
-                            ],
-                            [
-                                'preco' => $faker->randomFloat(2, 1, 1000),
-                            ]);
+                        $servidoId = $pedido->cliente->despachante->servicos->random()->id;
+                        PedidoServico::updateOrCreate([
+                            'pedido_id' => $pedido->id,
+                            'servico_id' => $servidoId,
+                        ], [
+                            'preco' => $faker->randomFloat(2, 1, 1000),
+                        ]);
                     }
                 });
             });

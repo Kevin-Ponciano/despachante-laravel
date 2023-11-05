@@ -13,6 +13,7 @@ class PedidoFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('pt_BR');
+
         return [
             'comprador_nome' => $faker->name,
             'comprador_telefone' => $faker->cellphoneNumber,

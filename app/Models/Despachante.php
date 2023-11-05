@@ -15,10 +15,10 @@ use Str;
 
 class Despachante extends Model
 {
+    use AttributeModel;
     use CrudTrait;
     use HasFactory;
     use softDeletes;
-    use AttributeModel;
 
     protected $fillable = [
         'razao_social',

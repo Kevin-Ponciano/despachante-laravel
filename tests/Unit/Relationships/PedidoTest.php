@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Relationships;
 
-
 use App\Models\Atpv;
 use App\Models\Cliente;
 use App\Models\Pedido;

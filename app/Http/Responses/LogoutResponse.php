@@ -13,8 +13,7 @@ class LogoutResponse implements LogoutResponseContract
     /**
      * Create an HTTP response that represents the object.
      *
-     * @param Request $request
-     * @return JsonResponse|Response
+     * @param  Request  $request
      */
     public function toResponse($request): JsonResponse|Response
     {

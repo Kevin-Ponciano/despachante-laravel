@@ -27,15 +27,17 @@ trait FunctionsHelpers
     {
         $cep = $this->onlyNumbers($this->endereco['cep']);
         $response = HTTP::get("http://viacep.com.br/ws/$cep/json/", 'GET')->json();
-        if ($response === null)
+        if ($response === null) {
             return $this->addError('endereco.cep', 'CEP inválido.');
-        elseif (isset($response['erro']))
+        } elseif (isset($response['erro'])) {
             return $this->addError('endereco.cep', 'CEP Não encontrado.');
+        }
         $this->endereco['cep'] = $response['cep'];
         $this->endereco['logradouro'] = $response['logradouro'];
         $this->endereco['bairro'] = $response['bairro'];
         $this->endereco['cidade'] = $response['localidade'];
         $this->endereco['uf'] = $response['uf'];
+
         return $this->resetErrorBag('endereco.cep');
     }
 
@@ -46,8 +48,9 @@ trait FunctionsHelpers
 
     public function play()
     {
-        if (Pendencias::hasPendingStatic($this->pedido->id))
+        if (Pendencias::hasPendingStatic($this->pedido->id)) {
             return $this->emit('modal-aviso');
+        }
 
         $this->status = 'ea';
         $this->pedido->update([
@@ -86,8 +89,9 @@ trait FunctionsHelpers
 
     public function conclude()
     {
-        if (Pendencias::hasPendingStatic($this->pedido->id))
+        if (Pendencias::hasPendingStatic($this->pedido->id)) {
             return $this->emit('modal-aviso');
+        }
 
         $numero_pedido = $this->pedido->numero_pedido;
         $this->status = 'co';
@@ -105,13 +109,15 @@ trait FunctionsHelpers
         ]);
 
         session()->flash('success', "Pedido $numero_pedido Concluído");
+
         return redirect()->route('despachante.dashboard');
     }
 
     public function delete()
     {
-        if (Pendencias::hasPendingStatic($this->pedido->id))
+        if (Pendencias::hasPendingStatic($this->pedido->id)) {
             return $this->emit('modal-aviso');
+        }
 
         $numero_pedido = $this->pedido->numero_pedido;
         $this->status = 'ex';
@@ -127,6 +133,7 @@ trait FunctionsHelpers
         ]);
 
         session()->flash('error', "Pedido $numero_pedido Excluído Com Sucesso");
+
         return redirect()->route('despachante.dashboard');
     }
 
@@ -134,6 +141,7 @@ trait FunctionsHelpers
     {
         if ($this->status === 'co' || $this->status === 'ex') {
             $this->emit('warning', 'Pedido concluído ou excluído não pode ser editado.');
+
             return true;
         } else {
             return false;
@@ -145,13 +153,12 @@ trait FunctionsHelpers
         $this->pedido->timelines()->create([
             'user_id' => Auth::user()->id,
             'titulo' => 'Pedido Visualizado',
-            'descricao' => 'O Pedido foi visualizado pelo usuário ' . Auth::user()->name,
+            'descricao' => 'O Pedido foi visualizado pelo usuário '.Auth::user()->name,
             'tipo' => 'vp',
-            'privado' => true
+            'privado' => true,
         ]);
         $this->pedido->update([
             'viewed_at' => now(),
         ]);
     }
-
 }

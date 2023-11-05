@@ -23,12 +23,14 @@ class Usuarios extends Component
                     'status' => $usuario->status,
                 ];
             }
+
             return response()->json([
                 'data' => $data,
             ]);
         } catch (Throwable $th) {
             Log::error($th);
             $this->emit('error', 'Erro ao carregar usuários.');
+
             return response()->json([
                 'data' => [],
             ]);

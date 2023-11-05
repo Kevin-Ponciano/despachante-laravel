@@ -14,12 +14,19 @@ class ClienteEditar extends Component
     use FunctionsHelpers;
 
     public $clienteCollection;
+
     public $cliente;
+
     public $nomeCliente;
+
     public $usuario;
+
     public $nomeUsuario;
+
     public $emailUsuario;
+
     public $preco;
+
     public $status;
 
     public function mount($id)
@@ -40,7 +47,6 @@ class ClienteEditar extends Component
         ];
         $this->status = $this->cliente->status;
     }
-
 
     public function updateNomeCliente()
     {
@@ -152,7 +158,8 @@ class ClienteEditar extends Component
         try {
             $this->cliente->update(['status' => 'ex']);
 
-            session()->flash('success', "Cliente deletado com sucesso");
+            session()->flash('success', 'Cliente deletado com sucesso');
+
             return redirect()->route('despachante.clientes');
         } catch (Throwable $th) {
             Log::error($th);

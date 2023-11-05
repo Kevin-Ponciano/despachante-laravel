@@ -18,34 +18,51 @@ class ProcessoShow extends Component
     use HandinFiles;
 
     public $pedido;
+
     public $cliente;
+
     public $compradorNome;
+
     public $responsavelNome;
+
     public $telefone;
+
     public $placa;
+
     public $veiculo;
+
     public $qtdPlaca;
+
     public $compradorTipo;
+
     public $processoTipo;
+
     public $observacoes;
+
     public $precoPlaca;
+
     public $precoHonorario;
+
     public $servicosDespachante = [];
 
     public $servicos = [];
+
     public $servicoId;
+
     public $isEditing = false;
+
     public $status;
 
     public $despachanteId;
-    public $numeroCliente;
-    public $numeroPedido;
 
+    public $numeroCliente;
+
+    public $numeroPedido;
 
     protected $listeners = [
         '$refresh',
         'deleteFile',
-        'visualizar'
+        'visualizar',
     ];
 
     protected $rules = [
@@ -83,23 +100,26 @@ class ProcessoShow extends Component
             $servico->preco = $this->regexMoneyToView($servico->pivot->preco);
             $this->servicos[] = $servico->toArray();
         }
-        if (Auth::user()->isDespachante())
+        if (Auth::user()->isDespachante()) {
             $this->servicosDespachante = Auth::user()->despachante->servicos()->orderBy('nome')->get();
+        }
 
-        if (Auth::user()->isCliente() && $this->pedido->viewed_at == null)
+        if (Auth::user()->isCliente() && $this->pedido->viewed_at == null) {
             $this->wasViewed();
+        }
     }
 
     public function addServico()
     {
         try {
-            if ($this->servicoId == null || $this->servicoId == -1 || $this->hasConludeOrExcluded())
+            if ($this->servicoId == null || $this->servicoId == -1 || $this->hasConludeOrExcluded()) {
                 return;
+            }
             $servico = Auth::user()->despachante->servicos()->find($this->servicoId)->toArray();
             $serviceIds = array_map(function ($service) {
                 return $service['id'];
             }, $this->servicos);
-            if (!in_array($servico['id'], $serviceIds)) {
+            if (! in_array($servico['id'], $serviceIds)) {
                 $servico['preco'] = $this->regexMoneyToView($servico['preco']);
                 $this->servicos[] = $servico;
                 PedidoServico::create([
@@ -110,9 +130,9 @@ class ProcessoShow extends Component
                 $this->pedido->timelines()->create([
                     'user_id' => Auth::user()->id,
                     'titulo' => 'Serviço adicionado',
-                    'descricao' => 'O Serviço <b>' . $servico['nome'] . '</b> foi adicionado ao processo',
+                    'descricao' => 'O Serviço <b>'.$servico['nome'].'</b> foi adicionado ao processo',
                     'tipo' => 'up',
-                    'privado' => Auth::user()->isDespachante()
+                    'privado' => Auth::user()->isDespachante(),
                 ]);
                 $this->emit('savedPriceServico');
             }
@@ -125,18 +145,21 @@ class ProcessoShow extends Component
     public function removeServico($id)
     {
         try {
-            if ($this->hasConludeOrExcluded())
+            if ($this->hasConludeOrExcluded()) {
                 return;
+            }
             $this->servicos = array_filter($this->servicos, function ($servico) use ($id) {
                 return $servico['id'] != $id;
             });
+            debug($this->servicos);
+            debug($id);
             PedidoServico::where('pedido_id', $this->pedido->id)->where('servico_id', $id)->delete();
             $this->pedido->timelines()->create([
                 'user_id' => Auth::user()->id,
                 'titulo' => 'Serviço removido',
-                'descricao' => 'O Serviço <b>' . $this->servicosDespachante->find($id)->nome . '</b> foi removido do processo',
+                'descricao' => 'O Serviço <b>'.$this->servicosDespachante->find($id)->nome.'</b> foi removido do processo',
                 'tipo' => 'up',
-                'privado' => Auth::user()->isDespachante()
+                'privado' => Auth::user()->isDespachante(),
             ]);
             $this->emit('savedPriceServico');
         } catch (Throwable $th) {
@@ -148,11 +171,13 @@ class ProcessoShow extends Component
     public function savePriceServico($index)
     {
         try {
-            if ($this->hasConludeOrExcluded())
+            if ($this->hasConludeOrExcluded()) {
                 return;
+            }
             $servico = $this->servicos[$index];
-            if ($servico['preco'] == null)
+            if ($servico['preco'] == null) {
                 return;
+            }
             $servico['preco'] = $this->regexMoney($servico['preco']);
             PedidoServico::where('pedido_id', $this->pedido->id)->where('servico_id', $servico['id'])->update([
                 'preco' => $servico['preco'],
@@ -161,9 +186,9 @@ class ProcessoShow extends Component
             $this->pedido->timelines()->create([
                 'user_id' => Auth::user()->id,
                 'titulo' => 'Preço do serviço alterado',
-                'descricao' => 'O preço do serviço <b>' . $this->servicosDespachante->find($servico['id'])->nome . '</b> foi alterado para <b>R$ ' . $this->regexMoneyToView($servico['preco']) . '</b>',
+                'descricao' => 'O preço do serviço <b>'.$this->servicosDespachante->find($servico['id'])->nome.'</b> foi alterado para <b>R$ '.$this->regexMoneyToView($servico['preco']).'</b>',
                 'tipo' => 'up',
-                'privado' => Auth::user()->isDespachante()
+                'privado' => Auth::user()->isDespachante(),
             ]);
             $this->emit('savedPriceServico');
         } catch (Throwable $th) {
@@ -174,8 +199,9 @@ class ProcessoShow extends Component
 
     public function update()
     {
-        if (!$this->isEditing || $this->hasConludeOrExcluded())
+        if (! $this->isEditing || $this->hasConludeOrExcluded()) {
             return;
+        }
         $this->validate();
         try {
             $this->pedido->update([
@@ -200,7 +226,7 @@ class ProcessoShow extends Component
                 $this->pedido->timelines()->create([
                     'user_id' => Auth::user()->id,
                     'titulo' => 'Processo atualizado',
-                    'descricao' => "Os campos <b>|" . $this->fieldsChanged() . "|</b> foram atualizados.",
+                    'descricao' => 'Os campos <b>|'.$this->fieldsChanged().'|</b> foram atualizados.',
                     'tipo' => 'up',
                     'privado' => Auth::user()->isDespachante(),
                 ]);
@@ -237,8 +263,9 @@ class ProcessoShow extends Component
 
     public function savePrecoPlaca()
     {
-        if ($this->precoPlaca == null || $this->hasConludeOrExcluded())
+        if ($this->precoPlaca == null || $this->hasConludeOrExcluded()) {
             return;
+        }
         try {
             $this->pedido->processo->update([
                 'preco_placa' => $this->regexMoney($this->precoPlaca),
@@ -247,9 +274,9 @@ class ProcessoShow extends Component
             $this->pedido->timelines()->create([
                 'user_id' => Auth::user()->id,
                 'titulo' => 'Preço da placa alterado',
-                'descricao' => 'O preço da placa foi alterado para <b>R$ ' . $this->precoPlaca . '</b>',
+                'descricao' => 'O preço da placa foi alterado para <b>R$ '.$this->precoPlaca.'</b>',
                 'tipo' => 'up',
-                'privado' => Auth::user()->isDespachante()
+                'privado' => Auth::user()->isDespachante(),
             ]);
 
             $this->emit('savedPrecoPlaca');
@@ -261,8 +288,9 @@ class ProcessoShow extends Component
 
     public function savePrecoHonorario()
     {
-        if ($this->precoHonorario == null || $this->hasConludeOrExcluded())
+        if ($this->precoHonorario == null || $this->hasConludeOrExcluded()) {
             return;
+        }
         try {
             $this->pedido->update([
                 'preco_honorario' => $this->regexMoney($this->precoHonorario),
@@ -271,9 +299,9 @@ class ProcessoShow extends Component
             $this->pedido->timelines()->create([
                 'user_id' => Auth::user()->id,
                 'titulo' => 'Preço do honorário alterado',
-                'descricao' => 'O preço do honorário foi alterado para <b>R$ ' . $this->precoHonorario . '</b>',
+                'descricao' => 'O preço do honorário foi alterado para <b>R$ '.$this->precoHonorario.'</b>',
                 'tipo' => 'up',
-                'privado' => Auth::user()->isDespachante()
+                'privado' => Auth::user()->isDespachante(),
             ]);
 
             $this->emit('savedPrecoHonorario');
@@ -292,5 +320,4 @@ class ProcessoShow extends Component
 
         return view('livewire.processo-show');
     }
-
 }

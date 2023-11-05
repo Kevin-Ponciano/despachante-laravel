@@ -12,19 +12,27 @@ use Livewire\Component;
 
 class AtpvNovo extends Component
 {
-    use HandinFiles;
     use FunctionsHelpers;
+    use HandinFiles;
 
     public $clientes;
+
     public $clienteId;
+
     public $veiculo;
+
     public $vendedor;
+
     public $comprador;
 
     public $endereco;
+
     public $observacoes;
+
     public $pedido;
+
     public $movimentacao;
+
     public $isRenave = false;
 
     protected $rules = [
@@ -108,21 +116,24 @@ class AtpvNovo extends Component
         }
         if ($this->isRenave) {
             if ($this->movimentacao === 'in') {
-                if (Auth::user()->isDespachante())
+                if (Auth::user()->isDespachante()) {
                     $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_renave_entrada;
-                else
+                } else {
                     $preco = Auth::user()->cliente->despachante->clientes()->find($this->clienteId)->preco_renave_entrada;
+                }
             } elseif ($this->movimentacao === 'out') {
-                if (Auth::user()->isDespachante())
+                if (Auth::user()->isDespachante()) {
                     $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_renave_saida;
-                else
+                } else {
                     $preco = Auth::user()->cliente->despachante->clientes()->find($this->clienteId)->preco_renave_saida;
+                }
             }
         } else {
-            if (Auth::user()->isDespachante())
+            if (Auth::user()->isDespachante()) {
                 $preco = Auth::user()->despachante->clientes()->find($this->clienteId)->preco_atpv;
-            else
+            } else {
                 $preco = Auth::user()->cliente->despachante->clientes()->find($this->clienteId)->preco_atpv;
+            }
         }
 
         $codigoCrv = $this->isRenave ? $this->veiculo['codigoCrv'] : null;
@@ -168,17 +179,18 @@ class AtpvNovo extends Component
             'pedido_id' => $pedido->id,
         ]);
 
-
         //TODO: verificar uma forma caso de erro ao salvar os arquivos reverter os dados salvos no banco
         $this->pedido = $pedido;
-        if ($this->isRenave)
-            if (!empty($this->arquivos))
+        if ($this->isRenave) {
+            if (! empty($this->arquivos)) {
                 $this->uploadFiles('renave/despachante');
+            }
+        }
 
         $pedido->timelines()->create([
             'user_id' => Auth::user()->id,
-            'titulo' => $atpv->getTipo() . ' criado',
-            'descricao' => 'O ' . $atpv->getTipo() . ' foi criado por <b>' . Auth::user()->name . '</b>.',
+            'titulo' => $atpv->getTipo().' criado',
+            'descricao' => 'O '.$atpv->getTipo().' foi criado por <b>'.Auth::user()->name.'</b>.',
             'tipo' => 'np',
         ]);
 
@@ -191,7 +203,7 @@ class AtpvNovo extends Component
 
         $this->emit('$refresh');
         $this->emit('success', [
-            'message' => $atpv->getTipo() . " criado com sucesso.",
+            'message' => $atpv->getTipo().' criado com sucesso.',
             'url' => $url,
         ]);
     }

@@ -13,6 +13,7 @@ class Servicos extends Component
     use FunctionsHelpers;
 
     public $servicos;
+
     public $servico = [
         'id' => -1,
     ];
@@ -24,9 +25,9 @@ class Servicos extends Component
 
     public function switchServico()
     {
-        if ($this->servico['id'] == -1)
+        if ($this->servico['id'] == -1) {
             $this->clearFields();
-        else {
+        } else {
             $servico = $this->servicos->find($this->servico['id']);
             $this->servico['nome'] = $servico->nome;
             $this->servico['preco'] = $this->regexMoneyToView($servico->preco);
@@ -47,7 +48,7 @@ class Servicos extends Component
     public function createOrUpdate()
     {
         $this->validate([
-            'servico.nome' => 'required|unique:servicos,nome,' . $this->servico['id'] . ',id,despachante_id,' . Auth::user()->despachante->id . '|max:191',
+            'servico.nome' => 'required|unique:servicos,nome,'.$this->servico['id'].',id,despachante_id,'.Auth::user()->despachante->id.'|max:191',
             'servico.preco' => 'required',
         ], [
             'servico.nome.required' => 'Obrigatório.',

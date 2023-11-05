@@ -79,7 +79,6 @@ class ClienteTest extends TestCase
         }
     }
 
-
     public function test_pedidos_with_processos()
     {
         $cliente = Cliente::factory()->create();

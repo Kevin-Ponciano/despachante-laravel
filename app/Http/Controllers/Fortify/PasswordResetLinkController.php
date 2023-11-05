@@ -16,9 +16,6 @@ class PasswordResetLinkController extends Controller
 {
     /**
      * Show the reset password link request view.
-     *
-     * @param Request $request
-     * @return RequestPasswordResetLinkViewResponse
      */
     public function create(Request $request): RequestPasswordResetLinkViewResponse
     {
@@ -27,9 +24,6 @@ class PasswordResetLinkController extends Controller
 
     /**
      * Send a reset link to the given user.
-     *
-     * @param Request $request
-     * @return Responsable
      */
     public function store(Request $request): Responsable
     {
@@ -50,8 +44,6 @@ class PasswordResetLinkController extends Controller
 
     /**
      * Get the broker to be used during password reset.
-     *
-     * @return PasswordBroker
      */
     protected function broker(): PasswordBroker
     {
