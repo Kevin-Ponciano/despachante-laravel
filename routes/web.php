@@ -8,7 +8,7 @@ use App\Http\Livewire\AtpvShow;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\despachante\ClienteEditar;
 use App\Http\Livewire\despachante\Clientes;
-use App\Http\Livewire\despachante\RelatorioPedidos;
+use App\Http\Livewire\despachante\Relatorios\Pedidos;
 use App\Http\Livewire\despachante\Servicos;
 use App\Http\Livewire\despachante\Settings;
 use App\Http\Livewire\despachante\UsuarioEditar;
@@ -54,8 +54,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::get('/servicos', Servicos::class)->name('servicos');
         });
 
-        Route::get('/relatorios/pedidos', RelatorioPedidos::class)->name('relatorios.pedidos');
-        Route::POST('/relatorios/pedidos/table', [RelatorioPedidos::class, 'data'])->name('relatorios.pedidos.table ');
+        Route::get('/relatorios/pedidos', Pedidos::class)->name('relatorios.pedidos');
+        Route::POST('/relatorios/pedidos/geral', [Pedidos::class, 'geral'])->name('relatorios.pedidos.geral');
+        Route::POST('/relatorios/pedidos/total', [Pedidos::class, 'somatorio'])->name('relatorios.pedidos.somatorio');
         Route::get('/perfil', Perfil::class)->name('perfil');
 
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('reset-password');
