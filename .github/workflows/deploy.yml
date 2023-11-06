@@ -20,6 +20,6 @@ jobs:
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "/home/kevin/repositores/laravel-app/"
           REMOTE_HOST: ${{ vars.REMOTE_HOST }}
-          REMOTE_USER: ${{ vars.REMOTE_USER }}
+          REMOTE_USER: 'root'
           TARGET: "/home/kevin/repositores/laravel-app/"
 
