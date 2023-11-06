@@ -32,7 +32,7 @@ jobs:
     - name: Deploy to server
       if: github.ref == 'refs/heads/${{ matrix.branch }}'
       run: |
-        ssh -o "StrictHostKeyChecking=no" kevin@193.203.182.156 << 'ENDSSH'
+        ssh -o "StrictHostKeyChecking=no" root@193.203.182.156 << 'ENDSSH'
           cd /home/kevin/repositories/laravel-app/
           git pull origin ${{ matrix.branch }}
           composer install --no-interaction --prefer-dist --optimize-autoloader
