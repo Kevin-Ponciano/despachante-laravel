@@ -2,44 +2,24 @@ name: Laravel CI/CD Pipeline
 
 on:
   push:
-    branches: [ staging ]
+    branches: [ main, staging ]
   pull_request:
-    branches: [ staging ]
+    branches: [ main, staging ]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - environment: "production"
-            branch: "main"
-            migrate_command: "migrate --force"
-          - environment: "staging"
-            branch: "staging"
-            migrate_command: "migrate:refresh --seed"
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy
+        uses: easingthemes/ssh-deploy@v2.1.5
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SECRET_SSH_KEY }}
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "/home/kevin/repositores/laravel-app/"
+          REMOTE_HOST: ${{ vars.REMOTE_HOST }}
+          REMOTE_USER: ${{ vars.REMOTE_USER }}
+          TARGET: "/home/kevin/repositores/laravel-app/"
 
-    - name: Deploy to server
-      if: github.ref == 'refs/heads/${{ matrix.branch }}'
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ vars.REMOTE_HOST }}
-        username: 'kevin'
-        key: ${{ secrets.SECRET_SSH_KEY }}
-        port: ${{ vars.REMOTE_PORT }} # Se você usa um porto diferente do padrão (22)
-        script: |
-          cd /home/kevin/repositories/laravel-app/
-          git pull origin ${{ matrix.branch }}
-          composer install --no-interaction --prefer-dist --optimize-autoloader
-          php artisan ${{ matrix.migrate_command }}
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-          # Remova esta linha se não estiver usando Docker com Laravel Sail no servidor
-          npm run build
-          # any other commands you need to run for the specific environment
