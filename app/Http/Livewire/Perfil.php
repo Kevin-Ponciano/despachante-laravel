@@ -76,7 +76,6 @@ class Perfil extends Component
     public function deletePhoto()
     {
         try {
-
             $this->delete();
             $this->user->update([
                 'profile_photo_path' => null,
