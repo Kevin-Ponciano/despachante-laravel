@@ -10,11 +10,15 @@ $(document).ready(function () {
             });
         })
     }
-    applySelect($("#select-cliente"))
-    $('.ts-control').addClass('py-0 px-1 text-muted')
-    applySelect($("#select-cliente-processo-novo"))
-    applySelect($("#select-cliente-atpv-novo"))
-    applySelect($("#select-cliente-renave-novo"))
-    applySelect($("#select-servico"))
-    applySelect($("#select-servico-novo"))
+    // applySelect($("#select-cliente"))
+    // applySelect($("#select-cliente-processo-novo"))
+    // applySelect($("#select-cliente-atpv-novo"))
+    // applySelect($("#select-cliente-renave-novo"))
+    // applySelect($("#select-servico"))
+    // applySelect($("#select-servico-novo"))
+
+    $.find('select').forEach(function (el) {
+        applySelect($(el))
+    })
+    $('.ts-control').addClass('py-0 px-2 text-muted')
 });

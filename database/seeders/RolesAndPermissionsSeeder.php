@@ -46,9 +46,25 @@ class RolesAndPermissionsSeeder extends Seeder
             '[DESPACHANTE] - Alterar Configurações',
         ]);
 
+        Permission::create(['name' => '[FINANCEIRO] - Acessar Módulo']);
+        Permission::create(['name' => '[FINANCEIRO] - Gerenciar Contas a Pagar']);
+        Permission::create(['name' => '[FINANCEIRO] - Gerenciar Contas a Receber']);
+        Permission::create(['name' => '[FINANCEIRO] - Gerenciar Categorias']);
+        Permission::create(['name' => '[FINANCEIRO] - Gerenciar Relatórios']);
+        Permission::create(['name' => '[FINANCEIRO] - Gerenciar Configurações']);
+        Role::create(['name' => '[FINANCEIRO] - ADMIN'])->givePermissionTo([
+            '[FINANCEIRO] - Acessar Módulo',
+            '[FINANCEIRO] - Gerenciar Contas a Pagar',
+            '[FINANCEIRO] - Gerenciar Contas a Receber',
+            '[FINANCEIRO] - Gerenciar Categorias',
+            '[FINANCEIRO] - Gerenciar Relatórios',
+            '[FINANCEIRO] - Gerenciar Configurações',
+        ]);
+
+
         //# MÓDULOS DESPACHANTE
         //Role::create(['name'=> '[Módulo] - Relatório de Pedidos']);
-        //Role::create(['name'=> '[Módulo] - Financeiro']);
+        //Role::create(['name'=> '[Módulo] - FINANCEIRO']);
 
         //# CLIENTE
         Permission::create(['name' => '[CLIENTE] - Acessar Sistema']);

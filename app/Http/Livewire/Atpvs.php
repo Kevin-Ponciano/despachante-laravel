@@ -152,7 +152,7 @@ class Atpvs extends Component
             ->paginate($this->paginate);
 
         $this->iconDirection = $this->sortDirection === 'asc' ? 'up' : 'down';
-
+        $this->resetPage();
         return view('livewire.atpvs', [
             'pedidos' => $pedidos,
         ]);

@@ -12,13 +12,14 @@ use App\Http\Livewire\despachante\Relatorios\Pedidos;
 use App\Http\Livewire\despachante\ServicoEditar;
 use App\Http\Livewire\despachante\Servicos;
 use App\Http\Livewire\despachante\Settings;
+use App\Http\Livewire\despachante\Transacoes;
 use App\Http\Livewire\despachante\UsuarioEditar;
 use App\Http\Livewire\despachante\Usuarios;
 use App\Http\Livewire\Perfil;
 use App\Http\Livewire\Processos;
 use App\Http\Livewire\ProcessoShow;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+
 
 Route::get('/', function () {
     return view('lading-page');
@@ -65,26 +66,23 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::get('/relatorios/pedidos/pendencias', [Pedidos::class, 'pendencias'])->name('relatorios.pedidos.pendencias');
         });
 
-        Route::get('/perfil', Perfil::class)->name('perfil');
-
-        Route::get('/teste', function () {
-            $session = new \Illuminate\Http\Request;
-            $token = Auth::user()->createToken('teste')->plainTextToken;
-            dd($token);
-            $email = Auth::user()->email;
-            app(AuthenticatedSessionController::class)->destroy($session);
-            return redirect(\route('password.reset', ['token' => $token, 'email' => $email]));
+        Route::middleware(['can:[FINANCEIRO] - Acessar Módulo'])->group(function () {
+            Route::get('/transacoes', Transacoes::class)->name('transacoes');
+            Route::get('/transacoes/table', [Transacoes::class, 'dataTable'])->name('transacoes.table');
         });
+
+        Route::get('/perfil', Perfil::class)->name('perfil');
     });
 
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('reset-password');
-});
 
-Route::middleware(['can:[CLIENTE] - Acessar Sistema'])->prefix('cliente')->name('cliente.')->group(function () {
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
-    Route::get('/processos', Processos::class)->name('processos');
-    Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');
-    Route::get('/transferencias', Atpvs::class)->name('atpvs');
-    Route::get('/transferencias/{id}', AtpvShow::class)->name('atpvs.show');
-    Route::get('/perfil', Perfil::class)->name('perfil');
+    Route::middleware(['can:[CLIENTE] - Acessar Sistema'])->prefix('cliente')->name('cliente.')->group(function () {
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        Route::get('/processos', Processos::class)->name('processos');
+        Route::get('/processos/{id}', ProcessoShow::class)->name('processos.show');
+        Route::get('/transferencias', Atpvs::class)->name('atpvs');
+        Route::get('/transferencias/{id}', AtpvShow::class)->name('atpvs.show');
+        Route::get('/perfil', Perfil::class)->name('perfil');
+    });
+
 });

@@ -175,3 +175,15 @@ input[type="datetime-local"]::-webkit-clear-button {
     cursor: default;
     opacity: 0.7;
 }
+
+.text-sm {
+    font-size: small !important;
+}
+
+.text-md {
+    font-size: medium !important;
+}
+
+.text-lg {
+    font-size: large !important;
+}

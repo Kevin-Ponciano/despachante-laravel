@@ -135,7 +135,7 @@ class Processos extends Component
             })
             ->paginate($this->paginate);
         $this->iconDirection = $this->sortDirection === 'asc' ? 'up' : 'down';
-
+        $this->resetPage();
         return view('livewire.processos', [
             'pedidos' => $pedidos,
         ]);

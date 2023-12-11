@@ -12,6 +12,7 @@ use App\Models\Pendencia;
 use App\Models\Plano;
 use App\Models\Processo;
 use App\Models\Servico;
+use App\Models\Transacao;
 use App\Models\User;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
@@ -34,7 +35,13 @@ class DatabaseSeeder extends Seeder
             $despachante = Despachante::factory()->create([
                 'endereco_id' => $endereco->id,
             ]);
+
             Servico::factory($qtdServicosPorDespachante)->create([
+                'despachante_id' => $despachante->id,
+            ]);
+
+            Transacao::factory(100)->create([
+                'categoria_id' => $despachante->categorias->random()->id,
                 'despachante_id' => $despachante->id,
             ]);
 
@@ -103,14 +110,14 @@ class DatabaseSeeder extends Seeder
 
         });
 
-        User::find(1)->assignRole('[ADMIN]')->assignRole('[DESPACHANTE] - ADMIN')
+        User::find(1)->assignRole('[ADMIN]')->assignRole(['[DESPACHANTE] - ADMIN','[FINANCEIRO] - ADMIN'])
             ->update([
                 'name' => 'admin',
                 'email' => 'admin@admin',
                 'password' => Hash::make('123'),
                 'status' => 'at',
             ]);
-        User::find(2)->assignRole('[DESPACHANTE] - ADMIN')
+        User::find(2)->assignRole(['[DESPACHANTE] - ADMIN','[FINANCEIRO] - ADMIN'])
             ->update([
                 'name' => 'despachante',
                 'email' => 'despachante@despachante',
