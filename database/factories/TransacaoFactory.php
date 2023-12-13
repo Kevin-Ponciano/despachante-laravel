@@ -20,7 +20,7 @@ class TransacaoFactory extends Factory
             'pedido_id' => null,
             'categoria_id' => null,
             'valor' => $this->faker->randomFloat(2, 0, 9999.99),
-            'status' => $this->faker->randomElement(['pg', 'pe', 'cl', 'at']),
+            'status' => $this->faker->randomElement(['pg', 'pe']),
             'data_vencimento' => $this->faker->dateTimeBetween('-1 year', '+1 year'),
             'data_pagamento' => $this->faker->randomElement([null, $this->faker->dateTimeBetween('-1 year', '+1 year')]),
             'descricao' => $this->faker->sentence(3),

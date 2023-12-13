@@ -69,6 +69,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::middleware(['can:[FINANCEIRO] - Acessar Módulo'])->group(function () {
             Route::get('/transacoes', Transacoes::class)->name('transacoes');
             Route::get('/transacoes/table', [Transacoes::class, 'dataTable'])->name('transacoes.table');
+            Route::get('/transacoes/receitas', Transacoes::class)->name('transacoes.receitas');
+            Route::get('/transacoes/despesas', Transacoes::class)->name('transacoes.despesas');
         });
 
         Route::get('/perfil', Perfil::class)->name('perfil');

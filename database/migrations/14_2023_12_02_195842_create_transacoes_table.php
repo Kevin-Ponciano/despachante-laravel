@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignId('pedido_id')->nullable()->constrained('pedidos')->onDelete('SET NULL');
             $table->foreignId('categoria_id')->nullable()->constrained('categorias')->onDelete('SET NULL');
             $table->decimal('valor', 14, 2);
-            $table->enum('status', ['pg', 'pe', 'cl', 'at', 'ex'])->default('pe')->index(); // pg = pago, pe = pendente, cl = cancelado, at = atrasado, ex = excluido
+            $table->enum('status', ['pg', 'pe', 'ex'])->default('pe')->index(); // pg = pago, pe = pendente, cl = cancelado, at = atrasado, ex = excluido
             $table->date('data_vencimento');
             $table->date('data_pagamento')->nullable();
             $table->string('descricao');

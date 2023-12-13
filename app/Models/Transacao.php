@@ -70,4 +70,20 @@ class Transacao extends Model
     {
         return Carbon::createFromFormat('Y-m-d', $this->data_pagamento)->format('d/m/Y');
     }
+
+    public function getValor()
+    {
+        return number_format($this->valor, 2, ',', '.');
+    }
+
+    public function getStatus()
+    {
+        return match ($this->status) {
+            'pg' => ['text' => 'Pago', 'color' => 'success', 'icon' => 'ti ti-check'],
+            'cl' => ['text' => 'Cancelado', 'color' => 'danger', 'icon' => 'ti ti-x'],
+            'ex' => ['text' => 'Excluído', 'color' => 'danger', 'icon' => 'ti ti-x'],
+            'at' => ['text' => 'Atrasado', 'color' => 'danger', 'icon' => 'ti ti-exclamation-mark'],
+            default => ['text' => 'Pendente', 'color' => 'warning', 'icon' => 'ti ti-exclamation-mark'],
+        };
+    }
 }

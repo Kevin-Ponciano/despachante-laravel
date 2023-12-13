@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire\despachante;
 
+use App\Traits\FunctionsHelpers;
 use Auth;
 use Carbon\Carbon;
+use http\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -13,6 +15,7 @@ class Transacoes extends Component
 
     public $search;
     public $paginate = 10;
+    public $tipo;
     public $situacao;
     public $data;
     public $descricao;
@@ -23,6 +26,12 @@ class Transacoes extends Component
 
     public $mes;
     public $ano;
+    public $saldoReceitas;
+    public $saldoDespesas;
+    public $balanco;
+    public $saldoPg;
+    public $saldoPe;
+    public $total;
 
     public $showMonth = true;
 
@@ -42,6 +51,21 @@ class Transacoes extends Component
         $this->date = Carbon::now();
         $this->mes = $this->date->translatedFormat('F');
         $this->ano = $this->date->year;
+        $this->setTipoWithUrl();
+    }
+
+    private function setTipoWithUrl()
+    {
+        $url = url()->current();
+        $url = explode('/', $url);
+        $url = end($url);
+        if ($url == 'receitas') {
+            $this->tipo = 'in';
+        } elseif ($url == 'despesas') {
+            $this->tipo = 'out';
+        } else {
+            $this->tipo = null;
+        }
     }
 
     public function previous()
@@ -66,6 +90,12 @@ class Transacoes extends Component
         $this->ano = Carbon::parse($this->date)->year;
     }
 
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+    }
+
     public function next()
     {
         if ($this->showMonth) {
@@ -74,14 +104,6 @@ class Transacoes extends Component
             $this->nextYear();
         }
 
-    }
-
-    public function setMonth($month)
-    {
-        $this->date = Carbon::parse($this->date)->month($month);
-        $this->mes = Carbon::parse($this->date)->translatedFormat('F');
-        $this->ano = Carbon::parse($this->date)->year;
-        $this->showMonth = true;
     }
 
     private function nextMonth()
@@ -95,6 +117,14 @@ class Transacoes extends Component
     {
         $this->date = Carbon::parse($this->date)->addYear();
         $this->ano = Carbon::parse($this->date)->year;
+    }
+
+    public function setMonth($month)
+    {
+        $this->date = Carbon::parse($this->date)->month($month);
+        $this->mes = Carbon::parse($this->date)->translatedFormat('F');
+        $this->ano = Carbon::parse($this->date)->year;
+        $this->showMonth = true;
     }
 
     public function toggleShowMonth()
@@ -128,10 +158,38 @@ class Transacoes extends Component
         $startDate = Carbon::parse($this->date)->startOfMonth();
         $endDate = Carbon::parse($this->date)->endOfMonth();
         $transacoes = Auth::user()->empresa()->transacoes()
+            ->where('tipo', 'like', "%{$this->tipo}%")
             ->whereBetween('data_vencimento', [$startDate, $endDate])
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->paginate);
+        if ($this->tipo) {
+            $this->calculateTotal($transacoes);
+        }else{
+            $this->calculateBalance($transacoes);
+        }
         $this->resetPage();
         return view('livewire.transacoes', compact('transacoes'));
+    }
+
+    private function calculateBalance($transacoes)
+    {
+        $saldoReceitas = $transacoes->where('tipo', 'in')->whereIn('status', ['pe', 'pg', 'at'])->sum('valor');
+        $saldoDespesas = $transacoes->where('tipo', 'out')->whereIn('status', ['pe', 'pg', 'at'])->sum('valor');
+        $balanco = $saldoReceitas - $saldoDespesas;
+
+        $this->saldoReceitas = number_format($saldoReceitas, 2, ',', '.');
+        $this->saldoDespesas = number_format($saldoDespesas, 2, ',', '.');
+        $this->balanco = number_format($balanco, 2, ',', '.');
+    }
+
+    private function calculateTotal($transacoes)
+    {
+        $saldoPg = $transacoes->where('status', 'pg')->sum('valor');
+        $saldoPe = $transacoes->where('status', 'pe')->sum('valor');
+        $total = $saldoPg + $saldoPe;
+
+        $this->saldoPg = number_format($saldoPg, 2, ',', '.');
+        $this->saldoPe = number_format($saldoPe, 2, ',', '.');
+        $this->total = number_format($total, 2, ',', '.');
     }
 }

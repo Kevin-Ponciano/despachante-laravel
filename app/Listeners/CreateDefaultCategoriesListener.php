@@ -17,19 +17,19 @@ class CreateDefaultCategoriesListener
         $despachante->categorias()->create([
             'nome' => 'Outros',
             'icone' => 'ti ti-dots',
-            'cor' => 'bg-secondary',
+            'cor' => 'secondary',
         ]);
 
         $despachante->categorias()->create([
             'nome' => 'Serviços',
             'icone' => 'ti ti-clipboard-list',
-            'cor' => 'bg-green',
+            'cor' => 'green',
         ]);
 
         $despachante->categorias()->create([
             'nome' => 'Salários',
             'icone' => 'ti ti-coin',
-            'cor' => 'bg-primary',
+            'cor' => 'primary',
         ]);
     }
 }
