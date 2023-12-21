@@ -27,7 +27,7 @@ class CreateDefaultCategoriesListener
         ]);
 
         $despachante->categorias()->create([
-            'nome' => 'Salários',
+            'nome' => 'Salário',
             'icone' => 'ti ti-coin',
             'cor' => 'primary',
         ]);

@@ -9,9 +9,9 @@ return new class extends Migration {
     {
         Schema::create('controle_repeticoes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('transicao_anterior_id')->nullable();
+            $table->unsignedBigInteger('transacao_anterior_id')->nullable();
             $table->foreignId('transacao_id')->constrained('transacoes')->onDelete('CASCADE');
-            $table->unsignedSmallInteger('transicao_posterior_id')->nullable();
+            $table->unsignedSmallInteger('transacao_posterior_id')->nullable();
             $table->enum('status', ['at', 'in', 'ex'])->default('at')->index(); // at = ativo, in = inativo, ex = excluido
             $table->unsignedSmallInteger('posicao')->default(1);
             $table->bigInteger('transacao_original_id');

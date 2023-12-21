@@ -54,22 +54,22 @@
     <div class="page-body">
         <div class="mx-8">
             <div class="d-flex justify-content-between">
-                <div class="card w-75 h-100">
+                <div class="card w-75 h-100 rounded-5">
                     <x-transacoes.meses :tipo="$tipo" :mes="$mes" :ano="$ano" :show-month="$showMonth"/>
                     <x-transacoes.table :transacoes="$transacoes"/>
                 </div>
                 <div>
                     @if($tipo === 'in')
                         <x-transacoes.card label="Receitas Pendentes" icon="ti ti-arrow-up"
-                                           bg="bg-green" :valor="$saldoPe"/>
+                                           bg="bg-green" :valor="$saldoPendente"/>
                         <x-transacoes.card label="Receitas Recebidas" icon="ti ti-arrow-down"
-                                           bg="bg-green" :valor="$saldoPg"/>
+                                           bg="bg-green" :valor="$saldoPago"/>
                         <x-transacoes.card label="Total" icon="ti ti-scale" bg="bg-green" :valor="$total"/>
                     @elseif($tipo === 'out')
                         <x-transacoes.card label="Despesas Pendentes" icon="ti ti-arrow-up"
-                                           bg="bg-red" :valor="$saldoPe"/>
+                                           bg="bg-red" :valor="$saldoPendente"/>
                         <x-transacoes.card label="Despesas Pagas" icon="ti ti-arrow-down"
-                                           bg="bg-red" :valor="$saldoPg"/>
+                                           bg="bg-red" :valor="$saldoPago"/>
                         <x-transacoes.card label="Total" icon="ti ti-scale" bg="bg-red" :valor="$total"/>
                     @else
                         <x-transacoes.card functions="wire:click=setTipo('in')" label="Receitas" icon="ti ti-arrow-up"
@@ -83,6 +83,9 @@
             </div>
         </div>
     </div>
+    <x-transacoes.nova :recorrente="$recorrente" :creating="$creating" :categorias="$categorias" :tipo="$tipo"
+                       :situacao="$situacao" :recorrente-opcao="$recorrenteOpcao" :color="$color"/>
+    <x-transacoes.deletar :transacao="$transacao" :tipo="$tipo" :color="$color" :recorrente-opcao="$recorrenteOpcao"/>
     <script>
         $(document).ready(function () {
             $('.toggle-months').click(function () {

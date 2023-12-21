@@ -28,7 +28,7 @@ class Transacao extends Model
         'data_pagamento',
         'descricao',
         'observacao',
-        'repetir',
+        'recorrencia',
     ];
 
     public function despachante()
@@ -56,9 +56,24 @@ class Transacao extends Model
         return $this->belongsTo(Categoria::class);
     }
 
+    public function controleRepeticao()
+    {
+        return $this->hasOne(ControleRepeticoes::class, 'transacao_id', 'id');
+    }
+
+    public function fixa()
+    {
+        return $this->hasOne(ControleFixas::class, 'transacao_original_id', 'id');
+    }
+
     public function repeticoes()
     {
-        return $this->hasMany(ControleRepeticoes::class);
+        return $this->hasMany(ControleRepeticoes::class, 'transacao_original_id');
+    }
+
+    public function transacoes()
+    {
+        return $this->hasMany(Transacao::class, 'transacao_original_id', 'id');
     }
 
     public function getDataVencimento()
@@ -79,11 +94,20 @@ class Transacao extends Model
     public function getStatus()
     {
         return match ($this->status) {
-            'pg' => ['text' => 'Pago', 'color' => 'success', 'icon' => 'ti ti-check'],
+            'pg' => ['text' => 'Efetuada', 'color' => 'success', 'icon' => 'ti ti-check'],
             'cl' => ['text' => 'Cancelado', 'color' => 'danger', 'icon' => 'ti ti-x'],
             'ex' => ['text' => 'Excluído', 'color' => 'danger', 'icon' => 'ti ti-x'],
             'at' => ['text' => 'Atrasado', 'color' => 'danger', 'icon' => 'ti ti-exclamation-mark'],
             default => ['text' => 'Pendente', 'color' => 'warning', 'icon' => 'ti ti-exclamation-mark'],
         };
+    }
+
+    public function getDescricao()
+    {
+        if ($this->recorrencia === 'rr') {
+            return $this->descricao . ' (' . $this->controleRepeticao->posicao . '/' . $this->controleRepeticao->total_repeticoes . ')';
+        } else {
+            return $this->descricao;
+        }
     }
 }

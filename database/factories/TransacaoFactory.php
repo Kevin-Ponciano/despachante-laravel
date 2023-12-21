@@ -25,7 +25,7 @@ class TransacaoFactory extends Factory
             'data_pagamento' => $this->faker->randomElement([null, $this->faker->dateTimeBetween('-1 year', '+1 year')]),
             'descricao' => $this->faker->sentence(3),
             'observacao' => $this->faker->randomElement([null, $this->faker->sentence(3)]),
-            'repetir' => 'nr',
+            'recorrencia' => 'n/a',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

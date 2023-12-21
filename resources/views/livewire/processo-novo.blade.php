@@ -146,7 +146,7 @@
                         <textarea class="form-control" name="observacoes" wire:model.defer="observacoes"></textarea>
                     </x-slot:observacao>
                 </x-processo>
-                <fieldset class="form-fieldset row">
+                <fieldset class="form-fieldset mx-0 row">
                     <div class="col d-flex">
                         <div class="col-lg-4">
                             <div class="mb-3">
@@ -237,7 +237,6 @@
             @if(Auth::user()->isDespachante())
                 <div wire:ignore.self class="tab-pane" id="tabs-info-pedido" role="tabpanel">
                     <h4>Informação do Pedido</h4>
-
                 </div>
             @endif
         </div>

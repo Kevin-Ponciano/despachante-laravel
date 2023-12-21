@@ -40,10 +40,10 @@ class DatabaseSeeder extends Seeder
                 'despachante_id' => $despachante->id,
             ]);
 
-            Transacao::factory(100)->create([
-                'categoria_id' => $despachante->categorias->random()->id,
-                'despachante_id' => $despachante->id,
-            ]);
+//            Transacao::factory(100)->create([
+//                'categoria_id' => $despachante->categorias->random()->id,
+//                'despachante_id' => $despachante->id,
+//            ]);
 
             $planoId = Plano::factory()->create()->id;
             $despachante->plano()->attach($planoId, [

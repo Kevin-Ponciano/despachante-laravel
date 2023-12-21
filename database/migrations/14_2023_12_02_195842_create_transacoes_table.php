@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('transacoes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('transacao_original_id')->nullable();
-            $table->enum('tipo', ['in', 'out'])->index(); // in = entrada, out = saida
+            $table->enum('tipo', ['in', 'out'])->index();
             $table->foreignId('despachante_id')->constrained('despachantes')->onDelete('CASCADE');
             $table->foreignId('cliente_id')->nullable()->constrained('clientes')->onDelete('SET NULL');
             $table->foreignId('pedido_id')->nullable()->constrained('pedidos')->onDelete('SET NULL');
@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->date('data_pagamento')->nullable();
             $table->string('descricao');
             $table->string('observacao')->nullable();
-            $table->enum('repetir', ['nr', 'rp', 'fx'])->default('nr'); // nr = nao repetir, rp = repetir, fx = fixo
+            $table->enum('recorrencia', ['n/a', 'rr', 'fx'])->default('n/a')->index(); // n/a = não se aplica, rr = recorrencia, fx = fixo
             $table->timestamps();
             $table->softDeletes();
         });

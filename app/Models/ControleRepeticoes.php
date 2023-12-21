@@ -13,9 +13,9 @@ class ControleRepeticoes extends Model
     use AttributeModel;
 
     protected $fillable = [
-        'transicao_anterior_id',
+        'transacao_anterior_id',
         'transacao_id',
-        'transicao_posterior_id',
+        'transacao_posterior_id',
         'status',
         'posicao',
         'transacao_original_id',
@@ -29,16 +29,16 @@ class ControleRepeticoes extends Model
 
     public function transacaoAnterior()
     {
-        return $this->belongsTo(Transacao::class, 'transicao_anterior_id');
+        return $this->belongsTo(Transacao::class, 'transacao_anterior_id');
     }
 
     public function transacaoPosterior()
     {
-        return $this->belongsTo(Transacao::class, 'transicao_posterior_id');
+        return $this->belongsTo(Transacao::class, 'transacao_posterior_id');
     }
 
     public function transacaoOriginal()
     {
-        return $this->belongsTo(Transacao::class, 'original_id');
+        return $this->belongsTo(Transacao::class, 'transacao_original_id');
     }
 }

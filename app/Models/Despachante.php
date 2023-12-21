@@ -87,6 +87,11 @@ class Despachante extends Model
         return $this->hasMany(Transacao::class);
     }
 
+    public function transacoesFixas()
+    {
+        return $this->hasMany(ControleFixas::class);
+    }
+
     public function pedidosProcessos()
     {
         return $this->pedidos()->has('processo');

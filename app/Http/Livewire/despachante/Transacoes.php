@@ -5,45 +5,46 @@ namespace App\Http\Livewire\despachante;
 use App\Traits\FunctionsHelpers;
 use Auth;
 use Carbon\Carbon;
-use http\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Transacoes extends Component
 {
     use WithPagination;
+    use FunctionsHelpers;
 
-    public $search;
-    public $paginate = 10;
+    public $search, $paginate = 10, $sortField = 'data_vencimento', $sortDirection = 'desc', $iconDirection = 'up';
     public $tipo;
-    public $situacao;
-    public $data;
-    public $descricao;
-    public $categoria;
-    public $valor;
-
-    public $date;
-
-    public $mes;
-    public $ano;
-    public $saldoReceitas;
-    public $saldoDespesas;
-    public $balanco;
-    public $saldoPg;
-    public $saldoPe;
-    public $total;
-
-    public $showMonth = true;
-
-    public $sortField = 'data_vencimento';
-    public $sortDirection = 'desc';
-    public $iconDirection = 'up';
-
+    public $categorias = [];
+    public $date, $mes, $ano, $valor;
+    public $saldoReceitas, $saldoDespesas, $balanco;
+    public $saldoPago, $saldoPendente, $total;
+    public $transacao = [
+        'recorrente_periodo' => 'Months',
+        'recorrente_vezes' => 2,
+        'status' => 'pe',
+        'descricao' => '',
+        'valor' => '',
+    ];
+    public $data_vencimento, $fixa = false, $recorrente = false, $situacao, $recorrenteOpcao = 'this';
+    public $showMonth = true, $creating = false, $color = null;
     protected $paginationTheme = 'bootstrap';
-
     protected $listeners = [
         '$refresh',
         'resetSearch',
+    ];
+
+    protected $rules = [
+        'valor' => 'required|numeric|min:0.01',
+        'transacao.recorrente_vezes' => 'numeric|min:2',
+    ];
+
+    protected $messages = [
+        'valor.required' => 'Informe um valor válido.',
+        'valor.numeric' => 'Informe um valor válido.',
+        'valor.min' => 'Informe um valor válido.',
+        'transacao.recorrente_vezes.numeric' => 'Informe um numero maior que 1.',
+        'transacao.recorrente_vezes.min' => 'Informe um numero maior que 1.',
     ];
 
     public function mount()
@@ -52,6 +53,8 @@ class Transacoes extends Component
         $this->mes = $this->date->translatedFormat('F');
         $this->ano = $this->date->year;
         $this->setTipoWithUrl();
+        $this->categorias = Auth::user()->empresa()->categorias()->get();
+        $this->switchSituacao();
     }
 
     private function setTipoWithUrl()
@@ -65,6 +68,27 @@ class Transacoes extends Component
             $this->tipo = 'out';
         } else {
             $this->tipo = null;
+        }
+    }
+
+    public function switchSituacao()
+    {
+        if ($this->tipo == 'in') {
+            $this->situacao = $this->situacao == "Não foi recebida" ? "Foi recebida" : "Não foi recebida";
+            $this->transacao['status'] = $this->situacao == "Não foi recebida" ? "pe" : "pg";
+        } elseif ($this->tipo == 'out') {
+            $this->situacao = $this->situacao == "Não foi paga" ? "Foi paga" : "Não foi paga";
+            $this->transacao['status'] = $this->situacao == "Não foi paga" ? "pe" : "pg";
+        }
+    }
+
+    public function handleRecorrencia($recorrencia)
+    {
+        if ($recorrencia === 'fx') {
+            $this->recorrente = false;
+        } elseif ($recorrencia === 'rr') {
+            $this->fixa = false;
+            $this->transacao['recorrente_vezes'] = 2;
         }
     }
 
@@ -93,7 +117,7 @@ class Transacoes extends Component
     public function setTipo($tipo)
     {
         $this->tipo = $tipo;
-
+        $this->situacao = $tipo == 'in' ? 'Não foi recebida' : 'Não foi paga';
     }
 
     public function next()
@@ -117,6 +141,89 @@ class Transacoes extends Component
     {
         $this->date = Carbon::parse($this->date)->addYear();
         $this->ano = Carbon::parse($this->date)->year;
+    }
+
+    public function edit($id)
+    {
+        $this->creating = false;
+        $this->recorrenteOpcao = 'this';
+        $transacao = Auth::user()->empresa()->transacoes()->find($id);
+        $this->color = $transacao->tipo === 'in' ? 'success' : 'danger';
+        $this->transacao['id'] = $transacao->id;
+        $this->transacao['valor'] = $this->regexMoneyToView($transacao->valor);
+        $this->transacao['pago'] = $transacao->status === 'pg';
+        $this->transacao['status'] = $transacao->status;
+        $tipo = $transacao->tipo;
+        if ($tipo === 'in') {
+            $this->situacao = $transacao->status === 'pg' ? 'Foi recebida' : 'Não foi recebida';
+        } elseif ($tipo === 'out') {
+            $this->situacao = $transacao->status === 'pg' ? 'Foi paga' : 'Não foi paga';
+        }
+        $this->transacao['descricao'] = $transacao->descricao;
+        $this->transacao['categoria_id'] = $transacao->categoria_id;
+        $this->transacao['observacao'] = $transacao->observacao;
+        $this->transacao['data_pagamento'] = $transacao->data_pagamento;
+
+        $this->recorrente = $transacao->recorrencia !== 'n/a';
+        $data_vencimento = Carbon::parse($transacao->data_vencimento)->toDateTimeString();
+
+        $this->emit('edit', [
+            'data_vencimento' => $data_vencimento,
+            'categoria_id' => $transacao->categoria_id,
+        ]);
+    }
+
+    public function delete($id)
+    {
+        $transacao = Auth::user()->empresa()->transacoes()->find($id);
+        $this->color = $transacao->tipo === 'in' ? 'success' : 'danger';
+        $this->transacao['id'] = $transacao->id;
+        $this->transacao['descricao'] = $transacao->descricao;
+        $this->transacao['valor'] = $this->regexMoneyToView($transacao->valor);
+        $this->recorrenteOpcao = 'this';
+    }
+
+    public function destroy()
+    {
+        $transacao = Auth::user()->empresa()->transacoes()->find($this->transacao['id']);
+        if ($this->recorrenteOpcao === 'pendentes') {
+            if ($transacao->recorrencia === 'rr') {
+                while ($transacao) {
+                    if ($transacao->status === 'pe')
+                        $this->updatePendenteOption($transacao, $descricao);
+                    $transacao = $transacao->controleRepeticao->transacaoPosterior;
+                }
+            } elseif ($transacao->recorrencia === 'fx') {
+                $transacoes = $transacao->transacaoOriginal->transacoes()->where('recorrencia', 'fx')
+                    ->where('status', 'pe');
+                $this->updatePendenteOption($transacoes, $descricao);
+                $trasacaoFixa = $transacao->transacaoOriginal->fixa();
+                $this->updatePendenteOption($trasacaoFixa, $descricao);
+            }
+        } elseif ($this->recorrenteOpcao === 'all') {
+            if ($transacao->recorrencia === 'rr') {
+                $transacoes = $transacao->transacaoOriginal->transacoes();
+                $this->updateAllOption($transacoes, $descricao);
+            } elseif ($transacao->recorrencia === 'fx') {
+                $transacoes = $transacao->transacaoOriginal->transacoes();
+                $this->updateAllOption($transacoes, $descricao);
+                $trasacaoFixa = $transacao->transacaoOriginal->fixa();
+                $this->updateAllOption($trasacaoFixa, $descricao);
+            }
+        } else {
+            $transacao->update([
+                'categoria_id' => $this->transacao['categoria_id'],
+                'valor' => $this->valor,
+                'status' => $this->transacao['status'],
+                'data_vencimento' => $this->data_vencimento,
+                'data_pagamento' => $this->transacao['status'] == 'pg' ? $this->data_vencimento : null,
+                'descricao' => $descricao,
+                'observacao' => $this->transacao['observacao'],
+            ]);
+        }
+
+        $this->emit('$refresh');
+        $this->emit('success', ['message' => 'Transação atualizada com sucesso.']);
     }
 
     public function setMonth($month)
@@ -143,20 +250,36 @@ class Transacoes extends Component
 
     public function clearFilters()
     {
+//        $this->reset([
+//            'search',
+//            'situacao',
+//            'data',
+//            'descricao',
+//            'categoria',
+//            'valor',
+//        ]);
+    }
+
+    public function clearInputs()
+    {
         $this->reset([
-            'search',
+            'transacao',
+            'data_vencimento',
+            'fixa',
+            'recorrente',
             'situacao',
-            'data',
-            'descricao',
-            'categoria',
-            'valor',
         ]);
+        $this->switchSituacao();
+        $this->creating = true;
+        $this->emit('showModal');
+        $this->resetErrorBag();
     }
 
     public function render()
     {
         $startDate = Carbon::parse($this->date)->startOfMonth();
         $endDate = Carbon::parse($this->date)->endOfMonth();
+        $this->verifyCreateTransacaoFixa($startDate, $endDate);
         $transacoes = Auth::user()->empresa()->transacoes()
             ->where('tipo', 'like', "%{$this->tipo}%")
             ->whereBetween('data_vencimento', [$startDate, $endDate])
@@ -164,11 +287,199 @@ class Transacoes extends Component
             ->paginate($this->paginate);
         if ($this->tipo) {
             $this->calculateTotal($transacoes);
-        }else{
+        } else {
             $this->calculateBalance($transacoes);
         }
         $this->resetPage();
         return view('livewire.transacoes', compact('transacoes'));
+    }
+
+    private function verifyCreateTransacaoFixa($startDate, $endDate)
+    {
+        $transacoesFixas = Auth::user()->empresa()->transacoesFixas()
+            ->where('tipo', 'like', "%{$this->tipo}%")
+            ->where('data_vencimento', '<=', $startDate)
+            ->with('transacaoOriginal.transacoes')
+            ->get();
+
+        foreach ($transacoesFixas as $transacaoFixa) {
+            $transacoes = $transacaoFixa->transacaoOriginal
+                ->transacoes->whereBetween('data_vencimento', [$startDate, $endDate]);
+
+            if ($transacoes->isEmpty()) {
+                $day = Carbon::parse($transacaoFixa->data_vencimento)->day;
+                Auth::user()->empresa()->transacoes()->create([
+                    'transacao_original_id' => $transacaoFixa->transacao_original_id,
+                    'tipo' => $this->tipo,
+                    'categoria_id' => $transacaoFixa->categoria_id,
+                    'valor' => $transacaoFixa->valor,
+                    'status' => 'pe',
+                    'data_vencimento' => Carbon::parse($startDate)->day($day),
+                    'descricao' => $transacaoFixa->descricao,
+                    'observacao' => $transacaoFixa->observacao,
+                    'recorrencia' => 'fx',
+                ]);
+            }
+        }
+    }
+
+    public function create()
+    {
+        $this->valor = $this->regexMoney($this->transacao['valor'] ?? null);
+        $this->validate();
+
+        $recorrencia = $this->fixa ? 'fx' : ($this->recorrente ? 'rr' : 'n/a');
+        $categoria_id = $this->transacao['categoria_id'] ?? $this->categorias->first()->id;
+        $descricao = $this->transacao['descricao'] === '' ? Auth::user()->empresa()->categorias()
+            ->find($categoria_id)->nome : $this->transacao['descricao'];
+
+        $transacao = Auth::user()->empresa()->transacoes()->create([
+            'tipo' => $this->tipo,
+            'categoria_id' => $categoria_id,
+            'valor' => $this->valor,
+            'status' => $this->transacao['status'],
+            'data_vencimento' => $this->data_vencimento ?? Carbon::now(),
+            'data_pagamento' => $this->transacao['status'] == 'pg' ? $this->data_vencimento : null,
+            'descricao' => $descricao,
+            'observacao' => $this->transacao['observacao'] ?? null,
+            'recorrencia' => $recorrencia,
+        ]);
+        $transacao->update([
+            'transacao_original_id' => $transacao->id,
+        ]);
+
+        if ($recorrencia === 'rr') {
+            $this->createTransacoesRecorrentes($transacao);
+        } elseif ($recorrencia === 'fx') {
+            $transacao->fixa()->create([
+                'tipo' => $this->tipo,
+                'despachante_id' => Auth::user()->despachante->id,
+                'categoria_id' => $categoria_id,
+                'valor' => $this->valor,
+                'data_vencimento' => $this->data_vencimento ?? Carbon::now(),
+                'descricao' => $descricao,
+                'observacao' => $this->transacao['observacao'] ?? null,
+            ]);
+        }
+
+        $this->emit('$refresh');
+        $this->emit('success', ['message' => 'Transação criada com sucesso.']);
+    }
+
+    public function update()
+    {
+        $this->valor = $this->regexMoney($this->transacao['valor'] ?? null);
+        $this->validate();
+        $descricao = $this->transacao['descricao'] === '' ? Auth::user()->empresa()->categorias()
+            ->find($this->transacao['categoria_id'])->nome : $this->transacao['descricao'];
+
+        $transacao = Auth::user()->empresa()->transacoes()->find($this->transacao['id']);
+        if ($this->recorrenteOpcao === 'pendentes') {
+            if ($transacao->recorrencia === 'rr') {
+                while ($transacao) {
+                    if ($transacao->status === 'pe')
+                        $this->updatePendenteOption($transacao, $descricao);
+                    $transacao = $transacao->controleRepeticao->transacaoPosterior;
+                }
+            } elseif ($transacao->recorrencia === 'fx') {
+                $transacoes = $transacao->transacaoOriginal->transacoes()->where('recorrencia', 'fx')
+                    ->where('status', 'pe');
+                $this->updatePendenteOption($transacoes, $descricao);
+                $trasacaoFixa = $transacao->transacaoOriginal->fixa();
+                $this->updatePendenteOption($trasacaoFixa, $descricao);
+            }
+        } elseif ($this->recorrenteOpcao === 'all') {
+            if ($transacao->recorrencia === 'rr') {
+                $transacoes = $transacao->transacaoOriginal->transacoes();
+                $this->updateAllOption($transacoes, $descricao);
+            } elseif ($transacao->recorrencia === 'fx') {
+                $transacoes = $transacao->transacaoOriginal->transacoes();
+                $this->updateAllOption($transacoes, $descricao);
+                $trasacaoFixa = $transacao->transacaoOriginal->fixa();
+                $this->updateAllOption($trasacaoFixa, $descricao);
+            }
+        } else {
+            $transacao->update([
+                'categoria_id' => $this->transacao['categoria_id'],
+                'valor' => $this->valor,
+                'status' => $this->transacao['status'],
+                'data_vencimento' => $this->data_vencimento,
+                'data_pagamento' => $this->transacao['status'] == 'pg' ? $this->data_vencimento : null,
+                'descricao' => $descricao,
+                'observacao' => $this->transacao['observacao'],
+            ]);
+        }
+
+        $this->emit('$refresh');
+        $this->emit('success', ['message' => 'Transação atualizada com sucesso.']);
+    }
+
+    private function updatePendenteOption($transacao, $descricao)
+    {
+        $transacao->update([
+            'categoria_id' => $this->transacao['categoria_id'],
+            'valor' => $this->valor,
+            'descricao' => $descricao,
+            'observacao' => $this->transacao['observacao'],
+        ]);
+    }
+
+    private function updateAllOption($transacao, $descricao)
+    {
+        $transacao->update([
+            'categoria_id' => $this->transacao['categoria_id'],
+            'descricao' => $descricao,
+            'observacao' => $this->transacao['observacao'],
+        ]);
+    }
+
+    private function createTransacoesRecorrentes($transacao)
+    {
+        $repeticoes = $this->transacao['recorrente_vezes'];
+        $periodo = $this->transacao['recorrente_periodo'];
+        $addPeriodo = 'add' . $periodo;
+        $transacao_original_id = $transacao->id;
+
+        $transacao->controleRepeticao()->create([
+            'transacao_original_id' => $transacao_original_id,
+            'total_repeticoes' => $repeticoes,
+        ]);
+
+        $transacao_anterior = $transacao;
+
+        for ($i = 1; $i < $repeticoes; $i++) {
+            $transacao = $transacao->replicate()->fill([
+                'data_vencimento' => Carbon::parse($transacao->data_vencimento)->$addPeriodo(),
+                'data_pagamento' => null,
+                'status' => 'pe',
+                'transacao_original_id' => $transacao_original_id,
+            ]);
+            $transacao->save();
+
+            $transacao->controleRepeticao()->create([
+                'transacao_anterior_id' => $transacao_anterior->id,
+                'transacao_original_id' => $transacao_original_id,
+                'posicao' => $i + 1,
+                'total_repeticoes' => $repeticoes,
+            ]);
+
+            $transacao_anterior->controleRepeticao()->update([
+                'transacao_posterior_id' => $transacao->id,
+            ]);
+
+            $transacao_anterior = $transacao;
+        }
+    }
+
+    private function calculateTotal($transacoes)
+    {
+        $saldoPg = $transacoes->where('status', 'pg')->sum('valor');
+        $saldoPe = $transacoes->where('status', 'pe')->sum('valor');
+        $total = $saldoPg + $saldoPe;
+
+        $this->saldoPago = number_format($saldoPg, 2, ',', '.');
+        $this->saldoPendente = number_format($saldoPe, 2, ',', '.');
+        $this->total = number_format($total, 2, ',', '.');
     }
 
     private function calculateBalance($transacoes)
@@ -180,16 +491,5 @@ class Transacoes extends Component
         $this->saldoReceitas = number_format($saldoReceitas, 2, ',', '.');
         $this->saldoDespesas = number_format($saldoDespesas, 2, ',', '.');
         $this->balanco = number_format($balanco, 2, ',', '.');
-    }
-
-    private function calculateTotal($transacoes)
-    {
-        $saldoPg = $transacoes->where('status', 'pg')->sum('valor');
-        $saldoPe = $transacoes->where('status', 'pe')->sum('valor');
-        $total = $saldoPg + $saldoPe;
-
-        $this->saldoPg = number_format($saldoPg, 2, ',', '.');
-        $this->saldoPe = number_format($saldoPe, 2, ',', '.');
-        $this->total = number_format($total, 2, ',', '.');
     }
 }
