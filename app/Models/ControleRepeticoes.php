@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ControleRepeticoes extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
     use AttributeModel;
 
     protected $fillable = [

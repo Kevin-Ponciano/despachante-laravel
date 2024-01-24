@@ -280,7 +280,9 @@ input[type="datetime-local"]::-webkit-clear-button {
 .form-check-input-warning[disabled] ~ .form-check-label, .form-check-input-warning:disabled ~ .form-check-label {
     cursor: default;
     opacity: 0.7;
-}.form-check-input-danger {
+}
+
+.form-check-input-danger {
     --tblr-form-check-bg: var(--tblr-bg-forms);
     width: 1rem !important;
     height: 1rem;
@@ -415,3 +417,56 @@ input[type="datetime-local"]::-webkit-clear-button {
     background: rgba(var(--tblr-success-rgb), .04);
     border-color: var(--tblr-success);
 }
+
+.search-box {
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    display: inline-block;
+}
+
+.input-search {
+    height: 50px;
+    width: 50px;
+    border: 1px solid var(--tblr-border-color); /* Adicionando borda com a cor do tema Tabler */
+    font-size: 18px;
+    letter-spacing: 2px;
+    outline: none;
+    border-radius: 25px;
+    transition: all .5s ease-in-out;
+    background-color: var(--tblr-bg-surface);
+    padding: 10px 40px 10px 10px;
+    color: var(--tblr-color-text);
+}
+
+.input-search::placeholder {
+    color: var(--tblr-color-text-muted);
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 100;
+}
+
+.btn-search {
+    width: 50px;
+    height: 50px;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    color: var(--tblr-color-text);
+    background-color: transparent;
+    pointer-events: painted;
+}
+
+.btn-search:focus ~ .input-search, .input-search:focus {
+    width: 300px;
+    border-radius: 0;
+    background-color: transparent;
+    border-bottom: 1px solid var(--tblr-border-color); /* Mantendo a borda inferior na expansão */
+    transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
+}
+

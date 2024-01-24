@@ -2,6 +2,8 @@
     if(!$color)
         $color = $tipo === 'in' ? 'success' : 'danger';
     $transacaoTipo = $color === 'success' ? 'receita' : 'despesa';
+    $recorrenciaTipo = $transacao['recorrencia'] === 'rr' ? 'recorrente' : 'fixa';
+    $pendenteLabel = $transacao['recorrencia'] === 'rr' ? 'e as futuras' : 'e as pendentes (antes de hoje inclusive)';
 
 @endphp
 <div wire:ignore.self class="modal modal-blur fade" id="deletar-transacao-modal" tabindex="-1" style="display: none;"
@@ -21,29 +23,31 @@
                     <label>Valor</label>
                     <div>R$ {{$transacao['valor']}}</div>
                 </div>
-                <div class="col-12 mt-4">
-                    <h3>Atenção! Está é uma {{$transacaoTipo}} recorrente.<br>Você deseja deletar:</h3>
-                    <div>
-                        <label class="form-check">
-                            <input class="form-check-input-{{$color}}" type="radio" value="this"
-                                   name="deletar_opcao"
-                                   style="float: left;margin-left: -1.5rem;" wire:model="recorrenteOpcao">
-                            <span class="form-check-label">Somente esta</span>
-                        </label>
-                        <label class="form-check">
-                            <input class="form-check-input-{{$color}}" type="radio" value="pendentes"
-                                   name="deletar_opcao"
-                                   style="float: left;margin-left: -1.5rem;" wire:model="recorrenteOpcao">
-                            <span class="form-check-label">Esta, e as futuras</span>
-                        </label>
-                        <label class="form-check">
-                            <input class="form-check-input-{{$color}}" type="radio" value="all"
-                                   name="deletar_opcao"
-                                   style="float: left;margin-left: -1.5rem;" wire:model="recorrenteOpcao">
-                            <span class="form-check-label">Todas as receitas, incluindo as passadas</span>
-                        </label>
+                @if($recorrente)
+                    <div class="col-12 mt-4">
+                        <h3>Atenção! Está é uma {{$transacaoTipo}} {{$recorrenciaTipo}}.<br>Você deseja deletar:</h3>
+                        <div>
+                            <label class="form-check">
+                                <input class="form-check-input-{{$color}}" type="radio" value="this"
+                                       name="deletar_opcao"
+                                       style="float: left;margin-left: -1.5rem;" wire:model="recorrenteOpcao">
+                                <span class="form-check-label">Somente esta</span>
+                            </label>
+                            <label class="form-check">
+                                <input class="form-check-input-{{$color}}" type="radio" value="pendentes"
+                                       name="deletar_opcao"
+                                       style="float: left;margin-left: -1.5rem;" wire:model="recorrenteOpcao">
+                                <span class="form-check-label">Esta, {{$pendenteLabel}}</span>
+                            </label>
+                            <label class="form-check">
+                                <input class="form-check-input-{{$color}}" type="radio" value="all"
+                                       name="deletar_opcao"
+                                       style="float: left;margin-left: -1.5rem;" wire:model="recorrenteOpcao">
+                                <span class="form-check-label">Todas as receitas, incluindo as passadas</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
             <div class="btn-list mx-5 my-3">
                 <button type="button" class="btn btn-outline-{{$color}} me-auto rounded-5" data-bs-dismiss="modal">
@@ -58,6 +62,10 @@
     $(document).ready(function () {
         $('#deletar-transacao-modal').modal({
             backdrop: 'static',
+        })
+
+        Livewire.on('$refresh', () => {
+            $('#deletar-transacao-modal').modal('hide')
         })
     })
 </script>

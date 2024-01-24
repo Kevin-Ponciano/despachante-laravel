@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ControleFixas extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'id',
@@ -17,6 +17,7 @@ class ControleFixas extends Model
         'despachante_id',
         'categoria_id',
         'valor',
+        'status',
         'data_vencimento',
         'descricao',
         'observacao',

@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SoftDeleteScope;
 use App\Traits\AttributeModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transacao extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
     use AttributeModel;
 
     protected $table = 'transacoes';
@@ -30,6 +30,13 @@ class Transacao extends Model
         'observacao',
         'recorrencia',
     ];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new SoftDeleteScope);
+    }
 
     public function despachante()
     {

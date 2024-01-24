@@ -21,5 +21,5 @@ $(document).ready(function () {
         if($(el).hasClass('select-ignore')) return
         applySelect($(el))
     })
-    $('.ts-control').addClass('py-0 px-2 text-muted')
+    //$('.ts-control').addClass('py-0 px-2 text-muted')
 });

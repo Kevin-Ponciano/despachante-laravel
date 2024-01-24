@@ -1,5 +1,7 @@
-<div {{$functions??''}} class="card card-sm rounded-4 mb-2 @if($functions??false) cursor-pointer @endif change-url" style="width: 20rem;height: 5rem;"
-data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="{{$label}}" data-bs-original-title="{{$label}}" data-url="{{$label}}">
+<div class="card card-sm rounded-4 mb-2 @if($tipo??false) cursor-pointer @endif change-url"
+     style="width: 20rem;height: 5rem;"
+     data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="{{$label}}" data-bs-original-title="{{$label}}"
+     @if($tipo??false) data-url="{{$label}}" @endif >
     <div class="mx-3 my-2 text-lg">
         <div class="row align-items-center">
             <div class="col">

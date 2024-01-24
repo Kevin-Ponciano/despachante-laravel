@@ -38,10 +38,16 @@
                     @elseif($tipo === 'out')
                         <x-transacoes.btn-novo label="NOVA DESPESA" color="red"/>
                     @endif
-                    <button class="btn rounded-5">
-                        <i class="ti ti-search"></i>
-                    </button>
-                    <button class="btn rounded-5">
+                    {{--                    <button class="btn rounded-5">--}}
+                    {{--                        <i class="ti ti-search"></i>--}}
+                    {{--                    </button>--}}
+                    <div class="search-box">
+                        <button class="btn-search">
+                            <i class="ti ti-search"></i>
+                        </button>
+                        <input type="text" class="input-search" wire:model="search">
+                    </div>
+                    <button class="btn rounded-5" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
                         <i class="ti ti-filter"></i>
                     </button>
                     <button class="btn rounded-5">
@@ -54,8 +60,13 @@
     <div class="page-body">
         <div class="mx-8">
             <div class="d-flex justify-content-between">
+{{--                TODO: if else para ocultar quando o filtro for aplicado--}}
                 <div class="card w-75 h-100 rounded-5">
+                    @if($filtering)
+                        <x-transacoes.filtros-aplicados :filters="$filters"/>
+                    @else
                     <x-transacoes.meses :tipo="$tipo" :mes="$mes" :ano="$ano" :show-month="$showMonth"/>
+                    @endif
                     <x-transacoes.table :transacoes="$transacoes"/>
                 </div>
                 <div>
@@ -72,9 +83,9 @@
                                            bg="bg-red" :valor="$saldoPago"/>
                         <x-transacoes.card label="Total" icon="ti ti-scale" bg="bg-red" :valor="$total"/>
                     @else
-                        <x-transacoes.card functions="wire:click=setTipo('in')" label="Receitas" icon="ti ti-arrow-up"
+                        <x-transacoes.card tipo="in" label="Receitas" icon="ti ti-arrow-up"
                                            bg="bg-green" :valor="$saldoReceitas"/>
-                        <x-transacoes.card functions="wire:click=setTipo('out')" label="Despesas"
+                        <x-transacoes.card tipo="out" label="Despesas"
                                            icon="ti ti-arrow-down"
                                            bg="bg-red" :valor="$saldoDespesas"/>
                         <x-transacoes.card label="Balanço mensal" icon="ti ti-scale" bg="bg-blue" :valor="$balanco"/>
@@ -85,7 +96,9 @@
     </div>
     <x-transacoes.nova :recorrente="$recorrente" :creating="$creating" :categorias="$categorias" :tipo="$tipo"
                        :situacao="$situacao" :recorrente-opcao="$recorrenteOpcao" :color="$color"/>
-    <x-transacoes.deletar :transacao="$transacao" :tipo="$tipo" :color="$color" :recorrente-opcao="$recorrenteOpcao"/>
+    <x-transacoes.deletar :transacao="$transacao" :tipo="$tipo" :color="$color" :recorrente-opcao="$recorrenteOpcao"
+                          :recorrente="$recorrente"/>
+    <x-transacoes.filtro :color="$color" :tipo="$tipo" :categorias="$categorias"/>
     <script>
         $(document).ready(function () {
             $('.toggle-months').click(function () {
@@ -93,12 +106,15 @@
             });
 
             $('.change-url').on('click', function () {
-                const tipo = $(this).data('url').toLowerCase()
+                const tipo = $(this).data('url')?.toLowerCase()
                 if (tipo !== 'receitas' && tipo !== 'despesas' && tipo !== 'transacoes') return
-                if (tipo === 'transacoes')
+                if (tipo === 'transacoes') {
                     history.pushState(null, null, '/despachante/transacoes');
-                else
+                    Livewire.emit('setTipo', null)
+                } else {
                     history.pushState(null, null, '/despachante/transacoes/' + tipo);
+                    Livewire.emit('setTipo', tipo === 'receitas' ? 'in' : 'out')
+                }
             })
         });
     </script>
