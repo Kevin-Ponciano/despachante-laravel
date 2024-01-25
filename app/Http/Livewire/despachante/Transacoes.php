@@ -4,9 +4,9 @@ namespace App\Http\Livewire\despachante;
 
 use App\Models\Scopes\SoftDeleteScope;
 use App\Traits\FunctionsHelpers;
-use Arr;
-use Auth;
+use App\Traits\transacoes\Filter;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -14,6 +14,7 @@ class Transacoes extends Component
 {
     use WithPagination;
     use FunctionsHelpers;
+    use Filter;
 
     public $search, $paginate = 10, $sortField = 'data_vencimento', $sortDirection = 'desc', $iconDirection = 'up';
     public $tipo;
@@ -31,8 +32,6 @@ class Transacoes extends Component
     ];
     public $data_vencimento, $fixa = false, $recorrente = false, $situacao, $recorrenteOpcao = 'this';
     public $showMonth = true, $creating = false, $color = null;
-    public $startDateFilter, $endDateFilter, $categoriasIdFilter, $situacaoFilter = 'pg', $recorrenciaFilter, $tipoFilter,
-        $filters = [], $filtering = false, $filterBag = [];
     protected $paginationTheme = 'bootstrap';
     protected $listeners = [
         '$refresh',
@@ -387,19 +386,6 @@ class Transacoes extends Component
         $this->sortField = $field;
     }
 
-    public function resetFilters()
-    {
-        $this->reset([
-            'startDateFilter',
-            'endDateFilter',
-            'categoriasIdFilter',
-            'situacaoFilter',
-            'recorrenciaFilter',
-            'tipoFilter',
-            'filters',
-            'filtering',
-        ]);
-    }
 
     public function clearInputs()
     {
@@ -443,7 +429,6 @@ class Transacoes extends Component
 
         $this->startDateFilter = $startDate->format('Y-m-d');
         $this->endDateFilter = $endDate->format('Y-m-d');
-        debug($this->filters);
         return view('livewire.transacoes', compact('transacoes'));
     }
 
@@ -559,49 +544,6 @@ class Transacoes extends Component
         }
     }
 
-    private function filter($model)
-    {
-        $startDateFilter = $this->startDateFilter;
-        $endDateFilter = $this->endDateFilter;
-        $categoriasIdFilter = $this->categoriasIdFilter;
-        $situacaoFilter = $this->situacaoFilter;
-        $recorrenciaFilter = $this->recorrenciaFilter;
-        $tipoFilter = $this->tipo ?: $this->tipoFilter;
-        $model
-            ->when($startDateFilter && $endDateFilter, function ($query) use ($startDateFilter, $endDateFilter) {
-                $this->filters['date']['startDateFilter'] = Carbon::parse($startDateFilter)->format('d/m/Y');
-                $this->filters['date']['endDateFilter'] = Carbon::parse($endDateFilter)->format('d/m/Y');
-                return $query->whereBetween('data_vencimento', [$startDateFilter, $endDateFilter]);
-            })
-            ->when($categoriasIdFilter, function ($query) use ($categoriasIdFilter) {
-                $this->filters['categorias'] = Auth::user()->empresa()->categorias()->where('status', 'at')
-                    ->whereIn('id', $categoriasIdFilter)->get()->toArray();
-                return $query->whereIn('categoria_id', $categoriasIdFilter);
-            })
-            ->when($situacaoFilter, function ($query) use ($situacaoFilter) {
-                $this->filters['situacao'] = $situacaoFilter;
-                return $query->where('status', $situacaoFilter);
-            })
-            ->when($recorrenciaFilter, function ($query) use ($recorrenciaFilter) {
-                switch ($recorrenciaFilter) {
-                    case 'fx':
-                        $this->filters['recorrenciaFilter'] = 'fixa';
-                        break;
-                    case 'rr':
-                        $this->filters['recorrenciaFilter'] = 'recorrente';
-                        break;
-                    case 'n/a':
-                        $this->filters['recorrenciaFilter'] = 'não recorrente';
-                }
-                return $query->where('recorrencia', $recorrenciaFilter);
-            })
-            ->when($tipoFilter, function ($query) use ($tipoFilter) {
-                $this->filters['tipoFilter'] = $tipoFilter === 'in' ? 'receita' : 'despesa';
-                return $query->where('tipo', $tipoFilter);
-            });
-
-        return $model;
-    }
 
     private function calculateTotal($transacoes)
     {
@@ -625,37 +567,5 @@ class Transacoes extends Component
         $this->balanco = number_format($balanco, 2, ',', '.');
     }
 
-    public function removeFilter($key, $value = null)
-    {
-        switch ($key) {
-            case 'date':
-                $this->startDateFilter = null;
-                $this->endDateFilter = null;
-                break;
-            case 'categorias':
-                $id = $value;
-                $this->categoriasIdFilter = Arr::where($this->categoriasIdFilter, function ($value) use ($id) {
-                    return $value != $id;
-                });
-                if (empty($this->categoriasIdFilter))
-                    unset($this->filters['categorias']);
-                break;
-            case 'situacao':
-                $this->situacaoFilter = null;
-                unset($this->filters['situacao']);
-                break;
-            case 'recorrenciaFilter':
-                $this->recorrenciaFilter = null;
-                break;
-            case 'tipoFilter':
-                $this->tipoFilter = null;
-                break;
-        }
-    }
 
-    public function applyFilter()
-    {
-        $this->filtering = true;
-        # TODO: Usar form 
-    }
 }
