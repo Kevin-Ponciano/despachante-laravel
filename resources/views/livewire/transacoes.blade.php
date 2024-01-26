@@ -98,7 +98,8 @@
                        :situacao="$situacao" :recorrente-opcao="$recorrenteOpcao" :color="$color"/>
     <x-transacoes.deletar :transacao="$transacao" :tipo="$tipo" :color="$color" :recorrente-opcao="$recorrenteOpcao"
                           :recorrente="$recorrente"/>
-    <x-transacoes.filtro :color="$color" :tipo="$tipo" :categorias="$categorias"/>
+    <x-transacoes.filtro :color="$color" :tipo="$tipo" :categorias="$categorias" :start-date="$startDateFilter"
+                         :end-date="$endDateFilter"/>
     <script>
         $(document).ready(function () {
             $('.toggle-months').click(function () {

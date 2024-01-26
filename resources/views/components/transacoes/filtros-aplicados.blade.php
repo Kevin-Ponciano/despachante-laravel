@@ -41,6 +41,7 @@
                         </div>
                     @endif
                 @endif
+{{--                TODO: Adcionar recorrencia--}}
             </div>
         </div>
         <button class="btn-close btn-close-white" wire:click="resetFilters"></button>

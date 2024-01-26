@@ -12,12 +12,12 @@ trait Filter
     public $startDateFilter;
     public $endDateFilter;
     public $categoriasIdFilter;
-    public $situacaoFilter = 'pg';
+    public $situacaoFilter;
     public $recorrenciaFilter;
     public $tipoFilter;
     public $filters = [];
     public $filtering = false;
-    public $filterBag = [];
+
 
     public function resetFilters()
     {
@@ -57,17 +57,11 @@ trait Filter
                 return $query->where('status', $situacaoFilter);
             })
             ->when($recorrenciaFilter, function ($query) use ($recorrenciaFilter) {
-                switch ($recorrenciaFilter) {
-                    case 'fx':
-                        $this->filters['recorrenciaFilter'] = 'fixa';
-                        break;
-                    case 'rr':
-                        $this->filters['recorrenciaFilter'] = 'recorrente';
-                        break;
-                    case 'n/a':
-                        $this->filters['recorrenciaFilter'] = 'não recorrente';
-                }
-                return $query->where('recorrencia', $recorrenciaFilter);
+                $this->filters['recorrenciaFilter'] = $recorrenciaFilter;
+                if ($recorrenciaFilter === 'rr')
+                    return $query->where('recorrencia', '!=', 'n/a');
+                else
+                    return $query->where('recorrencia', $recorrenciaFilter);
             })
             ->when($tipoFilter, function ($query) use ($tipoFilter) {
                 $this->filters['tipoFilter'] = $tipoFilter === 'in' ? 'receita' : 'despesa';
@@ -105,10 +99,15 @@ trait Filter
         }
     }
 
-    public function applyFilter()
+    public function applyFilter($filters)
     {
-        $this->filtering = true;
-        # TODO: Usar form
+        $this->startDateFilter = $filters['start_date'] ?? null;
+        $this->endDateFilter = $filters['end_date'] ?? null;
+        $this->categoriasIdFilter = $filters['categorias_id'] ?? null;
+        $this->situacaoFilter = $filters['situacao'] ?? null;
+        $this->recorrenciaFilter = $filters['recorrencia'] ?? null;
+        $this->tipoFilter = $filters['tipo'] ?? null;
 
+        $this->filtering = true;
     }
 }

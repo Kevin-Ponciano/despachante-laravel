@@ -36,6 +36,7 @@ class Transacoes extends Component
     protected $listeners = [
         '$refresh',
         'setTipo',
+        'applyFilter',
     ];
 
     protected $rules = [
