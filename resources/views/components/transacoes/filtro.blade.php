@@ -13,13 +13,11 @@
                 <div class="row">
                     <div class="col">
                         <label class="form-label">De</label>
-                        <input type="date" class="input-highlight {{$color}} text-{{$color}}" name="start_date"
-                               value="{{$startDate}}">
+                        <input type="date" class="input-highlight {{$color}} text-{{$color}}" name="start_date">
                     </div>
                     <div class="col">
                         <label class="form-label">Até</label>
-                        <input type="date" class="input-highlight {{$color}} text-{{$color}}" name="end_date"
-                               value="{{$endDate}}">
+                        <input type="date" class="input-highlight {{$color}} text-{{$color}}" name="end_date">
                     </div>
                 </div>
             </div>
@@ -35,7 +33,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="input-icon mb-5">
+            <div class="input-icon mb-5" wire:ignore>
                 <label class="form-label text-muted">Situação</label>
                 <select class="form-select input-highlight" name="situacao">
                     <option value="">Todas</option>
@@ -43,7 +41,7 @@
                     <option value="pe">Pendentes</option>
                 </select>
             </div>
-            <div class="input-icon mb-5">
+            <div class="input-icon mb-5" wire:ignore>
                 <label class="form-label text-muted">Recorrência</label>
                 <select class="form-select input-highlight" name="recorrencia">
                     <option value="">Todas</option>
@@ -52,7 +50,7 @@
                 </select>
             </div>
             @if($tipo === null)
-                <div class="input-icon mb-5">
+                <div class="input-icon mb-5" wire:ignore>
                     <label class="form-label text-muted">Tipo</label>
                     <select class="form-select input-highlight" name="tipo">
                         <option value="">Todas</option>
@@ -63,7 +61,7 @@
             @endif
         </div>
     </form>
-    <div class="btn-list mx-5 mb-5">
+    <div class="btn-list mb-5">
         <button data-bs-dismiss="offcanvas" class="btn btn-outline-{{$color}} rounded-5 w-25">Cancelar</button>
         <button id="btn-submit" data-bs-dismiss="offcanvas" class="btn btn-{{$color}} ms-auto rounded-5 w-25">
             Aplicar
@@ -107,11 +105,12 @@
             let formData = $('#form-filter').serializeArray();
             let data = {};
             $.each(formData, function (index, field) {
-                if (data[field.name]) {
-                    if (!Array.isArray(data[field.name])) {
-                        data[field.name] = [data[field.name]];
+                if (field.name === 'categorias_id') {
+                    if (data[field.name]) {
+                        data[field.name].push(field.value);
+                    } else {
+                        data[field.name] = [field.value];
                     }
-                    data[field.name].push(field.value);
                 } else {
                     data[field.name] = field.value;
                 }

@@ -2,11 +2,21 @@
     <table id="transacoes-table" class="bg-body-tertiary table table-mobile-xl card-table">
         <thead>
         <tr>
-            <th class="fw-bolder">Situação</th>
-            <th class="fw-bolder">Data</th>
-            <th class="fw-bolder">Descrição</th>
-            <th class="fw-bolder">Categoria</th>
-            <th class="fw-bolder">Valor</th>
+            <th class="fw-bolder cursor-pointer" wire:click="sortBy('status')">Situação
+                <i class="ti ti-arrow-big-{{$sortField === 'status' ? $iconDirection : null}}-filled"></i>
+            </th>
+            <th class="fw-bolder cursor-pointer" wire:click="sortBy('data_vencimento')">Data
+                <i class="ti ti-arrow-big-{{$sortField === 'data_vencimento' ? $iconDirection : null}}-filled"></i>
+            </th>
+            <th class="fw-bolder cursor-pointer" wire:click="sortBy('descricao')">Descrição
+                <i class="ti ti-arrow-big-{{$sortField === 'descricao' ? $iconDirection : null}}-filled"></i>
+            </th>
+            <th class="fw-bolder cursor-pointer" wire:click="sortBy('categoria_id')">Categoria
+                <i class="ti ti-arrow-big-{{$sortField === 'categoria_id' ? $iconDirection : null}}-filled"></i>
+            </th>
+            <th class="fw-bolder cursor-pointer" wire:click="sortBy('valor')">Valor
+                <i class="ti ti-arrow-big-{{$sortField === 'valor' ? $iconDirection : null}}-filled"></i>
+            </th>
             <th class="fw-bolder">Ações</th>
         </tr>
         </thead>
@@ -15,7 +25,9 @@
             <tr>
                 <td>
                     <div class="badge bg-{{$transacao->getStatus()['color']}} badge-pill"
-                         data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="{{$transacao->getStatus()['text']}}" data-bs-original-title="{{$transacao->getStatus()['text']}}">
+                         data-bs-toggle="tooltip" data-bs-placement="bottom"
+                         aria-label="{{$transacao->getStatus()['text']}}"
+                         data-bs-original-title="{{$transacao->getStatus()['text']}}">
                         <i class="{{ $transacao->getStatus()['icon'] }}"></i>
                     </div>
                 </td>
@@ -38,8 +50,6 @@
                             <i class="ti ti-pencil"></i>
                         </button>
                         <button class="btn btn-sm btn-icon btn-ghost-danger"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deletar-transacao-modal"
                                 wire:click="delete({{$transacao->id}})">
                             <i class="ti ti-trash"></i>
                         </button>

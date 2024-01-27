@@ -144,7 +144,6 @@ class ClienteEditar extends Component
     public function resetPassword()
     {
         try {
-            //TODO: corrigir, https://laracasts.com/series/laravel-authentication-options
             sendPasswordResetNotificationJob::dispatch($this->usuario);
             $this->emit('success', ['message' => 'Um e-mail será enviado para o cliente<br> para que ele possa redefinir sua senha']);
         } catch (Throwable $th) {

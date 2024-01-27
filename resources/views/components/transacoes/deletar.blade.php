@@ -15,13 +15,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-0 row">
-                <div class="col-6 text-muted">
-                    <label>Descrição</label>
-                    <div>{{$transacao['descricao']}}</div>
+                <div class="col-6">
+                    <label class="text-muted">Descrição</label>
+                    <div class="text-md fw-bolder">{{$transacao['descricao']}}</div>
                 </div>
-                <div class="col-6 text-muted">
-                    <label>Valor</label>
-                    <div>R$ {{$transacao['valor']}}</div>
+                <div class="col-6">
+                    <label class="text-muted">Valor</label>
+                    <div class="text-md fw-bolder">R$ {{$transacao['valor']}}</div>
                 </div>
                 @if($recorrente)
                     <div class="col-12 mt-4">
@@ -66,6 +66,9 @@
 
         Livewire.on('$refresh', () => {
             $('#deletar-transacao-modal').modal('hide')
+        })
+        Livewire.on('openModalDelete', () => {
+            $('#deletar-transacao-modal').modal('show')
         })
     })
 </script>

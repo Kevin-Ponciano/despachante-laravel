@@ -33,44 +33,6 @@ trait Filter
         ]);
     }
 
-    private function filter($model)
-    {
-        $startDateFilter = $this->startDateFilter;
-        $endDateFilter = $this->endDateFilter;
-        $categoriasIdFilter = $this->categoriasIdFilter;
-        $situacaoFilter = $this->situacaoFilter;
-        $recorrenciaFilter = $this->recorrenciaFilter;
-        $tipoFilter = $this->tipo ?: $this->tipoFilter;
-        $model
-            ->when($startDateFilter && $endDateFilter, function ($query) use ($startDateFilter, $endDateFilter) {
-                $this->filters['date']['startDateFilter'] = Carbon::parse($startDateFilter)->format('d/m/Y');
-                $this->filters['date']['endDateFilter'] = Carbon::parse($endDateFilter)->format('d/m/Y');
-                return $query->whereBetween('data_vencimento', [$startDateFilter, $endDateFilter]);
-            })
-            ->when($categoriasIdFilter, function ($query) use ($categoriasIdFilter) {
-                $this->filters['categorias'] = Auth::user()->empresa()->categorias()->where('status', 'at')
-                    ->whereIn('id', $categoriasIdFilter)->get()->toArray();
-                return $query->whereIn('categoria_id', $categoriasIdFilter);
-            })
-            ->when($situacaoFilter, function ($query) use ($situacaoFilter) {
-                $this->filters['situacao'] = $situacaoFilter;
-                return $query->where('status', $situacaoFilter);
-            })
-            ->when($recorrenciaFilter, function ($query) use ($recorrenciaFilter) {
-                $this->filters['recorrenciaFilter'] = $recorrenciaFilter;
-                if ($recorrenciaFilter === 'rr')
-                    return $query->where('recorrencia', '!=', 'n/a');
-                else
-                    return $query->where('recorrencia', $recorrenciaFilter);
-            })
-            ->when($tipoFilter, function ($query) use ($tipoFilter) {
-                $this->filters['tipoFilter'] = $tipoFilter === 'in' ? 'receita' : 'despesa';
-                return $query->where('tipo', $tipoFilter);
-            });
-
-        return $model;
-    }
-
     public function removeFilter($key, $value = null)
     {
         switch ($key) {
@@ -90,24 +52,70 @@ trait Filter
                 $this->situacaoFilter = null;
                 unset($this->filters['situacao']);
                 break;
-            case 'recorrenciaFilter':
+            case 'recorrencia':
                 $this->recorrenciaFilter = null;
+                unset($this->filters['recorrencia']);
                 break;
-            case 'tipoFilter':
+            case 'tipo':
                 $this->tipoFilter = null;
+                unset($this->filters['tipo']);
                 break;
         }
     }
 
     public function applyFilter($filters)
     {
-        $this->startDateFilter = $filters['start_date'] ?? null;
-        $this->endDateFilter = $filters['end_date'] ?? null;
+        $this->startDateFilter = $filters['start_date'] !== null
+            ? Carbon::parse($filters['start_date']) : $this->startDateFilter;
+        $this->endDateFilter = $filters['end_date'] !== null
+            ? Carbon::parse($filters['end_date']) : $this->endDateFilter;
         $this->categoriasIdFilter = $filters['categorias_id'] ?? null;
         $this->situacaoFilter = $filters['situacao'] ?? null;
         $this->recorrenciaFilter = $filters['recorrencia'] ?? null;
         $this->tipoFilter = $filters['tipo'] ?? null;
 
+        if ($filters['start_date'] && $filters['end_date'])
+            $this->verifyCreateTransacaoFixa($this->startDateFilter, $this->endDateFilter, true);
+
         $this->filtering = true;
     }
+
+    private function filter($model)
+    {
+        $startDateFilter = $this->startDateFilter;
+        $endDateFilter = $this->endDateFilter;
+        $categoriasIdFilter = $this->categoriasIdFilter;
+        $situacaoFilter = $this->situacaoFilter;
+        $recorrenciaFilter = $this->recorrenciaFilter;
+        $tipoFilter = $this->tipo ?: $this->tipoFilter;
+        $model
+            ->when($startDateFilter && $endDateFilter, function ($query) use ($startDateFilter, $endDateFilter) {
+                $this->filters['date']['start'] = Carbon::parse($startDateFilter)->format('d/m/Y');
+                $this->filters['date']['end'] = Carbon::parse($endDateFilter)->format('d/m/Y');
+                return $query->whereBetween('data_vencimento', [$startDateFilter, $endDateFilter]);
+            })
+            ->when($categoriasIdFilter, function ($query) use ($categoriasIdFilter) {
+                $this->filters['categorias'] = Auth::user()->empresa()->categorias()->where('status', 'at')
+                    ->whereIn('id', $categoriasIdFilter)->get()->toArray();
+                return $query->whereIn('categoria_id', $categoriasIdFilter);
+            })
+            ->when($situacaoFilter, function ($query) use ($situacaoFilter) {
+                $this->filters['situacao'] = $situacaoFilter;
+                return $query->where('status', $situacaoFilter);
+            })
+            ->when($recorrenciaFilter, function ($query) use ($recorrenciaFilter) {
+                $this->filters['recorrencia'] = $recorrenciaFilter;
+                if ($recorrenciaFilter === 'rr')
+                    return $query->where('recorrencia', '!=', 'n/a');
+                else
+                    return $query->where('recorrencia', $recorrenciaFilter);
+            })
+            ->when($tipoFilter, function ($query) use ($tipoFilter) {
+                $this->filters['tipo'] = $tipoFilter;
+                return $query->where('tipo', $tipoFilter);
+            });
+
+        return $model;
+    }
+
 }

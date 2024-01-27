@@ -38,21 +38,23 @@
                     @elseif($tipo === 'out')
                         <x-transacoes.btn-novo label="NOVA DESPESA" color="red"/>
                     @endif
-                    {{--                    <button class="btn rounded-5">--}}
-                    {{--                        <i class="ti ti-search"></i>--}}
-                    {{--                    </button>--}}
-                    <div class="search-box">
-                        <button class="btn-search">
-                            <i class="ti ti-search"></i>
-                        </button>
-                        <input type="text" class="input-search" wire:model="search">
-                    </div>
-                    <button class="btn rounded-5" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
+                    @if(config('app.env') === 'local')
+                        <div class="search-box">
+                            <button class="btn-search">
+                                <i class="ti ti-search"></i>
+                            </button>
+                            <input type="text" class="input-search" wire:model="search">
+                        </div>
+                    @endif
+                    <button class="btn rounded-5" data-bs-toggle="offcanvas" href="#offcanvas" role="button"
+                            aria-controls="offcanvas">
                         <i class="ti ti-filter"></i>
                     </button>
-                    <button class="btn rounded-5">
-                        <i class="ti ti-dots-vertical"></i>
-                    </button>
+                    @if(config('app.env') === 'local')
+                        <button class="btn rounded-5">
+                            <i class="ti ti-dots-vertical"></i>
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -60,27 +62,27 @@
     <div class="page-body">
         <div class="mx-8">
             <div class="d-flex justify-content-between">
-{{--                TODO: if else para ocultar quando o filtro for aplicado--}}
                 <div class="card w-75 h-100 rounded-5">
                     @if($filtering)
                         <x-transacoes.filtros-aplicados :filters="$filters"/>
                     @else
-                    <x-transacoes.meses :tipo="$tipo" :mes="$mes" :ano="$ano" :show-month="$showMonth"/>
+                        <x-transacoes.meses :tipo="$tipo" :mes="$mes" :ano="$ano" :show-month="$showMonth"/>
                     @endif
-                    <x-transacoes.table :transacoes="$transacoes"/>
+                    <x-transacoes.table :transacoes="$transacoes" :sort-field="$sortField"
+                                        :icon-direction="$iconDirection"/>
                 </div>
                 <div>
                     @if($tipo === 'in')
-                        <x-transacoes.card label="Receitas Pendentes" icon="ti ti-arrow-up"
-                                           bg="bg-green" :valor="$saldoPendente"/>
-                        <x-transacoes.card label="Receitas Recebidas" icon="ti ti-arrow-down"
+                        <x-transacoes.card label="Receitas Recebidas" icon="ti ti-arrow-up"
                                            bg="bg-green" :valor="$saldoPago"/>
+                        <x-transacoes.card label="Receitas Pendentes" icon="ti ti-exclamation-mark"
+                                           bg="bg-green" :valor="$saldoPendente"/>
                         <x-transacoes.card label="Total" icon="ti ti-scale" bg="bg-green" :valor="$total"/>
                     @elseif($tipo === 'out')
-                        <x-transacoes.card label="Despesas Pendentes" icon="ti ti-arrow-up"
-                                           bg="bg-red" :valor="$saldoPendente"/>
                         <x-transacoes.card label="Despesas Pagas" icon="ti ti-arrow-down"
                                            bg="bg-red" :valor="$saldoPago"/>
+                        <x-transacoes.card label="Despesas Pendentes" icon="ti ti-exclamation-mark"
+                                           bg="bg-red" :valor="$saldoPendente"/>
                         <x-transacoes.card label="Total" icon="ti ti-scale" bg="bg-red" :valor="$total"/>
                     @else
                         <x-transacoes.card tipo="in" label="Receitas" icon="ti ti-arrow-up"
@@ -98,8 +100,7 @@
                        :situacao="$situacao" :recorrente-opcao="$recorrenteOpcao" :color="$color"/>
     <x-transacoes.deletar :transacao="$transacao" :tipo="$tipo" :color="$color" :recorrente-opcao="$recorrenteOpcao"
                           :recorrente="$recorrente"/>
-    <x-transacoes.filtro :color="$color" :tipo="$tipo" :categorias="$categorias" :start-date="$startDateFilter"
-                         :end-date="$endDateFilter"/>
+    <x-transacoes.filtro :color="$color" :tipo="$tipo" :categorias="$categorias"/>
     <script>
         $(document).ready(function () {
             $('.toggle-months').click(function () {
