@@ -151,7 +151,7 @@ class User extends Authenticatable
     public function getProfilePhoto()
     {
         if ($this->profile_photo_path) {
-            return Storage::disk('public')->url($this->profile_photo_path);
+            return Storage::url($this->profile_photo_path);
         } else {
             return 'https://ui-avatars.com/api/?name='.$this->name[0].'&color=7F9CF5&background=EBF4FF';
         }
