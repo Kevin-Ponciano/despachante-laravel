@@ -5,6 +5,7 @@ services:
     image: laravel_app
     networks:
       - traefik_public
+      - app_network
     deploy:
       labels:
         - "traefik.enable=true"
@@ -18,7 +19,7 @@ services:
   postgres:
       image: postgres:latest
       ports:
-        - 5432:5432
+        - '5432:5432'
       volumes:
         - postgres_data:/var/lib/postgresql/data
       environment:
@@ -26,16 +27,16 @@ services:
           - POSTGRES_USER=postgres
           - POSTGRES_DB=postgres
       networks:
-          - traefik_public
+          - app_network
 
   redis:
       image: 'redis:alpine'
       ports:
-          - '${FORWARD_REDIS_PORT:-6379}:6379'
+          - '6379:6379'
       volumes:
           - redis_data:/data
       networks:
-          - traefik_public
+          - app_network
       healthcheck:
           test:
               - CMD
@@ -46,6 +47,7 @@ services:
 networks:
   traefik_public:
     external: true
+  app_network:
 volumes:
     postgres_data:
         driver: local
