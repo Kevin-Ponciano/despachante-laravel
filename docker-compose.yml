@@ -11,10 +11,43 @@ services:
         - "traefik.http.routers.laravel-app.rule=Host(`app.laravix.com.br`)"
         - "traefik.http.services.laravel-app.loadbalancer.server.port=80"
         - "traefik.http.routers.laravel-app.service=laravel-app"
-        - "traefik.http.routers.laravel-app.tls.certresolver=le"
         - "traefik.http.routers.laravel-app.entrypoints=https"
         - "traefik.http.routers.laravel-app.tls=true"
       replicas: 1
+
+  postgres:
+      image: postgres:latest
+      ports:
+        - 5432:5432
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      environment:
+          - POSTGRES_PASSWORD=${DB_PASSWORD}
+          - POSTGRES_USER=${DB_USERNAME}
+          - POSTGRES_DB=postgres
+      networks:
+          - traefik_public
+
+  redis:
+      image: 'redis:alpine'
+      ports:
+          - '${FORWARD_REDIS_PORT:-6379}:6379'
+      volumes:
+          - redis_data:/data
+      networks:
+          - traefik_public
+      healthcheck:
+          test:
+              - CMD
+              - redis-cli
+              - ping
+          retries: 3
+          timeout: 5s
 networks:
   traefik_public:
     external: true
+volumes:
+    postgres_data:
+        driver: local
+    redis_data:
+        driver: local
