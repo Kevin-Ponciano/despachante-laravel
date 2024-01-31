@@ -1,8 +1,6 @@
 name: Laravel CI/CD Pipeline
 
 on:
-  push:
-    branches: [ main, staging ]
   pull_request:
     branches: [ main, staging ]
   workflow_dispatch:
@@ -20,10 +18,6 @@ jobs:
           username: ${{secrets.USERNAME}}
           port: ${{secrets.PORT}}
           key: ${{secrets.SSHKEY}}
-          script: |
-          git pull origin main
-          docker build -t laravel_app .
-          docker stack deploy -c docker-compose.yml partner-app
-          docker service update --force --image laravel_app:latest partner-app_laravel-app
+          script: "git pull origin main && docker build -t laravel_app . && docker stack deploy -c docker-compose.yml partner-app && docker service update --force --image laravel_app:latest partner-app_laravel-app"
       
 
