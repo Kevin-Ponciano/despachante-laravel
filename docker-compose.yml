@@ -1,11 +1,10 @@
-version: '3.8'
+version: '3.9'
 
 services:
   laravel-app:
     image: laravel_app
     networks:
       - traefik_public
-      - app_network
     deploy:
       labels:
         - "traefik.enable=true"
@@ -16,40 +15,6 @@ services:
         - "traefik.http.routers.laravel-app.tls=true"
       replicas: 1
 
-  postgres:
-      image: postgres:latest
-      ports:
-        - '5432:5432'
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      environment:
-          - POSTGRES_PASSWORD=pCwnNPFk_postgres
-          - POSTGRES_USER=postgres
-          - POSTGRES_DB=postgres
-      networks:
-          - app_network
-
-  redis:
-      image: 'redis:alpine'
-      ports:
-          - '6379:6379'
-      volumes:
-          - redis_data:/data
-      networks:
-          - app_network
-      healthcheck:
-          test:
-              - CMD
-              - redis-cli
-              - ping
-          retries: 3
-          timeout: 5s
 networks:
   traefik_public:
     external: true
-  app_network:
-volumes:
-    postgres_data:
-        driver: local
-    redis_data:
-        driver: local
