@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y \
         dos2unix \
         supervisor \
         freetype-dev \
-        $PHPIZE_DEPS \
         libjpeg-turbo-dev \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
 
