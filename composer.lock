@@ -72,6 +72,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/bbf516a4a88f829f92cc396628be705966880dbd",
                 "reference": "bbf516a4a88f829f92cc396628be705966880dbd",
+
                 "shasum": ""
             },
             "require": {
