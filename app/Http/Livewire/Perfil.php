@@ -55,7 +55,7 @@ class Perfil extends Component
             }
             $this->delete();
             $this->user->update([
-                'profile_photo_path' => $this->photo->store('profile-photos', 'public'),
+                'profile_photo_path' => $this->photo->store('profile-photos'),
             ]);
             $this->emit('$refresh');
             $this->emit('savedPhoto');
@@ -68,15 +68,14 @@ class Perfil extends Component
     public function delete()
     {
         $path = $this->user->profile_photo_path;
-        if ($path && Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+        if ($path && Storage::exists($path)) {
+            Storage::delete($path);
         }
     }
 
     public function deletePhoto()
     {
         try {
-
             $this->delete();
             $this->user->update([
                 'profile_photo_path' => null,

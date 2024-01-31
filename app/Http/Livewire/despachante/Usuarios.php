@@ -13,13 +13,12 @@ class Usuarios extends Component
     {
         try {
             $data = [];
-            $usuarios = Auth::user()->despachante->users;
+            $usuarios = Auth::user()->despachante->users()->where('id', '!=', Auth::user()->id)->get();
             foreach ($usuarios as $usuario) {
                 $data[] = [
                     'id' => $usuario->id,
                     'name' => $usuario->name,
                     'email' => $usuario->email,
-                    'role' => $usuario->getFuncao(),
                     'status' => $usuario->status,
                 ];
             }

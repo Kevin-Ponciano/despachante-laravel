@@ -2,8 +2,8 @@
     <div class="page page-center border-top-wide border-primary">
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
-                <a class="navbar-brand navbar-brand-autodark">
-                    <img src="{{asset('assets/img/logo3.png')}}" height="36" alt="saled logo">
+                <a class="navbar-brand navbar-brand-autodark" href="{{route('login')}}">
+                    <img src="{{asset('assets/img/logo3.png')}}" height="36">
                     {{config('app.name')}}
                 </a>
             </div>

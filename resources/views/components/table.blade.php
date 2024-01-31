@@ -25,7 +25,7 @@
     </div>
     <div class="card-body">
         <div>
-            <table id="{{$id}}" class="card-table table table-hover">
+            <table id="{{$id}}" class="card-table table table-striped table-hover">
                 <thead>
                 {{$thead}}
                 </thead>

@@ -1,21 +1,21 @@
 <div>
-    @if(Auth::user()->isDespachante())
-        <ul wire:ignore class="nav nav-tabs card-header-tabs flex-row-reverse m-0" data-bs-toglgle="tabs">
-            <li class="nav-item" role="presentation" wire:click="setPrecos">
-                <a href="#tabs-info-pedido" class="nav-link"
-                   data-bs-toggle="tab"
-                   aria-selected="false"
-                   role="tab"
-                   tabindex="-1">Valores/Serviços</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="#tabs-processo2" class="nav-link active"
-                   data-bs-toggle="tab"
-                   aria-selected="true"
-                   role="tab">Informações Processo</a>
-            </li>
-        </ul>
-    @endif
+    {{--    @if(Auth::user()->isDespachante())--}}
+    {{--        <ul wire:ignore class="nav nav-tabs card-header-tabs flex-row-reverse m-0" data-bs-toglgle="tabs">--}}
+    {{--            <li class="nav-item" role="presentation" wire:click="setPrecos">--}}
+    {{--                <a href="#tabs-info-pedido" class="nav-link"--}}
+    {{--                   data-bs-toggle="tab"--}}
+    {{--                   aria-selected="false"--}}
+    {{--                   role="tab"--}}
+    {{--                   tabindex="-1">Valores/Serviços</a>--}}
+    {{--            </li>--}}
+    {{--            <li class="nav-item" role="presentation">--}}
+    {{--                <a href="#tabs-processo2" class="nav-link active"--}}
+    {{--                   data-bs-toggle="tab"--}}
+    {{--                   aria-selected="true"--}}
+    {{--                   role="tab">Informações Processo</a>--}}
+    {{--            </li>--}}
+    {{--        </ul>--}}
+    {{--    @endif--}}
     <form wire:submit.prevent="store"
           x-data="{ isUploading: false, error: false,input: $('#upload-file-np')}"
           x-on:livewire-upload-start="isUploading = true"
@@ -146,29 +146,8 @@
                         <textarea class="form-control" name="observacoes" wire:model.defer="observacoes"></textarea>
                     </x-slot:observacao>
                 </x-processo>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="mb-3">
-                            <div class="form-label">Enviar Documentos .pdf</div>
-                            <div class="input-icon">
-                                <input :disabled="isUploading"
-                                       class="form-control @error('arquivos.*') is-invalid @enderror"
-                                       id="upload-file-np" type="file" accept="application/pdf" multiple
-                                       wire:model="arquivos">
-                                @error('arquivos.*') <span x-show="!isUploading"
-                                                           class="invalid-feedback">{{ $message }}</span> @enderror
-                                <span x-show="isUploading" class="input-icon-addon">
-                                        <div class="spinner-border spinner-border-sm text-muted" role="status"></div>
-                                    </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @if(Auth::user()->isDespachante())
-                <div wire:ignore.self class="tab-pane" id="tabs-info-pedido" role="tabpanel">
-                    <h4>Informação do Pedido</h4>
-                    <div class="row">
+                <fieldset class="form-fieldset mx-0 row">
+                    <div class="col d-flex">
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label class="form-label">Valor Placas</label>
@@ -195,47 +174,69 @@
                                 </div>
                             </div>
                         </div>
-                        <fieldset class="form-fieldset">
-                            <h4>Serviços</h4>
-                            <div class="row" wire:ignore>
-                                <div class="col-auto">
-                                    <select id="select-servico-novo" class="form-select mb-2"
-                                            wire:model.defer="servicoId">
-                                        <option value="-1" selected>Selecionar Serviço</option>
-                                        @foreach($servicosDespachante as $servico)
-                                            <option title="{{$servico->descricao}}"
-                                                    value="{{$servico->id}}">{{$servico->nome}} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-3">
-                                    <a class="btn btn-ghost-primary" wire:click="addServico">Adicionar</a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                @foreach($servicos as $index => $servico)
-                                    <div class="col-lg-3">
-                                        <div class="mb-3">
-                                            <label class="form-label">Valor {{$servico['nome']}}</label>
-                                            <div class="input-icon">
+                    </div>
+
+                    <h4>Serviços</h4>
+                    <div class="row" wire:ignore>
+                        <div class="col-auto">
+                            <select id="select-servico-novo" class="form-select mb-2"
+                                    wire:model.defer="servicoId">
+                                <option value="-1" selected>Selecionar Serviço</option>
+                                @foreach($servicosDespachante as $servico)
+                                    <option title="{{$servico->descricao}}"
+                                            value="{{$servico->id}}">{{$servico->nome}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <a class="btn btn-ghost-primary" wire:click="addServico">Adicionar</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @foreach($servicos as $index => $servico)
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Valor {{$servico['nome']}}</label>
+                                    <div class="input-icon">
                                                 <span class="input-icon-addon">
                                                     <i class="ti ti-currency-real"></i>
                                                 </span>
-                                                <input x-mask:dynamic="$money($input, ',','.')"
-                                                       type="text" class="form-control px-5"
-                                                       wire:model.defer="servicos.{{ $index }}.preco">
-                                                <a class="btn btn-danger btn-remove-service px-0 py-0 rounded-5"
-                                                   title="Remover Serviço"
-                                                   wire:click="removeServico({{$servico['id']}})">
-                                                    <i class="ti ti-minus"></i>
-                                                </a>
-                                            </div>
-                                        </div>
+                                        <input x-mask:dynamic="$money($input, ',','.')"
+                                               type="text" class="form-control px-5"
+                                               wire:model.defer="servicos.{{ $index }}.preco">
+                                        <a class="btn btn-danger btn-remove-service px-0 py-0 rounded-5"
+                                           title="Remover Serviço"
+                                           wire:click="removeServico({{$servico['id']}})">
+                                            <i class="ti ti-minus"></i>
+                                        </a>
                                     </div>
-                                @endforeach
+                                </div>
                             </div>
-                        </fieldset>
+                        @endforeach
                     </div>
+                </fieldset>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <div class="form-label">Enviar Documentos .pdf</div>
+                            <div class="input-icon">
+                                <input :disabled="isUploading"
+                                       class="form-control @error('arquivos.*') is-invalid @enderror"
+                                       id="upload-file-np" type="file" accept="application/pdf" multiple
+                                       wire:model="arquivos">
+                                @error('arquivos.*') <span x-show="!isUploading"
+                                                           class="invalid-feedback">{{ $message }}</span> @enderror
+                                <span x-show="isUploading" class="input-icon-addon">
+                                        <div class="spinner-border spinner-border-sm text-muted" role="status"></div>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if(Auth::user()->isDespachante())
+                <div wire:ignore.self class="tab-pane" id="tabs-info-pedido" role="tabpanel">
+                    <h4>Informação do Pedido</h4>
                 </div>
             @endif
         </div>

@@ -18,7 +18,6 @@
                         <th>Nome</th>
                         <th>E-mail</th>
                         <th class="text-center">Status</th>
-                        <th class="text-center">Função</th>
                         <th></th>
                     </tr>
                 </x-slot:thead>

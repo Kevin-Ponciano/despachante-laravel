@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\CreatedDespachanteEvent;
 use App\Models\Scopes\SoftDeleteScope;
 use App\Traits\AttributeModel;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -40,6 +41,10 @@ class Despachante extends Model
             $model->uuid = Str::uuid();
         });
 
+        static::created(function ($model) {
+            event(new CreatedDespachanteEvent($model));
+        });
+
         static::deleted(function ($model) {
             $model->clientes()->each(function ($item) {
                 $item->delete();
@@ -70,6 +75,21 @@ class Despachante extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+
+    public function categorias()
+    {
+        return  $this->hasMany(Categoria::class);
+    }
+
+    public function transacoes()
+    {
+        return $this->hasMany(Transacao::class);
+    }
+
+    public function transacoesFixas()
+    {
+        return $this->hasMany(ControleFixas::class);
     }
 
     public function pedidosProcessos()

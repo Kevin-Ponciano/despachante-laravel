@@ -142,7 +142,7 @@
                         </div>
                     </fieldset>
                     <fieldset class="form-fieldset">
-                        <h4>Usuário Administrador do Cliente</h4>
+                        <h4>Usuário de Acesso do Cliente</h4>
                         <div class="row">
                             <div class="col-4">
                                 <div class="mb-3">

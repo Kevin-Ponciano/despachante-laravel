@@ -67,7 +67,6 @@ $(document).ready(function () {
 
     let usuariosTable = $('#usuarios-table').DataTable({
         ...configDefault,
-        'order': [[3, 'asc']],
         'ajax': '/despachante/usuarios/table',
         'columns': [
             {'data': 'name'},
@@ -82,12 +81,6 @@ $(document).ready(function () {
                     let color = row.status === 'at' ? 'success' : 'danger';
                     return '<span class="badge bg-' + color + '">' + status + '</span>';
                 }
-            },
-            {
-                'data': 'role',
-                'createdCell': function (td, cellData, rowData, row, col) {
-                    $(td).addClass('text-center');
-                },
             },
             {
                 'createdCell': function (td) {
@@ -109,6 +102,52 @@ $(document).ready(function () {
             });
         }
     });
+
+    let servicosTable = $('#servicos-table').DataTable({
+        ...configDefault,
+        'ajax': '/despachante/servicos/table',
+        'columns': [
+            {
+                'data': 'nome',
+                'createdCell': function (td, cellData, rowData, row, col) {
+                    $(td).addClass('fw-bold');
+                }
+            },
+            {
+                'data': 'preco',
+                'createdCell': function (td) {
+                    $(td).addClass('text-center');
+                },
+                'render': function (data, type, row) {
+                    return 'R$ ' + row.preco;
+                }
+            },
+            {
+                'data': 'created_at',
+                'createdCell': function (td) {
+                    $(td).addClass('text-center');
+                },
+            },
+            {
+                'createdCell': function (td) {
+                    $(td).addClass('text-center');
+                },
+                'defaultContent': '<a href="#" class="btn btn-sm btn-primary">Editar</a>',
+                'render': function (data, type, row) {
+                    let url = '/despachante/servicos/' + row.id;
+                    return '<a href="' + url + '" class="btn btn-sm btn-primary">Editar</a>';
+                }
+            },
+        ],
+        'rowCallback': function (row, data, index) {
+            let url = '/despachante/servicos/' + data.id;
+            $(row).attr('data-href', url);
+            $(row).css('cursor', 'pointer');
+            $(row).on('click', function () {
+                window.location.href = $(this).data('href');
+            });
+        }
+    })
 
     // let relatoriosPedido = $('#relatorios-pedido-table').DataTable({
     //     ...configDefault,
