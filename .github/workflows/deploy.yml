@@ -13,13 +13,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Deploy
-        uses: easingthemes/ssh-deploy@v2.1.5
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SECRET_SSH_KEY }}
-          ARGS: "-rltgoDzvO --delete"
-          SOURCE: "/home/kevin/repositores/laravel-app/"
-          REMOTE_HOST: ${{ vars.REMOTE_HOST }}
-          REMOTE_USER: ${{ vars.REMOTE_USER }}
-          TARGET: "/home/kevin/repositores/laravel-app/"
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USERNAME}}
+          port: ${{secrets.PORT}}
+          key: ${{secrets.SSHKEY}}
+          script: "cd /var/www/ && ./.scripts/deploy.sh"
+      
 
