@@ -20,6 +20,10 @@ jobs:
           username: ${{secrets.USERNAME}}
           port: ${{secrets.PORT}}
           key: ${{secrets.SSHKEY}}
-          script: "cd /var/www/ && ./.scripts/deploy.sh"
+          script: |
+          git pull origin main
+          docker build -t laravel_app .
+          docker stack deploy -c docker-compose.yml partner-app
+          docker service update --force --image laravel_app:latest partner-app_laravel-app
       
 
