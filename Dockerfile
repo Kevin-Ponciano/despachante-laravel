@@ -11,8 +11,25 @@ RUN apt-get update && apt-get install -y \
         unzip \
         git \
         curl \
+        nano \
         libpq-dev \
+        dos2unix \
+        supervisor \
+        freetype-dev \
+        $PHPIZE_DEPS \
+        libjpeg-turbo-dev \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
+
+# configure packages
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+
+RUN pecl install zip && docker-php-ext-enable zip \
+    && pecl install igbinary && docker-php-ext-enable igbinary \
+    && yes | pecl install redis && docker-php-ext-enable redis
+
+# setup node js source will be used later to install node js
+RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
+RUN ["sh",  "./nodesource_setup.sh"]
 
 # Configurar o Apache para servir o diretório público do Laravel
 RUN echo '<VirtualHost *:80>\n\
@@ -48,10 +65,6 @@ COPY . /var/www
 COPY .env /var/www/.env
 
 
-# Instalar Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader
-
 # Ajustar permissões dos diretórios do Laravel
 RUN chown -R www-data:www-data /var/www \
     && find /var/www -type f -exec chmod 644 {} \; \
@@ -59,18 +72,37 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 777 /var/www/storage \
     && chmod -R 777 /var/www/bootstrap/cache
 
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Optimizar a aplicação Laravel
+RUN php artisan otpimize
+
+# Instalar Node.js
+RUN npm install \
+    && npm run build \
+
+RUN apache2-foreground
+
 # Expor a porta 80
 EXPOSE 80
 
-
 # Copiar o script de entrada para o container
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Copiar o arquivo de configuração do Supervisor para o container
+COPY docker/supervisord.conf /etc/supervisord.conf
+RUN chmod +x /etc/supervisord.conf
+# run supervisor
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
+
 
 # Dar permissões de execução ao script de entrada
-RUN chmod +x /usr/local/bin/entrypoint.sh
+#RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Definir o script de entrada como ponto de entrada padrão do container
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Especificar o comando padrão a ser executado pelo entrypoint
-CMD ["apache2-foreground"]
+# CMD ["apache2-foreground"]
