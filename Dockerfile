@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
 
 # Instalar dependências do Node.js
 RUN curl -sL https://deb.nodesource.com/setup_21.x -o nodesource_setup.sh \
-    chmod +x nodesource_setup.sh \
+    && chmod +x nodesource_setup.sh \
     && bash nodesource_setup.sh \
     && apt-get install -y nodejs \
     && apt-get clean \
