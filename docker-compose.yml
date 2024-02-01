@@ -6,7 +6,7 @@ services:
         hostname: php-fpm
         user: www-data
         ports:
-            - "9000:9000"
+            - "9001:9000"
         volumes:
             - ./:/var/www/html
             - ./docker/supervisord.conf:/etc/supervisord.conf
@@ -30,7 +30,7 @@ services:
         environment:
             - DOCUMENT_ROOT=/var/www/html/public
             - CLIENT_MAX_BODY_SIZE=20M
-            - PHP_FPM_HOST=php-fpm:9000
+            - PHP_FPM_HOST=php-fpm:9001
         networks:
             - traefik_public
         deploy:
