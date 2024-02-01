@@ -1,20 +1,48 @@
 version: '3.9'
 
 services:
-  laravel-app:
-    image: laravel_app
-    networks:
-      - traefik_public
-    deploy:
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.laravel-app.rule=Host(`app.laravix.com.br`)"
-        - "traefik.http.services.laravel-app.loadbalancer.server.port=9000"
-        - "traefik.http.routers.laravel-app.service=laravel-app"
-        - "traefik.http.routers.laravel-app.entrypoints=https"
-        - "traefik.http.routers.laravel-app.tls=true"
-      replicas: 1
+    laravel-app:
+        image: jkaninda/laravel-php-fpm:latest
+        container_name: laravel-app
+        restart: unless-stopped
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - traefik_public
+#        deploy:
+#            labels:
+#                - "traefik.enable=true"
+#                - "traefik.http.routers.laravel-app.rule=Host(`app.laravix.com.br`)"
+#                - "traefik.http.services.laravel-app.loadbalancer.server.port=9000"
+#                - "traefik.http.routers.laravel-app.service=laravel-app"
+#                - "traefik.http.routers.laravel-app.entrypoints=https"
+#                - "traefik.http.routers.laravel-app.tls=true"
+#            replicas: 1
+
+    nginx-server:
+        image: jkaninda/nginx-fpm:alpine
+        container_name: nginx-server
+        restart: unless-stopped
+        volumes:
+            - ./:/var/www/html
+            - ./docker/supervisord.conf:/etc/supervisord.conf
+        command: /usr/bin/supervisord -c /etc/supervisord.conf
+        environment:
+            - DOCUMENT_ROOT=/var/www/html/public
+            - CLIENT_MAX_BODY_SIZE=20M
+            - PHP_FPM_HOST=php-fpm:9000
+        networks:
+            - traefik_public
+        deploy:
+            labels:
+                - "traefik.enable=true"
+                - "traefik.http.routers.nginx-server.rule=Host(`app.laravix.com.br`)"
+                - "traefik.http.services.nginx-server.loadbalancer.server.port=80"
+                - "traefik.http.routers.nginx-server.service=nginx-server"
+                - "traefik.http.routers.nginx-server.entrypoints=https"
+                - "traefik.http.routers.nginx-server.tls=true"
+            replicas: 1
 
 networks:
-  traefik_public:
-    external: true
+    traefik_public:
+        external: true

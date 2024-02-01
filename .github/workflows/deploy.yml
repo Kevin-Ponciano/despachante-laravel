@@ -17,13 +17,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Deploy to Server
+      - name: Update repository
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.HOST}}
           username: ${{secrets.USERNAME}}
           port: ${{secrets.PORT}}
           key: ${{secrets.SSHKEY}}
-          script: "eval `ssh-agent` && ssh-add ~/.ssh/github_deploy && cd ~/repositories/despachante-laravel/ && git checkout main && git pull && docker build -t laravel_app . && docker stack deploy -c docker-compose.yml partner-app && docker service update --force --image laravel_app:latest partner-app_laravel-app"
+          script: "eval `ssh-agent` && ssh-add ~/.ssh/github_deploy && cd ~/repositories/despachante-laravel/ && git checkout main && git pull"
+      - name: Deploy Docker Stack
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USERNAME}}
+          port: ${{secrets.PORT}}
+          key: ${{secrets.SSHKEY}}
+          script: "docker stack deploy -c ~/repositories/despachante-laravel/docker-compose.yml laravel-app"
 
 
