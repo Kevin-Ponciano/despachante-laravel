@@ -66,7 +66,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Optimizar a aplicação Laravel
-RUN php artisan otpimize
+RUN php artisan optimize
 
 # Instalar Node.js
 RUN npm install \
