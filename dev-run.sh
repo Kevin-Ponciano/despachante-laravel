@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Caminho para o arquivo docker-compose do serviço
-DEV_DOCKER_COMPOSE_PATH="docker/docker-compose-dev.yml"
+DEV_DOCKER_COMPOSE_PATH="docker-compose-dev.yml"
 
 # Comando sail
 SAIL="./vendor/bin/sail"
