@@ -13,11 +13,11 @@ RUN apt-get update && apt-get install -y \
         curl \
         nano \
         libpq-dev \
-        supervisor/ \
+        supervisor \
         nodejs \
         npm \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
 
