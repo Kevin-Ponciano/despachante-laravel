@@ -1,11 +1,11 @@
 name: Laravel CI/CD Pipeline
 
 on:
-  pull_request:
+  pull_request_review:
     branches:
       - main
     types:
-      - closed
+      - submitted
   workflow_dispatch:
 
 jobs:
@@ -21,6 +21,6 @@ jobs:
           username: ${{secrets.USERNAME}}
           port: ${{secrets.PORT}}
           key: ${{secrets.SSHKEY}}
-          script: "cd ~/repositories/despachante-laravel/ && git checkout main && git pull && docker build -t laravel_app . && docker stack deploy -c docker-compose.yml partner-app && docker service update --force --image laravel_app:latest partner-app_laravel-app"
+          script: "eval `ssh-agent` && ssh-add ~/.ssh/github_deploy && cd ~/repositories/despachante-laravel/ && git checkout main && git pull && docker build -t laravel_app . && docker stack deploy -c docker-compose.yml partner-app && docker service update --force --image laravel_app:latest partner-app_laravel-app"
 
 
