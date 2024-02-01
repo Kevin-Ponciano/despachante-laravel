@@ -1,9 +1,9 @@
 version: '3.9'
 
 services:
-    laravel-app:
+    php-fpm:
         image: jkaninda/laravel-php-fpm:latest
-        hostname: laravel-app
+        hostname: php-fpm
         user: www-data
         ports:
             - "9000:9000"
@@ -30,7 +30,7 @@ services:
         environment:
             - DOCUMENT_ROOT=/var/www/html/public
             - CLIENT_MAX_BODY_SIZE=20M
-            - PHP_FPM_HOST=laravel-app:9000
+            - PHP_FPM_HOST=php-fpm:9000
         networks:
             - traefik_public
         deploy:
