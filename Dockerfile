@@ -1,6 +1,8 @@
 # Use a imagem oficial do PHP com Apache, versão buster para ser mais leve
 FROM php:8.2-apache-buster
 
+ENV NJS_VERSION   0.7.0
+ENV PKG_RELEASE   1
 # Instalar dependências do sistema e extensões PHP
 RUN apt-get update && apt-get install -y \
         libpng-dev \
