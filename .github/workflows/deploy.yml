@@ -1,11 +1,11 @@
 name: Laravel CI/CD Pipeline
 
 on:
-  pull_request:
+  pull_request_review:
     branches:
       - main
     types:
-      - closed
+      - submitted
   workflow_dispatch:
 
 jobs:
