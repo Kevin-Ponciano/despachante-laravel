@@ -88,7 +88,7 @@ RUN apache2-foreground
 EXPOSE 80
 
 # Copiar o script de entrada para o container
-# COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Copiar o arquivo de configuração do Supervisor para o container
 COPY docker/supervisord.conf /etc/supervisord.conf
@@ -98,10 +98,10 @@ CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
 
 
 # Dar permissões de execução ao script de entrada
-#RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Definir o script de entrada como ponto de entrada padrão do container
-# ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Especificar o comando padrão a ser executado pelo entrypoint
-# CMD ["apache2-foreground"]
+CMD ["apache2-foreground"]
