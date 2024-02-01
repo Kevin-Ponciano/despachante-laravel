@@ -13,13 +13,13 @@ RUN apt-get update && apt-get install -y \
         curl \
         nano \
         libpq-dev \
-        supervisor
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
+        supervisor/ \
+        nodejs \
+        npm \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# setup node js source will be used later to install node js
-RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
-RUN chmod +x nodesource_setup.sh
-RUN ./nodesource_setup.sh
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
 
 # Configurar o Apache para servir o diretório público do Laravel
 RUN echo '<VirtualHost *:80>\n\
