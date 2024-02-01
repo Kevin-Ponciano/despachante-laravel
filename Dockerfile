@@ -1,23 +1,25 @@
-# Use a imagem oficial do PHP com Apache, versão buster para ser mais leve
-FROM php:8.2-apache-buster
+# Use a imagem oficial do PHP 8.2-FPM
+FROM php:8.2-fpm
 
-# Instalar dependências do sistema e extensões PHP
+# Atualizar pacotes e instalar dependências
 RUN apt-get update && apt-get install -y \
-        libpng-dev \
         libonig-dev \
-        libxml2-dev \
+        libpng-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
         libzip-dev \
+        libxml2-dev \
         zip \
         unzip \
         git \
         curl \
-        nano \
-        libpq-dev \
-        supervisor \
-        && apt-get clean \
-        && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Instalar dependências do Node.js
+# Instalar extensões do PHP
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip opcache
+
+# Instalar Node.js
 RUN curl -sL https://deb.nodesource.com/setup_21.x -o nodesource_setup.sh \
     && chmod +x nodesource_setup.sh \
     && bash nodesource_setup.sh \
@@ -26,41 +28,26 @@ RUN curl -sL https://deb.nodesource.com/setup_21.x -o nodesource_setup.sh \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f nodesource_setup.sh
 
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
+# Instalar Supervisor
+RUN apt-get update && apt-get install -y supervisor \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Configurar o Apache para servir o diretório público do Laravel
-RUN echo '<VirtualHost *:80>\n\
-    DocumentRoot /var/www/public\n\
-    <Directory /var/www/public>\n\
-        AllowOverride All\n\
-        Require all granted\n\
-    </Directory>\n\
-    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
-    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
-</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+# Copiar arquivos de configuração do Supervisor
+# (Garanta que você tem um arquivo supervisord.conf adequado no seu projeto)
+COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Habilitar mod_rewrite para o Apache
-RUN a2enmod rewrite
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configurações recomendadas para o Opcache para melhorar o desempenho do PHP
-RUN { \
-        echo 'opcache.memory_consumption=256'; \
-        echo 'opcache.interned_strings_buffer=16'; \
-        echo 'opcache.max_accelerated_files=7963'; \
-        echo 'opcache.revalidate_freq=2'; \
-        echo 'opcache.fast_shutdown=1'; \
-        echo 'opcache.enable_cli=1'; \
-    } > /usr/local/etc/php/conf.d/opcache-recommended.ini
-
-# Definir diretório de trabalho para /var/www (pasta padrão do Apache)
+# Definir diretório de trabalho
 WORKDIR /var/www
 
 # Copiar o código da aplicação para o diretório de trabalho
 COPY . /var/www
 
-# Copiar o env da aplicação
+# Copiar o arquivo .env da aplicação
 COPY .env /var/www/.env
-
 
 # Ajustar permissões dos diretórios do Laravel
 RUN chown -R www-data:www-data /var/www \
@@ -69,8 +56,7 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 777 /var/www/storage \
     && chmod -R 777 /var/www/bootstrap/cache
 
-# Instalar Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Instalar dependências do projeto
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Optimizar a aplicação Laravel
@@ -78,30 +64,10 @@ RUN php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
 
-# Instalar Node.js
-RUN npm install \
-    && npm run build
+RUN npm install && npm run build
 
-#RUN apache2-foreground
+# Expor a porta 9000
+EXPOSE 9000
 
-# Expor a porta 80
-EXPOSE 80
-
-# Copiar o script de entrada para o container
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-
-# Copiar o arquivo de configuração do Supervisor para o container
-COPY docker/supervisord.conf /etc/supervisord.conf
-RUN chmod +x /etc/supervisord.conf
-# run supervisor
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
-
-
-# Dar permissões de execução ao script de entrada
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# Definir o script de entrada como ponto de entrada padrão do container
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-# Especificar o comando padrão a ser executado pelo entrypoint
-CMD ["apache2-foreground"]
+# Comando padrão para iniciar o Supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
