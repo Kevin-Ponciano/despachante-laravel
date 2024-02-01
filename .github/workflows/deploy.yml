@@ -24,7 +24,7 @@ jobs:
           username: ${{secrets.USERNAME}}
           port: ${{secrets.PORT}}
           key: ${{secrets.SSHKEY}}
-          script: "eval `ssh-agent` && ssh-add ~/.ssh/github_deploy && cd ~/repositories/despachante-laravel/ && git config --global --add safe.directory && git checkout main && git pull"
+          script: "eval `ssh-agent` && ssh-add ~/.ssh/github_deploy && cd ~/repositories/despachante-laravel/ && git config --global --add safe.directory ~/repositories/despachante-laravel/ && git checkout main && git pull"
       - name: Deploy Docker Stack
         uses: appleboy/ssh-action@master
         with:
