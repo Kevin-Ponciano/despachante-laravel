@@ -14,10 +14,17 @@ RUN apt-get update && apt-get install -y \
         nano \
         libpq-dev \
         supervisor \
-        nodejs \
-        npm \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*
+
+# Instalar dependências do Node.js
+RUN curl -sL https://deb.nodesource.com/setup_21.x -o nodesource_setup.sh \
+    chmod +x nodesource_setup.sh \
+    && bash nodesource_setup.sh \
+    && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -f nodesource_setup.sh
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
 
