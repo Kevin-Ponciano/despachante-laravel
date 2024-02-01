@@ -82,7 +82,7 @@ RUN php artisan config:cache \
 RUN npm install \
     && npm run build
 
-RUN apache2-foreground
+#RUN apache2-foreground
 
 # Expor a porta 80
 EXPOSE 80
