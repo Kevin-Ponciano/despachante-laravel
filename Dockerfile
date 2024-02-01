@@ -69,11 +69,11 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Optimizar a aplicação Laravel
 RUN php artisan config:cache \
     && php artisan route:cache \
-    && php artisan view:cache \
+    && php artisan view:cache
 
 # Instalar Node.js
 RUN npm install \
-    && npm run build \
+    && npm run build
 
 RUN apache2-foreground
 
