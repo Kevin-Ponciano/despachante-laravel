@@ -13,9 +13,7 @@ RUN apt-get update && apt-get install -y \
         curl \
         nano \
         libpq-dev \
-        dos2unix \
-        supervisor \
-        freetype-dev
+        supervisor
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
 
