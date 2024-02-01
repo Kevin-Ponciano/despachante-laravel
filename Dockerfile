@@ -15,13 +15,8 @@ RUN apt-get update && apt-get install -y \
         curl \
         nano \
         libpq-dev \
-        supervisor \
-        freetype-dev \
-        libjpeg-turbo-dev
+        supervisor
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
-
-# configure packages
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 
 RUN pecl install zip && docker-php-ext-enable zip \
     && pecl install igbinary && docker-php-ext-enable igbinary \
