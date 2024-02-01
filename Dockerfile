@@ -13,8 +13,9 @@ RUN apt-get update && apt-get install -y \
         curl \
         nano \
         libpq-dev \
-        supervisor
-
+        supervisor \
+        freetype-dev \
+        libjpeg-turbo-dev
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
 
 # configure packages
