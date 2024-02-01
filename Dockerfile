@@ -18,7 +18,7 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache p
 
 # setup node js source will be used later to install node js
 RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
-RUN ["sh",  "./nodesource_setup.sh"]
+RUN ./nodesource_setup.sh
 
 # Configurar o Apache para servir o diretório público do Laravel
 RUN echo '<VirtualHost *:80>\n\
@@ -66,7 +66,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Optimizar a aplicação Laravel
-RUN php artisan optimize
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
 
 # Instalar Node.js
 RUN npm install \
