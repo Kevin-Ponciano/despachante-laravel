@@ -16,10 +16,6 @@ RUN apt-get update && apt-get install -y \
         supervisor
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
 
-RUN pecl install zip && docker-php-ext-enable zip \
-    && pecl install igbinary && docker-php-ext-enable igbinary \
-    && yes | pecl install redis && docker-php-ext-enable redis
-
 # setup node js source will be used later to install node js
 RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
 RUN ["sh",  "./nodesource_setup.sh"]
