@@ -15,9 +15,9 @@ RUN apt-get update && apt-get install -y \
         libpq-dev \
         dos2unix \
         supervisor \
-        freetype-dev \
-        libjpeg-turbo-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
+        freetype-dev
+
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip opcache pdo_pgsql pgsql
 
 # configure packages
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
