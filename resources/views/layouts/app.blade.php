@@ -12,6 +12,8 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
     <!-- Tabler CSS -->
+    <link rel="stylesheet" href="{{asset('assets/css/tabler.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/tabler-vendors.css')}}">
     @vite(['resources/css/tabler-css.js','resources/js/app.js','resources/css/app.css'])
 
     <!-- Datatable CSS -->
