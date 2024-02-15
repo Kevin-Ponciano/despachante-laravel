@@ -8,17 +8,17 @@ services:
             context: .
             dockerfile: ./docker/Dockerfile
             args:
-                PHP_VERSION: '8.2.4-bullseye'
+                PHP_VERSION: '8.3.2-bullseye'
         ports:
-            - "80:80" #http
-            - "443:443" #https
+            - "8080:80" #http
+            - "8443:443" #https
         networks:
             - traefik_public
         deploy:
             labels:
                 - "traefik.enable=true"
                 - "traefik.http.routers.laravel-app.rule=Host(`app.laravix.com.br`)"
-                - "traefik.http.services.laravel-app.loadbalancer.server.port=9001"
+                - "traefik.http.services.laravel-app.loadbalancer.server.port=8443"
                 - "traefik.http.routers.laravel-app.service=laravel-app"
                 - "traefik.http.routers.laravel-app.entrypoints=https"
                 - "traefik.http.routers.laravel-app.tls=true"

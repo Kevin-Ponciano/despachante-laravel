@@ -36,6 +36,15 @@ RUN docker-php-ext-enable swoole
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Instalar Node.js
+RUN curl -sL https://deb.nodesource.com/setup_21.x -o nodesource_setup.sh \
+    && chmod +x nodesource_setup.sh \
+    && bash nodesource_setup.sh \
+    && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -f nodesource_setup.sh
+
 COPY ./docker/supervisord/supervisord.octane.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./docker/supervisord/conf /etc/supervisord.d/
 ### Supervisor permite monitorar e controlar vários processos (LINUX)
@@ -48,7 +57,7 @@ WORKDIR $APP_DIR
 RUN cd $APP_DIR
 RUN chown www-data:www-data $APP_DIR
 
-COPY --chown=www-data:www-data ./app_octane .
+COPY --chown=www-data:www-data ./ .
 RUN rm -rf vendor
 RUN composer install --no-interaction
 
