@@ -1,5 +1,5 @@
 ARG PHP_VERSION
-FROM php:${PHP_VERSION}
+FROM php:8.3.2-bullseye
 
 ## Diretório da aplicação
 ARG APP_DIR=/var/www/app
