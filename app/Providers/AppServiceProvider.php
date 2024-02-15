@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Http\Controllers\Admin\UserCrudController;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
             \Backpack\PermissionManager\app\Http\Controllers\UserCrudController::class, //this is package controller
             UserCrudController::class //this should be your own controller
         );
-        if (config('app.env') === 'production') {
-            URL::forceScheme('https');
+        if ($this->app->environment('production')) {
+            \URL::forceScheme('https');
         }
         Schema::defaultStringLength(191);
     }
