@@ -10,6 +10,8 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/css/tabler.css',
+                'resources/css/tabler-vendors.css',
                 'resources/css/tabler-css.js',
                 'resources/js/app.js',
                 'resources/css/app.css',
