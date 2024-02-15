@@ -32,6 +32,6 @@ jobs:
           username: ${{secrets.USERNAME}}
           port: ${{secrets.PORT}}
           key: ${{secrets.SSHKEY}}
-          script: "docker build ~/repositories/despachante-laravel && docker stack deploy -c ~/repositories/despachante-laravel/docker-compose.yml laravel-app"
+          script: "docker stack deploy -c ~/repositories/despachante-laravel/docker-compose.yml laravel-app"
 
 
