@@ -9,7 +9,7 @@ services:
             context: .
             dockerfile: ./docker/Dockerfile
         ports:
-            - "8080:80" #http
+            - "8081:80" #http
             - "8443:443" #https
         networks:
             - traefik_public
