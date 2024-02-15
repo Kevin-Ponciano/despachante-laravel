@@ -17,7 +17,7 @@ services:
             labels:
                 - "traefik.enable=true"
                 - "traefik.http.routers.laravel-app.rule=Host(`app.laravix.com.br`)"
-                - "traefik.http.services.laravel-app.loadbalancer.server.port=8443"
+                - "traefik.http.services.laravel-app.loadbalancer.server.port=8081"
                 - "traefik.http.routers.laravel-app.service=laravel-app"
                 - "traefik.http.routers.laravel-app.entrypoints=https"
                 - "traefik.http.routers.laravel-app.tls=true"
