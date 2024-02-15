@@ -5,6 +5,8 @@ services:
         # urnau/php82-app-2023:horizon
         # container_name: laravel-app
         image: laravel-octane
+        volumes:
+            - ./.env:/var/www/app/.env
         build:
             context: .
             dockerfile: Dockerfile

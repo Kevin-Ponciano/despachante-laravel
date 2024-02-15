@@ -49,6 +49,10 @@ RUN cd $APP_DIR
 RUN chown www-data:www-data $APP_DIR
 
 COPY --chown=www-data:www-data ./ .
+
+RUN npm install
+RUN npm run build
+
 RUN rm -rf vendor
 RUN composer install --no-interaction
 
