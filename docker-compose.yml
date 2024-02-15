@@ -5,8 +5,6 @@ services:
         # urnau/php82-app-2023:horizon
         # container_name: laravel-app
         image: laravel-octane
-        volumes:
-            - ./.env:/var/www/app/.env
         build:
             context: .
             dockerfile: Dockerfile
@@ -24,6 +22,13 @@ services:
                 - "traefik.http.routers.laravel-app.entrypoints=https"
                 - "traefik.http.routers.laravel-app.tls=true"
             replicas: 1
+            resources:
+                limits:
+                    cpus: "2"
+                    memory: 3G
+                reservations:
+                    cpus: "1"
+                    memory: 2G
             restart_policy:
                 condition: on-failure
 networks:

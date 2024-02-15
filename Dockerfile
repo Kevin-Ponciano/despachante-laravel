@@ -61,19 +61,23 @@ RUN npm install
 RUN npm run build
 
 RUN rm -rf vendor
-RUN composer install --no-interaction
+
+RUN composer require laravel/octane
+RUN composer require laravel/horizon
+
+RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 ### OCTANE
-RUN composer require laravel/octane
 RUN php artisan octane:install --server=swoole
 
 ### HORIZON
-RUN composer require laravel/horizon
 RUN php artisan horizon:install
 
 ### Comandos úteis para otimização da aplicação
-RUN php artisan clear-compiled
-RUN php artisan optimize
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+RUN php artisan event:cache
 
 ### NGINX
 RUN apt-get install nginx -y
