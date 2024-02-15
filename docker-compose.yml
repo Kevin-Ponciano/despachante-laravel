@@ -8,9 +8,9 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        ports:
-            - "8081:80" #http
-            - "8443:443" #https
+#        ports:
+#            - "8081:80" #http
+#            - "8443:443" #https
         networks:
             - traefik_public
         deploy:
