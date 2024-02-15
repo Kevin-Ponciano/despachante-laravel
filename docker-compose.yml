@@ -4,6 +4,7 @@ services:
     laravel-app:
         # urnau/php82-app-2023:horizon
         container_name: laravel-app
+        image: laravel-octane
         build:
             context: .
             dockerfile: ./docker/Dockerfile
