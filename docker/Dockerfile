@@ -45,13 +45,13 @@ RUN curl -sL https://deb.nodesource.com/setup_21.x -o nodesource_setup.sh \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f nodesource_setup.sh
 
-COPY ./docker/supervisord/supervisord.octane.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./docker/supervisord/conf /etc/supervisord.d/
+COPY ./supervisord/supervisord.octane.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./supervisord/conf /etc/supervisord.d/
 ### Supervisor permite monitorar e controlar vários processos (LINUX)
 ### Bastante utilizado para manter processos em Daemon, ou seja, executando em segundo plano
 
-COPY ./docker/php/extra-php.ini "$PHP_INI_DIR/99_extra.ini"
-# COPY ./docker/php/extra-php-fpm.conf /etc/php8/php-fpm.d/www.conf
+COPY ./php/extra-php.ini "$PHP_INI_DIR/99_extra.ini"
+# COPY ./php/extra-php-fpm.conf /etc/php8/php-fpm.d/www.conf
 
 WORKDIR $APP_DIR
 RUN cd $APP_DIR
@@ -76,8 +76,8 @@ RUN php artisan optimize
 ### NGINX
 RUN apt-get install nginx -y
 RUN rm -rf /etc/nginx/sites-enabled/* && rm -rf /etc/nginx/sites-available/*
-COPY ./docker/nginx/sites.octane.conf /etc/nginx/sites-enabled/default.conf
-COPY ./docker/nginx/error.html /var/www/html/error.html
+COPY ./nginx/sites.octane.conf /etc/nginx/sites-enabled/default.conf
+COPY ./nginx/error.html /var/www/html/error.html
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # RUN apt update -y && apt install nano git -y
