@@ -46,7 +46,7 @@ RUN curl -sL https://deb.nodesource.com/setup_21.x -o nodesource_setup.sh \
     && rm -f nodesource_setup.sh
 
 COPY ./supervisord/supervisord.octane.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./supervisord/conf /etc/supervisord.d/
+# COPY ./supervisord/conf /etc/supervisord.d/
 ### Supervisor permite monitorar e controlar vários processos (LINUX)
 ### Bastante utilizado para manter processos em Daemon, ou seja, executando em segundo plano
 
