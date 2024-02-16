@@ -169,5 +169,6 @@
     <orderEntry type="library" name="jquery-3.7.0" level="application" />
     <orderEntry type="library" name="pdfmake" level="application" />
     <orderEntry type="library" name="imask" level="application" />
+    <orderEntry type="library" name="@tabler/core" level="application" />
   </component>
 </module>
