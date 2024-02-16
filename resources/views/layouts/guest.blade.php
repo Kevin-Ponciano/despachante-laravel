@@ -7,8 +7,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="{{ asset('assets/img/logo3.png') }}" type="image/png"/>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler-vendors.min.css">
+{{--    <link rel="stylesheet" href="{{asset('assets/css/tabler.css')}}">--}}
+{{--    <link rel="stylesheet" href="{{asset('assets/css/tabler-vendors.css')}}">--}}
     @vite('resources/css/tabler-css.js')
     <style>
         @import url('https://rsms.me/inter/inter.css');

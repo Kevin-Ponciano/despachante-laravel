@@ -1,0 +1,70 @@
+{
+  "node_modules/@tabler/icons-webfont/fonts/tabler-icons.eot": {
+    "file": "assets/tabler-icons-af5a8337.eot",
+    "src": "node_modules/@tabler/icons-webfont/fonts/tabler-icons.eot"
+  },
+  "node_modules/@tabler/icons-webfont/fonts/tabler-icons.ttf": {
+    "file": "assets/tabler-icons-fa92836a.ttf",
+    "src": "node_modules/@tabler/icons-webfont/fonts/tabler-icons.ttf"
+  },
+  "node_modules/@tabler/icons-webfont/fonts/tabler-icons.woff": {
+    "file": "assets/tabler-icons-99a345f8.woff",
+    "src": "node_modules/@tabler/icons-webfont/fonts/tabler-icons.woff"
+  },
+  "node_modules/@tabler/icons-webfont/fonts/tabler-icons.woff2": {
+    "file": "assets/tabler-icons-0586ae82.woff2",
+    "src": "node_modules/@tabler/icons-webfont/fonts/tabler-icons.woff2"
+  },
+  "node_modules/webdatarocks/theme/assets/webdatarocks-icons.svg": {
+    "file": "assets/webdatarocks-icons-a58ed68e.svg",
+    "src": "node_modules/webdatarocks/theme/assets/webdatarocks-icons.svg"
+  },
+  "node_modules/webdatarocks/theme/assets/webdatarocks-icons.ttf": {
+    "file": "assets/webdatarocks-icons-4372cf26.ttf",
+    "src": "node_modules/webdatarocks/theme/assets/webdatarocks-icons.ttf"
+  },
+  "node_modules/webdatarocks/theme/assets/webdatarocks-icons.woff": {
+    "file": "assets/webdatarocks-icons-0399338f.woff",
+    "src": "node_modules/webdatarocks/theme/assets/webdatarocks-icons.woff"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-bd73a24c.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/css/tabler-css.css": {
+    "file": "assets/tabler-css-99493a24.css",
+    "src": "resources/css/tabler-css.css"
+  },
+  "resources/css/tabler-css.js": {
+    "assets": [
+      "assets/tabler-icons-af5a8337.eot",
+      "assets/tabler-icons-0586ae82.woff2",
+      "assets/tabler-icons-99a345f8.woff",
+      "assets/tabler-icons-fa92836a.ttf"
+    ],
+    "css": [
+      "assets/tabler-css-99493a24.css"
+    ],
+    "file": "assets/tabler-css-ad3041b2.js",
+    "isEntry": true,
+    "src": "resources/css/tabler-css.js"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app-b66ab6e2.css",
+    "src": "resources/js/app.css"
+  },
+  "resources/js/app.js": {
+    "assets": [
+      "assets/webdatarocks-icons-0399338f.woff",
+      "assets/webdatarocks-icons-4372cf26.ttf",
+      "assets/webdatarocks-icons-a58ed68e.svg"
+    ],
+    "css": [
+      "assets/app-b66ab6e2.css"
+    ],
+    "file": "assets/app-3e06e220.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  }
+}

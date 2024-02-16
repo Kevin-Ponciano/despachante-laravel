@@ -57,8 +57,8 @@ RUN chown www-data:www-data $APP_DIR
 
 COPY --chown=www-data:www-data ./ .
 
-RUN npm install
-RUN npm run build
+#RUN npm install
+#RUN npm run build
 
 RUN rm -rf vendor
 
