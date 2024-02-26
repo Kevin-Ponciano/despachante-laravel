@@ -25,9 +25,9 @@ class AppServiceProvider extends ServiceProvider
             \Backpack\PermissionManager\app\Http\Controllers\UserCrudController::class, //this is package controller
             UserCrudController::class //this should be your own controller
         );
-        if ($this->app->environment('production')) {
-            \URL::forceScheme('https');
-        }
+//        if ($this->app->environment('production')) {
+//            \URL::forceScheme('https');
+//        }
         Schema::defaultStringLength(191);
     }
 }
