@@ -5,11 +5,11 @@ namespace App\Http\Livewire;
 use App\Models\PedidoServico;
 use App\Traits\FunctionsHelpers;
 use App\Traits\HandinFiles;
-use Arr;
-use Auth;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
-use Log;
-use Str;
 use Throwable;
 
 class ProcessoShow extends Component
@@ -151,11 +151,9 @@ class ProcessoShow extends Component
             $this->servicos = array_filter($this->servicos, function ($servico) use ($id) {
                 return $servico['id'] != $id;
             });
-            debug($this->servicos);
-            debug($id);
             PedidoServico::where('pedido_id', $this->pedido->id)->where('servico_id', $id)->delete();
             $this->pedido->timelines()->create([
-                'user_id' => Auth::user()->id,
+                'user_id' => Auth::id(),
                 'titulo' => 'Serviço removido',
                 'descricao' => 'O Serviço <b>'.$this->servicosDespachante->find($id)->nome.'</b> foi removido do processo',
                 'tipo' => 'up',
@@ -184,7 +182,7 @@ class ProcessoShow extends Component
             ]);
 
             $this->pedido->timelines()->create([
-                'user_id' => Auth::user()->id,
+                'user_id' => Auth::id(),
                 'titulo' => 'Preço do serviço alterado',
                 'descricao' => 'O preço do serviço <b>'.$this->servicosDespachante->find($servico['id'])->nome.'</b> foi alterado para <b>R$ '.$this->regexMoneyToView($servico['preco']).'</b>',
                 'tipo' => 'up',
@@ -224,7 +222,7 @@ class ProcessoShow extends Component
 
             if ($this->fieldsChanged()) {
                 $this->pedido->timelines()->create([
-                    'user_id' => Auth::user()->id,
+                    'user_id' => Auth::id(),
                     'titulo' => 'Processo atualizado',
                     'descricao' => 'Os campos <b>|'.$this->fieldsChanged().'|</b> foram atualizados.',
                     'tipo' => 'up',
@@ -272,7 +270,7 @@ class ProcessoShow extends Component
             ]);
 
             $this->pedido->timelines()->create([
-                'user_id' => Auth::user()->id,
+                'user_id' => Auth::id(),
                 'titulo' => 'Preço da placa alterado',
                 'descricao' => 'O preço da placa foi alterado para <b>R$ '.$this->precoPlaca.'</b>',
                 'tipo' => 'up',
@@ -297,7 +295,7 @@ class ProcessoShow extends Component
             ]);
 
             $this->pedido->timelines()->create([
-                'user_id' => Auth::user()->id,
+                'user_id' => Auth::id(),
                 'titulo' => 'Preço do honorário alterado',
                 'descricao' => 'O preço do honorário foi alterado para <b>R$ '.$this->precoHonorario.'</b>',
                 'tipo' => 'up',
