@@ -3,6 +3,7 @@ FROM php:8.3.2-bullseye
 
 ## Diretório da aplicação
 ARG APP_DIR=/var/www/app
+ARG LIVEWIRE_TEMP_DIR=/var/www/app/storage/livewire-tmp
 
 ## Versão da Lib do Redis para PHP
 ARG REDIS_LIB_VERSION=5.3.7
@@ -57,21 +58,16 @@ RUN chown www-data:www-data $APP_DIR
 
 COPY --chown=www-data:www-data ./ .
 
+RUN mkdir -p $LIVEWIRE_TEMP_DIR
+RUN chown -R www-data:www-data $LIVEWIRE_TEMP_DIR
+
 #RUN npm install
 #RUN npm run build
-
-RUN rm -rf vendor
-
-RUN composer require laravel/octane
-RUN composer require laravel/horizon
 
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 ### OCTANE
 RUN php artisan octane:install --server=swoole
-
-### HORIZON
-RUN php artisan horizon:install
 
 ### Comandos úteis para otimização da aplicação
 RUN php artisan config:cache
@@ -87,5 +83,7 @@ COPY ./docker/nginx/error.html /var/www/html/error.html
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # RUN apt update -y && apt install nano git -y
+
+RUN * * * * * cd $APP_DIR && php artisan schedule:run >> /dev/null 2>&1
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

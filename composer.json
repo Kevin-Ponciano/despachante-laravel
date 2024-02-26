@@ -19,6 +19,7 @@
         "laravel/framework": "^10.0",
         "laravel/horizon": "^5.21",
         "laravel/jetstream": "^3.0",
+        "laravel/octane": "^2.3",
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.16",
         "laravel/tinker": "^2.8",
