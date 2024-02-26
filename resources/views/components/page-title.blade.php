@@ -13,7 +13,7 @@
                     </div>
                     @can('[DESPACHANTE] - Acessar Sistema')
                         @if($status??false)
-                            <div class="mt-5">
+                            <div class="mt-4">
                                 <span class="page-subtitle">Responsável: </span>
                                 {{$responsavel->name ?? ''}}
                             </div>
@@ -25,7 +25,7 @@
                 <div class="mt-2">
                     <div>
                         <div class="text-center h3 m-0">
-                            <span class="badge {{$statusDisplay[1]}}">{{$statusDisplay[0]}}
+                            <a class="badge {{$statusDisplay[1]}}">{{$statusDisplay[0]}}</a>
                         </div>
                         @if($status === 'co')
                             <div class="text-center">

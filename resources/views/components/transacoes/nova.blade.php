@@ -135,7 +135,7 @@
                             wire:model.defer="transacao.categoria_id">
                         @foreach($categorias as $categoria)
                             <option value="{{$categoria->id}}"
-                                    data-custom-properties="&lt;div class=&quot;badge bg-{{$categoria->cor}} badge-pill me-2&quot;&gt;&lt;i class=&quot;icon text-lg {{$categoria->icone}}&quot;&gt;&lt;/i&gt;&lt;/div&gt;">
+                                    data-custom-properties="&lt;a class=&quot;badge bg-{{$categoria->cor}} badge-pill me-2&quot;&gt;&lt;i class=&quot;icon text-lg {{$categoria->icone}}&quot;&gt;&lt;/i&gt;&lt;/a&gt;">
                                 {{$categoria->nome}}
                             </option>
                         @endforeach
