@@ -21,7 +21,8 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libpq-dev \
     libxml2-dev \
-    nano
+    nano \
+    cron
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql pdo_pgsql pgsql session xml
 
@@ -75,7 +76,9 @@ RUN php artisan route:cache
 RUN php artisan view:cache
 RUN php artisan event:cache
 
-RUN php artisan schedule:run
+RUN echo "* * * * * cd $APP_DIR && php artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/laravel \
+    && chmod 0644 /etc/cron.d/laravel \
+    && crontab /etc/cron.d/laravel
 
 ### NGINX
 RUN apt-get install nginx -y
