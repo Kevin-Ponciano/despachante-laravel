@@ -3,7 +3,7 @@ FROM php:8.3.2-bullseye
 
 ## Diretório da aplicação
 ARG APP_DIR=/var/www/app
-ARG LIVEWIRE_TEMP_DIR=/var/www/app/storage/livewire-tmp
+ARG LIVEWIRE_TEMP_DIR=/var/www/app/storage/app/livewire-tmp
 
 ## Versão da Lib do Redis para PHP
 ARG REDIS_LIB_VERSION=5.3.7
