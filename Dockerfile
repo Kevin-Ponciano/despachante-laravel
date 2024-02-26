@@ -75,7 +75,7 @@ RUN php artisan route:cache
 RUN php artisan view:cache
 RUN php artisan event:cache
 
-RUN php artisan schedule:run >> /dev/null 2>&1
+RUN php artisan schedule:run
 
 ### NGINX
 RUN apt-get install nginx -y
