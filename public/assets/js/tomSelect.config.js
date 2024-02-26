@@ -19,7 +19,8 @@ $(document).ready(function () {
 
     $.find('select').forEach(function (el) {
         if($(el).hasClass('select-ignore')) return
+        if ($(el).hasClass('swal2-select')) return
         applySelect($(el))
     })
-    //$('.ts-control').addClass('py-0 px-2 text-muted')
+    $('.ts-control').addClass('py-0 px-2')
 });
