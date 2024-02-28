@@ -25,7 +25,7 @@
                 <div class="mt-2">
                     <div>
                         <div class="text-center h3 m-0">
-                            <a class="badge {{$statusDisplay[1]}}">{{$statusDisplay[0]}}</a>
+                            <div class="badge {{$statusDisplay[1]}} text-white">{{$statusDisplay[0]}}</div>
                         </div>
                         @if($status === 'co')
                             <div class="text-center">

@@ -28,7 +28,7 @@
     "src": "node_modules/webdatarocks/theme/assets/webdatarocks-icons.woff"
   },
   "resources/css/app.css": {
-    "file": "assets/app-bd73a24c.css",
+    "file": "assets/app-d2bedce7.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },

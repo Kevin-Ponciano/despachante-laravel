@@ -24,19 +24,19 @@
         @forelse($transacoes as $transacao)
             <tr>
                 <td>
-                    <a class="badge bg-{{$transacao->getStatus()['color']}} badge-pill"
+                    <div class="badge bg-{{$transacao->getStatus()['color']}} badge-pill text-white"
                          data-bs-toggle="tooltip" data-bs-placement="bottom"
                          aria-label="{{$transacao->getStatus()['text']}}"
                          data-bs-original-title="{{$transacao->getStatus()['text']}}">
                         <i class="{{ $transacao->getStatus()['icon'] }}"></i>
-                    </a>
+                    </div>
                 </td>
                 <td>{{ $transacao->getDataVencimento() }}</td>
                 <td>{{ $transacao->getDescricao() }}</td>
                 <td>
-                    <a class="badge bg-{{$transacao->categoria->cor}} badge-pill me-2">
+                    <div class="badge bg-{{$transacao->categoria->cor}} badge-pill me-2 text-white">
                         <i class="{{ $transacao->categoria->icone }}"></i>
-                    </a>
+                    </div>
                     {{ $transacao->categoria->nome }}
                 </td>
                 <td class="@if($transacao->tipo === 'in') text-green @else text-red @endif">

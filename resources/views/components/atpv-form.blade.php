@@ -123,10 +123,15 @@
                                    class="form-check-input-warning mt-1"/>
                         @endif
                     </div>
-                    <input type="datetime-local" :readonly="isEditing ? false : !isPendingInput.data_hora_medicao"
-                           class="form-control @error('veiculo.dataHodometro') is-invalid @enderror"
-                           wire:model.defer="veiculo.dataHodometro">
-                    @error('veiculo.dataHodometro')<span class="invalid-feedback"> {{ $message }}</span> @enderror
+                    <div class="input-icon">
+                        <span class="input-icon-addon">
+                            <i class="ti ti-calendar"></i>
+                        </span>
+                        <input type="datetime-local" :readonly="isEditing ? false : !isPendingInput.data_hora_medicao"
+                               class="form-control @error('veiculo.dataHodometro') is-invalid @enderror"
+                               wire:model.defer="veiculo.dataHodometro">
+                        @error('veiculo.dataHodometro')<span class="invalid-feedback"> {{ $message }}</span> @enderror
+                    </div>
                 </div>
             </div>
         </div>

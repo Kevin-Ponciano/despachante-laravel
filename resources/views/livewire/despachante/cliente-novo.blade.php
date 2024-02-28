@@ -127,8 +127,8 @@
             </div>
         </div>
     </fieldset>
-    <div class="d-flex justify-content-between mx-1">
-        <button class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal" wire:click="clearFields">
+    <div class="d-flex justify-content-between mt-2">
+        <button class="btn btn-secondary me-auto" data-bs-dismiss="modal" wire:click="clearFields">
             Cancelar
         </button>
         <button class="btn btn-primary" wire:click="store">Cadastrar</button>

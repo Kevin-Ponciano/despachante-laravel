@@ -104,7 +104,7 @@
                     @endif
                     <td>{{$pedido->processo->getTipo()}}</td>
                     <td class="text-center">
-                        <a class="badge {{$pedido->getStatus()[1]}}">{{$pedido->getStatus()[0]}}</a>
+                        <div class="badge {{$pedido->getStatus()[1]}} text-white">{{$pedido->getStatus()[0]}}</div>
                     </td>
                     <td>{{$pedido->getUpdatedAt()}}</td>
                 </tr>

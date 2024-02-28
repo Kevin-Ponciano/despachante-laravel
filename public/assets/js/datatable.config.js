@@ -37,7 +37,7 @@ $(document).ready(function () {
                 'render': function (data, type, row) {
                     let status = row.status === 'at' ? 'Ativo' : 'Inativo';
                     let color = row.status === 'at' ? 'success' : 'danger';
-                    return '<span class="badge bg-' + color + '">' + status + '</span>';
+                    return '<span class="badge bg-' + color + ' text-white">' + status + '</span>';
                 }
             },
             {
@@ -79,7 +79,7 @@ $(document).ready(function () {
                 'render': function (data, type, row) {
                     let status = row.status === 'at' ? 'Ativo' : 'Inativo';
                     let color = row.status === 'at' ? 'success' : 'danger';
-                    return '<span class="badge bg-' + color + '">' + status + '</span>';
+                    return '<span class="badge bg-' + color + ' text-white">' + status + '</span>';
                 }
             },
             {
