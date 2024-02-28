@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     nano \
     cron \
-    postgresql-client
+    postgresql-client postgresql-client-common libpq-dev
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql pdo_pgsql pgsql session xml
 
