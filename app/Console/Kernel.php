@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->exec('echo "start Scheduling" > log.txt')->everyMinute()->sentryMonitor('schedule');
+        $schedule->exec('echo "start Scheduling" > /log.txt')->everyMinute()->sentryMonitor('schedule');
         // Backup
         $schedule->command('backup:clean')->daily()->at('04:00')->sentryMonitor('schedule');
         $schedule->command('backup:run')->daily()->at('05:00')->sentryMonitor('schedule');
