@@ -23,7 +23,13 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     nano \
     cron \
-    postgresql-client postgresql-client-common libpq-dev
+    gnupg2 \
+    wget
+
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'  && \
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+
+RUN apt-get update && apt-get install -y postgresql-client-16
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql pdo_pgsql pgsql session xml
 
