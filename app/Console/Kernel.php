@@ -14,8 +14,8 @@ class Kernel extends ConsoleKernel
     {
         //$schedule->exec('echo "start Scheduling" > /log.txt')->everyMinute();
         // Backup
-        $schedule->command('backup:clean --disable-notifications')->daily()->at('04:00');
-        $schedule->command('backup:run --disable-notifications')->daily()->at('05:00');
+        //$schedule->command('backup:clean --disable-notifications')->daily()->at('04:00');
+        //$schedule->command('backup:run --disable-notifications')->daily()->at('05:00');
 
     }
 

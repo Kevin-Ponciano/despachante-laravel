@@ -17,34 +17,34 @@
     <div class="container-narrow">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">Foto de Perfil</h3>
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <img src="{{$photo? $photo->temporaryUrl(): $user->getProfilePhoto() }}"
-                             class="rounded-4 avatar avatar-xl"
-                             alt="profile">
-                    </div>
-                    <div class="col-auto">
-                        <div class="col mb-3">
-                            <x-action-message on="savedPhoto">
-                                Foto atualizada com sucesso!
-                            </x-action-message>
-                            <x-action-message on="deletedPhoto">
-                                Foto removida com sucesso!
-                            </x-action-message>
-                            <input type="file" accept="image/*"
-                                   class="form-control mt-2 @error('photo') is-invalid @enderror"
-                                   wire:model="photo"/>
-                            @error('photo') <span class="invalid-feedback">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="btn-list gap-2">
-                            <a href="#" class="btn btn-primary" wire:click="savePhoto">Upload</a>
-                            @if($user->profile_photo_path)
-                                <a href="#" class="btn btn-ghost-danger" wire:click="deletePhoto">Remover</a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+{{--                <h3 class="card-title">Foto de Perfil</h3>--}}
+{{--                <div class="row align-items-center">--}}
+{{--                    <div class="col-auto">--}}
+{{--                        <img src="{{$photo? $photo->temporaryUrl(): $user->getProfilePhoto() }}"--}}
+{{--                             class="rounded-4 avatar avatar-xl"--}}
+{{--                             alt="profile">--}}
+{{--                    </div>--}}
+{{--                    <div class="col-auto">--}}
+{{--                        <div class="col mb-3">--}}
+{{--                            <x-action-message on="savedPhoto">--}}
+{{--                                Foto atualizada com sucesso!--}}
+{{--                            </x-action-message>--}}
+{{--                            <x-action-message on="deletedPhoto">--}}
+{{--                                Foto removida com sucesso!--}}
+{{--                            </x-action-message>--}}
+{{--                            <input type="file" accept="image/*"--}}
+{{--                                   class="form-control mt-2 @error('photo') is-invalid @enderror"--}}
+{{--                                   wire:model="photo"/>--}}
+{{--                            @error('photo') <span class="invalid-feedback">{{ $message }}</span> @enderror--}}
+{{--                        </div>--}}
+{{--                        <div class="btn-list gap-2">--}}
+{{--                            <a href="#" class="btn btn-primary" wire:click="savePhoto">Upload</a>--}}
+{{--                            @if($user->profile_photo_path)--}}
+{{--                                <a href="#" class="btn btn-ghost-danger" wire:click="deletePhoto">Remover</a>--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <h3 class="card-title mt-4">Informações Pessoais</h3>
                 <fieldset class="form-fieldset row g-1">
                     <div class="col-6">
