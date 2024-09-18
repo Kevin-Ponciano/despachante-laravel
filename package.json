@@ -10,7 +10,7 @@
         "autoprefixer": "^10.4.13",
         "axios": "^1.6.0",
         "laravel-vite-plugin": "^0.7.2",
-        "vite": "^4.5.2"
+        "vite": "^4.5.5"
     },
     "dependencies": {
         "@alpinejs/mask": "^3.12.3",
